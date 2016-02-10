@@ -13,33 +13,32 @@
       .w3-row {height:auto;}
     }
     </style>
-    <script type="text/JavaScript" src="jquery-1.7.2.min.js"></script>
+    <script type="text/JavaScript" src="jquery-1.12.0.min.js"></script>
     <!-- CONSEGUIMOS EL ALTO DEL NAVEGADOR OBJETO (WINDOW) Y RESTAMOS EL ALTO DE LA BARRA DE NAVEGACIÓN -->
     <script type="text/JavaScript">
       $(document).ready(function(){
-        var innerHeight = $(window).height();
+        var innerHeightWin = $(window).height();
         var innerHeightNav = $('.w3-topnav').innerHeight();
-        $('.container').height(innerHeight);
-        $('.w3-col.m2').height((innerHeight - innerHeightNav));
+        $('.w3-col.m2-5').height((innerHeight - innerHeightNav));
+        $('.w3-container').css('marginLeft', 28 + 'px');
       });
     </script>
   </head>
-  <body class="container">
-    <div class="w3-topnav w3-large w3-orange">
-      <a href="#">1</a>
-      <a href="#">2</a>
-      <a href="#">3</a>
-      <a href="#">4</a>
-      <a href="#">5</a>
+  <body>
+    <div class="w3-topnav w3-large w3-dark-grey">
+      <a href="#">Comerciales</a>
+      <a href="#">Administrativos</a>
     </div>
+    <!--<div class="w3-side w3-grey">
+    </div>-->
 
     <div class="w3-center">
       <div class="w3-row">
-        <div class="w3-col m2 w3-blue">
-          <p><a class="w3-btn w3-round-large w3-yellow" href="#">Notas / Calendario</a></p>
-          <p><a class="w3-btn w3-round-large w3-yellow" href="#">Clientes</a></p>
-          <p><a class="w3-btn w3-round-large w3-yellow" href="#">Stock</a></p>
-          <p><a class="w3-btn w3-round-large w3-yellow" href="#">Ventas</a></p>
+        <div class="w3-col m2-5 w3-blue-grey w3-card-2">
+          <p><a class="w3-border w3-border-blue" href="#">Notas / Calendario</a></p>
+          <p><a class="w3-border w3-border-blue" href="#">Clientes</a></p>
+          <p><a class="w3-border w3-border-blue" href="#">Stock</a></p>
+          <p><a class="w3-border w3-border-blue" href="#">Ventas</a></p>
         </div>
         <div class="w3-col m10 w3-container">
           <h1>Welcome</h1>
