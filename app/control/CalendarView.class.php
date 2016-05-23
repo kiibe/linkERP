@@ -33,6 +33,7 @@ class CalendarView extends TPage
 
        $this->calendar->selectDays(date("j"));
        $this->calendar->setSize(500,350);
+
        $this->calendar->setAction( new TAction(array($this, 'onSelect')) );
 
        // creates a simple form
@@ -52,13 +53,12 @@ class CalendarView extends TPage
 
        $this->form->addQuickField('Year',  $year,  100);
        $this->form->addQuickField('Month', $month, 100);
-       $this->form->addQuickField('Day',   $day,   100);
-
-       $this->form->addQuickAction('Back', new TAction(array($this, 'onBack')), 'ico_back.png');
-       $this->form->addQuickAction('Next', new TAction(array($this, 'onNext')), 'ico_next.png');
+       //$this->form->addQuickField('Day',   $day,   100);
 
        // creates a table to wrap the treeview and the form
        $table = new TTable;
+       $this->form->addQuickAction('Back', new TAction(array($this, 'onBack')), 'ico_back.png');
+       $this->form->addQuickAction('Next', new TAction(array($this, 'onNext')), 'ico_next.png');
        $row = $table->addRow();
        $cell=$row->addCell($this->calendar)->valign='top';
        $cell=$row->addCell($notebook)->valign='top';

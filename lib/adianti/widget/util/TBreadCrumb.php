@@ -19,7 +19,7 @@ class TBreadCrumb extends TElement
     protected static $homeController;
     protected $container;
     protected $items;
-    
+
     /**
      * Handle paths from a XML file
      * @param $xml_file path for the file
@@ -28,41 +28,41 @@ class TBreadCrumb extends TElement
     {
         parent::__construct('div');
         $this->{'id'} = 'div_breadcrumbs';
-        
+
         $this->container = new TElement('ol');
         $this->container->{'class'} = 'tbreadcrumb';
         parent::add( $this->container );
     }
-    
+
     /**
      * Add the home icon
      */
     public function addHome()
     {
         $li = new TElement('li');
-        
+
         $a = new TElement('a');
         $a->{'class'} = 'bread';
         $a->generator = 'adianti';
-        
+
         if (self::$homeController)
         {
             $a->{'href'} = 'engine.php?class='.self::$homeController;
         }
         else
         {
-            $a->{'href'} = 'engine.php';
+            $a->{'href'} = 'engine.php?class=WelcomeView';
         }
-        
+
         $a->{'title'} = 'Home';
-        
+
         $span = new TElement('span');
         $span->add( 'h' );
         $li->add( $a );
         $a->add( $span );
         $this->container->add( $li );
     }
-    
+
     /**
      * Add an item
      * @param $path Path to be shown
@@ -72,10 +72,10 @@ class TBreadCrumb extends TElement
     {
         $li = new TElement('li');
         $this->container->add( $li );
-        
+
         $span = new TElement('span');
         $span->add( $path );
-        
+
         $this->items[$path] = $span;
         if( $last )
         {
@@ -84,13 +84,13 @@ class TBreadCrumb extends TElement
         else
         {
             $a = new TElement('a');
-            
+
             $li->add( $a );
             $a->add( $span );
         }
-            
+
     }
-    
+
     /**
      * Mark one breadcrumb item as selected
      */
@@ -108,7 +108,7 @@ class TBreadCrumb extends TElement
             }
         }
     }
-    
+
     /**
      * Define the home controller
      * @param $class Home controller class
