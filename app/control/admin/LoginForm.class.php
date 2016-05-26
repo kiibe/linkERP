@@ -37,7 +37,7 @@ class LoginForm extends TPage
         // creates the form
         $this->form = new TForm('form_login');
         $this->form->class = 'tform';
-        $this->form->style = 'max-width: 400px; margin:auto; margin-top:120px;';
+        $this->form->style = 'max-width: 500px; margin:auto; margin-top:120px;';
 
         // add the notebook inside the form
         $this->form->add($table);
@@ -50,8 +50,8 @@ class LoginForm extends TPage
         $login->setSize('70%', 40);
         $password->setSize('70%', 40);
 
-        $login->style = 'height:35px; font-size:14px;float:left;border-bottom-left-radius: 0;border-top-left-radius: 0;';
-        $password->style = 'height:35px;margin-bottom: 15px;font-size:14px;float:left;border-bottom-left-radius: 0;border-top-left-radius: 0;';
+        $login->style = 'height:55px; font-size:18px;float:left;border-bottom-left-radius: 0;border-top-left-radius: 0;';
+        $password->style = 'height:55px;margin-bottom: 15px;font-size:18px;float:left;border-bottom-left-radius: 0;border-top-left-radius: 0;';
 
         $row=$table->addRow();
         $row->addCell( new TLabel('Log in') )->colspan = 2;
@@ -60,8 +60,8 @@ class LoginForm extends TPage
         $login->placeholder = _t('User');
         $password->placeholder = _t('Password');
 
-        $user = '<span style="float:left;width:35px;margin-left:45px;height:35px;" class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>';
-        $locker = '<span style="float:left;width:35px;margin-left:45px;height:35px;" class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>';
+        $user = '<span style="float:left;width:35px;margin-left:55px;height:55px;" class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>';
+        $locker = '<span style="float:left;width:35px;margin-left:55px;height:55px;" class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>';
 
         $container1 = new TElement('div');
         $container1->add($user);
