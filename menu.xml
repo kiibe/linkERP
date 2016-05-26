@@ -9,7 +9,7 @@
               </menuitem>
               <menuitem label='Clients'>
                   <icon>fa:users fa-fw</icon>
-                  <action>SystemGroupList</action>
+                  <action>SystemClientsList</action>
               </menuitem>
               <menuitem label='Stocks'>
                   <icon>fa:university fa-fw</icon>

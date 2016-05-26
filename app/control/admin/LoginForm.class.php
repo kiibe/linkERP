@@ -15,12 +15,29 @@ class LoginForm extends TPage
     {
         parent::__construct();
 
+       /* $container3 = new TElement('div');
+        $companyName= '<span style="font-size:30px"/>'
+        $companyName -> ddCell( new TLabel('Nombre de la empresa') )
+        $container3 -> add($companyName)*/
+
+       /* $table2 = new TTable;
+        $table2 -> width = '1000px';
+        $table2 -> height = '100px';
+
+        $row2=$table2->addRow();
+        $row2->addCell( new TLabel('Nombre empresa') )-> colspan = 2;
+        //$row2->class='tformtitle';
+
+        $container1 = new TElement('div');
+        $container1->add($user);*/
+
+
         $table = new TTable;
         $table->width = '100%';
         // creates the form
         $this->form = new TForm('form_login');
         $this->form->class = 'tform';
-        $this->form->style = 'max-width: 450px; margin:auto; margin-top:120px;';
+        $this->form->style = 'max-width: 400px; margin:auto; margin-top:120px;';
 
         // add the notebook inside the form
         $this->form->add($table);
@@ -66,7 +83,7 @@ class LoginForm extends TPage
         // define the button action
         $save_button->setAction(new TAction(array($this, 'onLogin')), _t('Log in'));
         $save_button->class = 'btn btn-success';
-        $save_button->style = 'font-size:18px;width:90%;padding:10px';
+        $save_button->style = 'font-size:18px;width:70%;padding:10px';
 
         $row=$table->addRow();
         $row->class = 'tformaction';
@@ -77,7 +94,9 @@ class LoginForm extends TPage
         $this->form->setFields(array($login, $password, $save_button));
 
         // add the form to the page
+        //parent::add($table2);
         parent::add($this->form);
+
     }
 
     /**

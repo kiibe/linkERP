@@ -1,155 +1,88 @@
 <?php
 /**
-* CalendarView
-*
-* @version    1.0
-* @package    samples
-* @subpackage tutor
-* @author     Pablo Dall'Oglio
-* @copyright  Copyright (c) 2006-2014 Adianti Solutions Ltd. (http://www.adianti.com.br)
-* @license    http://www.adianti.com.br/framework-license
-*/
-class CalendarView extends TPage
+ * System_groupList Listing
+ * @author  LinkERP
+ */
+class SystemClientsList extends TPage
 {
-   private $form;
-   private $calendar;
-   private $back_action;
-   private $next_action;
-
-   /**
-    * Class constructor
-    * Creates the page
-    */
-   function __construct()
-   {
-       parent::__construct();
-
-       // create the calendar
-       $this->calendar = new TCalendar;
-       // Gett actual data
-
-       $this->calendar->setMonth(date('m'));
-       $this->calendar->setYear(date('Y'));
-
-       $this->calendar->selectDays(date("j"));
-       $this->calendar->setSize(900,650);
-
-       $this->calendar->setAction( new TAction(array($this, 'onSelect')) );
-
-       // creates a simple form
-       $this->form = new TQuickForm('calendar_helper');
-
-       // creates the notebook around the form
-       $notebook = new TNotebook(300, 180);
-       $notebook->appendPage('Calendar Helper', $this->form);
-
-       // creates the form fields
-       $year  = new TEntry('year');
-       $month = new TEntry('month');
-       $day   = new TEntry('day');
-       $year->setValue( $this->calendar->getYear() );
-       $month->setValue( $this->calendar->getMonth() );
-       $day->setValue( $this->calendar->getSelectedDays() );
-
-       $this->form->addQuickField('Year',  $year,  100);
-       $this->form->addQuickField('Month', $month, 100);
-       //$this->form->addQuickField('Day',   $day,   100);
-
-       // creates a table to wrap the treeview and the form
-       $table = new TTable;
-       $this->form->addQuickAction('Back', new TAction(array($this, 'onBack')), 'ico_back.png');
-       $this->form->addQuickAction('Next', new TAction(array($this, 'onNext')), 'ico_next.png');
-       $row = $table->addRow();
-       $cell=$row->addCell($this->calendar)->valign='top';
-       $cell=$row->addCell($notebook)->valign='top';
-
-       // wrap the page content using vertical box
-       $vbox = new TVBox;
-       $vbox->add(new TXMLBreadCrumb('menu.xml', __CLASS__));
-       $vbox->add($table);
-       parent::add($vbox);
-   }
-
-   /**
-    * Next month
-    */
-   public function onNext($param)
-   {
-       $data = $this->form->getData();
-       $data->month ++;
-       if ($data->month ==13)
-       {
-           $data->month = 1;
-           $data->year ++;
-       }
-       $this->form->setData( $data );
-       $this->calendar->setMonth($data->month);
-       $this->calendar->setYear($data->year);
-   }
-
-   /**
-    * Previous month
-    */
-   public function onBack($param)
-   {
-       $data = $this->form->getData();
-       $data->month --;
-       if ($data->month == 0)
-       {
-           $data->month = 12;
-           $data->year --;
-       }
-       $this->form->setData( $data );
-       $this->calendar->setMonth($data->month);
-       $this->calendar->setYear($data->year);
-   }
-
-   /**
-    * Executed when the user clicks at a tree node
-    * @param $param URL parameters containing key and value
-    */
-   public function onSelect($param)
-   {
-      $table = new TTable;
+    private $form;     // registration form
+    private $datagrid; // listing
+    private $pageNavigation;
+    private $loaded;
+    
+    /**
+     * Class constructor
+     * Creates the page, the form and the listing
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        
+        // creates the form
+        $this->form = new TForm('form_search_System_clients');
+        $this->form->class = 'tform';
+        
+        // creates a table
+        $table = new TTable;
         $table->style = 'width:100%';
-
-        $table->addRowSet( new TLabel(_t('Notes')), '' )->class = 'tformtitle';
+        
+        $table->addRowSet( new TLabel(_t('Groups')), '' )->class = 'tformtitle';
         
         // add the table inside the form
         $this->form->add($table);
-
-        // create the form fields
-        $hour = new TEntry('Hour');
-        $hour->setValue(TSession::getValue('s_hour'));
         
-        $place = new TEntry('Place');
-        $place->setValue(TSession::getValue('s_place'));
+        // create the form fields
+        $id = new TEntry('id');
+        $id->setValue(TSession::getValue('s_id'));
+        
+        $name = new TEntry('name');
+        $name->setValue(TSession::getValue('s_name'));
 
-        $description = new TEntry('Description');
-        $description->setValue(TSession::getValue('s_description'));
+        $adress = new TEntry('adress');
+        $adress->setValue(TSession::getValue('s_adress'));
+
+        $dni = new TEntry('dni');
+        $dni->setValue(TSession::getValue('s_dni'));
+        
+        $email = new TEntry('email');
+        $email->setValue(TSession::getValue('s_email'));
+
+        $phone = new TEntry('phone');
+        $phone->setValue(TSession::getValue('s_phone'));
 
         // add a row for the filter field
         $row=$table->addRow();
-        $row->addCell(new TLabel(_t('Hour') . ': '));
-        $row->addCell($hour);
+        $row->addCell(new TLabel('ID:'));
+        $row->addCell($id);
         
         $row=$table->addRow();
-        $row->addCell(new TLabel(_t('Place') . ': '));
-        $row->addCell($place);
+        $row->addCell(new TLabel(_t('Name') . ': '));
+        $row->addCell($name);
 
         $row=$table->addRow();
-        $row->addCell(new TLabel(_t('Description') . ': '));
-        $row->addCell($description);
+        $row->addCell(new TLabel(_t('adress') . ': '));
+        $row->addCell($adress);
 
+        $row=$table->addRow();
+        $row->addCell(new TLabel(_t('dni') . ': '));
+        $row->addCell($dni);
+
+        $row=$table->addRow();
+        $row->addCell(new TLabel(_t('email') . ': '));
+        $row->addCell($email);
+
+        $row=$table->addRow();
+        $row->addCell(new TLabel(_t('phone') . ': '));
+        $row->addCell($phone);
+        
         // create two action buttons to the form
         $find_button = new TButton('find');
         $new_button  = new TButton('new');
-
         // define the button actions
         $find_button->setAction(new TAction(array($this, 'onSearch')), _t('Find'));
         $find_button->setImage('fa:search');
         
-        $new_button->setAction(new TAction(array('SystemNoteForm', 'onEdit')), _t('New'));
+        $new_button->setAction(new TAction(array('SystemClientsForm', 'onEdit')), _t('New'));
         $new_button->setImage('fa:plus-square green');
         
         $container = new THBox;
@@ -162,7 +95,7 @@ class CalendarView extends TPage
         $cell->colspan = 2;
         
         // define wich are the form fields
-        $this->form->setFields(array($hour, $place, $description, $find_button, $new_button));
+        $this->form->setFields(array($id, $name, $adress, $dni, $email, $phone, $find_button, $new_button));
         
         // creates a DataGrid
         $this->datagrid = new TDataGrid;
@@ -170,43 +103,78 @@ class CalendarView extends TPage
         $this->datagrid->setHeight(320);
         
         // creates the datagrid columns
-        $hour   = new TDataGridColumn('hour', _t('Hour'), 'center');
-        $place = new TDataGridColumn('Place', _t('Place'), 'center');
-        $description = new TDataGridColumn('Description', _t('Description'), 'center');
+        $id   = new TDataGridColumn('id', 'ID', 'center');
+        $name = new TDataGridColumn('name', _t('Name'), 'center');
+        $adress = new TDataGridColumn('adress', _t('Adress'), 'center');
+        $dni = new TDataGridColumn('dni', _t('DNI'), 'center');
+        $email = new TDataGridColumn('email', _t('Email'), 'center');
+        $phone = new TDataGridColumn('phone', _t('Phone'), 'center');
 
         // add the columns to the DataGrid
-        $this->datagrid->addColumn($hour);
-        $this->datagrid->addColumn($place);
-        $this->datagrid->addColumn($description);
+        $this->datagrid->addColumn($id);
+        $this->datagrid->addColumn($name);
+        $this->datagrid->addColumn($adress);
+        $this->datagrid->addColumn($dni);
+        $this->datagrid->addColumn($email);
+        $this->datagrid->addColumn($phone);
 
         // creates the datagrid column actions
-        $order_hour= new TAction(array($this, 'onReload'));
-        $order_hour->setParameter('order', 'hour');
-        $hour->setAction($order_hour);
+        $order_id= new TAction(array($this, 'onReload'));
+        $order_id->setParameter('order', 'id');
+        $id->setAction($order_id);
 
-        $order_place= new TAction(array($this, 'onReload'));
-        $order_place->setParameter('order', 'place');
-        $place->setAction($order_place);
+        $order_name= new TAction(array($this, 'onReload'));
+        $order_name->setParameter('order', 'name');
+        $name->setAction($order_name);
 
-        $order_description= new TAction(array($this, 'onReload'));
-        $order_description->setParameter('order', 'description');
-        $description->setAction($order_description);
+        $order_adress= new TAction(array($this, 'onReload'));
+        $order_adress->setParameter('order', 'adress');
+        $adress->setAction($order_adress);
+
+        $order_dni= new TAction(array($this, 'onReload'));
+        $order_dni->setParameter('order', 'dni');
+        $dni->setAction($order_dni);
+
+        $order_email= new TAction(array($this, 'onReload'));
+        $order_email->setParameter('order', 'email');
+        $email->setAction($order_email);
+
+        $order_phone= new TAction(array($this, 'onReload'));
+        $order_phone->setParameter('order', 'phone');
+        $phone->setAction($order_phone);
+
 
         // inline editing
-        $place_edit = new TDataGridAction(array($this, 'onInlineEdit'));
-        $place_edit->setField('hour');
-        $place->setEditAction($place_edit);
+        $name_edit = new TDataGridAction(array($this, 'onInlineEdit'));
+        $name_edit->setField('id');
+        $name->setEditAction($name_edit);
+
+        $adress_edit = new TDataGridAction(array($this, 'onInlineEdit'));
+        $adress_edit->setField('id');
+        $adress->setEditAction($adress_edit);
+
+        $dni_edit = new TDataGridAction(array($this, 'onInlineEdit'));
+        $dni_edit->setField('id');
+        $dni->setEditAction($dni_edit);
+
+        $email_edit = new TDataGridAction(array($this, 'onInlineEdit'));
+        $email_edit->setField('id');
+        $email->setEditAction($email_edit);
+
+        $phone_edit = new TDataGridAction(array($this, 'onInlineEdit'));
+        $phone_edit->setField('id');
+        $phone->setEditAction($phone_edit);
 
         // creates two datagrid actions
-        $action1 = new TDataGridAction(array('SystemNoteForm', 'onEdit'));
+        $action1 = new TDataGridAction(array('SystemClientsForm', 'onEdit'));
         $action1->setLabel(_t('Edit'));
         $action1->setImage('fa:pencil-square-o blue fa-lg');
-        $action1->setField('hour');
+        $action1->setField('id');
         
         $action2 = new TDataGridAction(array($this, 'onDelete'));
         $action2->setLabel(_t('Delete'));
         $action2->setImage('fa:trash-o red fa-lg');
-        $action2->setField('hour');
+        $action2->setField('id');
         
         // add the actions to the datagrid
         $this->datagrid->addAction($action1);
@@ -221,20 +189,18 @@ class CalendarView extends TPage
         $this->pageNavigation->setWidth($this->datagrid->getWidth());
         
         // creates the page structure using a table
-       /* $container = new TTable;
+        $container = new TTable;
         $container->style = 'width: 80%';
         $container->addRow()->addCell(new TXMLBreadCrumb('menu.xml', __CLASS__));
         $container->addRow()->addCell($this->form);
         $container->addRow()->addCell($this->datagrid);
-        $container->addRow()->addCell($this->pageNavigation);*/
+        $container->addRow()->addCell($this->pageNavigation);
         
         // add the container inside the page
         parent::add($container);
-        new TMessage('info',  $table);
-
     }
-
-   /**
+    
+    /**
      * method onInlineEdit()
      * Inline record editing
      * @param $param Array containing:
@@ -242,10 +208,7 @@ class CalendarView extends TPage
      *              field name: object attribute to be updated
      *              value: new attribute content 
      */
-
-
-
-function onInlineEdit($param)
+    function onInlineEdit($param)
     {
         try
         {
@@ -278,44 +241,84 @@ function onInlineEdit($param)
             // undo all pending operations
             TTransaction::rollback();
         }
-    }//end onInlineEdit
-
+    }
+    
     /**
      * method onSearch()
      * Register the filter in the session when the user performs a search
      */
-
     function onSearch()
     {
         // get the search form data
         $data = $this->form->getData();
         
-        TSession::setValue('s_hour_filter',   NULL);
-        TSession::setValue('s_place_filter', NULL);
-        TSession::setValue('s_description_filter', NULL);
+        TSession::setValue('s_id_filter',   NULL);
+        TSession::setValue('s_name_filter', NULL);
+        TSession::setValue('s_adress_filter', NULL);
+        TSession::setValue('s_dni_filter', NULL);
+        TSession::setValue('s_email_filter', NULL);
+        TSession::setValue('s_phone_filter', NULL);
         
-        TSession::setValue('s_hour', '');
-        TSession::setValue('s_place', '');
-        TSession::setValue('s_description', '');
+        TSession::setValue('s_id', '');
+        TSession::setValue('s_name', '');
+        TSession::setValue('s_adress', '');
+        TSession::setValue('s_dni', '');
+        TSession::setValue('s_email', '');
+        TSession::setValue('s_phone', '');
         
         // check if the user has filled the form
-        if ( $data->hour )
+        if ( $data->id )
         {
             // creates a filter using what the user has typed
-            $filter = new TFilter('hour', '=', "{$data->hour}");
+            $filter = new TFilter('id', '=', "{$data->id}");
             
             // stores the filter in the session
-            TSession::setValue('s_hour_filter',   $filter);
-            TSession::setValue('s_hour', $data->hour);
+            TSession::setValue('s_id_filter',   $filter);
+            TSession::setValue('s_id', $data->id);
         }
-        if ( $data->place )
+        if ( $data->name )
         {
             // creates a filter using what the user has typed
-            $filter = new TFilter('place', 'like', "%{$data->place}%");
+            $filter = new TFilter('name', 'like', "%{$data->name}%");
             
-            TSession::setValue('s_place_filter', $filter);
-            TSession::setValue('s_place', $data->place);            
+            TSession::setValue('s_name_filter', $filter);
+            TSession::setValue('s_name', $data->name);            
         }
+        if ( $data->adress )
+        {
+            // creates a filter using what the user has typed
+            $filter = new TFilter('adress', 'like', "%{$data->adress}%");
+            
+            TSession::setValue('s_adress_filter', $filter);
+            TSession::setValue('s_adress', $data->adress);            
+        }
+        if ( $data->dni )
+        {
+            // creates a filter using what the user has typed
+            $filter = new TFilter('dni', 'like', "%{$data->dni}%");
+            
+            TSession::setValue('s_dni_filter', $filter);
+            TSession::setValue('s_dni', $data->dni);            
+        }
+        if ( $data->email )
+        {
+            // creates a filter using what the user has typed
+            $filter = new TFilter('email', 'like', "%{$data->email}%");
+            
+            TSession::setValue('s_email_filter', $filter);
+            TSession::setValue('s_email', $data->email);            
+        }
+        if ( $data->phone )
+        {
+            // creates a filter using what the user has typed
+            $filter = new TFilter('phone', 'like', "%{$data->phone}%");
+            
+            TSession::setValue('s_phone_filter', $filter);
+            TSession::setValue('s_phone', $data->phone);            
+        }
+
+
+
         // fill the form with data again
         $this->form->setData($data);
         
@@ -324,7 +327,7 @@ function onInlineEdit($param)
         $param['first_page']=1;
         $this->onReload($param);
     }
-
+    
     /**
      * method onReload()
      * Load the datagrid with the database objects
@@ -338,7 +341,7 @@ function onInlineEdit($param)
             
             if( ! isset($param['order']) )
             {
-                $param['order'] = 'hour';
+                $param['order'] = 'id';
                 $param['direction'] = 'asc';
             }
             
@@ -350,16 +353,37 @@ function onInlineEdit($param)
             $criteria->setProperties($param); // order, offset
             $criteria->setProperty('limit', $limit);
             
-            if (TSession::getValue('s_hour_filter'))
+            if (TSession::getValue('s_id_filter'))
             {
                 // add the filter stored in the session to the criteria
-                $criteria->add(TSession::getValue('s_hour_filter'));
+                $criteria->add(TSession::getValue('s_id_filter'));
             }
-            if (TSession::getValue('s_place_filter'))
+            if (TSession::getValue('s_name_filter'))
             {
                 // add the filter stored in the session to the criteria
-                $criteria->add(TSession::getValue('s_place_filter'));
+                $criteria->add(TSession::getValue('s_name_filter'));
             }
+            if (TSession::getValue('s_adress_filter'))
+            {
+                // add the filter stored in the session to the criteria
+                $criteria->add(TSession::getValue('s_adress_filter'));
+            }
+            if (TSession::getValue('s_dni_filter'))
+            {
+                // add the filter stored in the session to the criteria
+                $criteria->add(TSession::getValue('s_dni_filter'));
+            }
+            if (TSession::getValue('s_email_filter'))
+            {
+                // add the filter stored in the session to the criteria
+                $criteria->add(TSession::getValue('s_email_filter'));
+            }
+            if (TSession::getValue('s_phone_filter'))
+            {
+                // add the filter stored in the session to the criteria
+                $criteria->add(TSession::getValue('s_phone_filter'));
+            }
+
             
             // load the objects according to criteria
             $objects = $repository->load($criteria);
@@ -396,9 +420,8 @@ function onInlineEdit($param)
             TTransaction::rollback();
         }
     }
-
-
-     /**
+    
+    /**
      * method onDelete()
      * executed whenever the user clicks at the delete button
      * Ask if the user really wants to delete the record
@@ -412,7 +435,7 @@ function onInlineEdit($param)
         // shows a dialog to the user
         new TQuestion(TAdiantiCoreTranslator::translate('Do you really want to delete ?'), $action);
     }
-
+    
     /**
      * method Delete()
      * Delete a record
@@ -449,7 +472,7 @@ function onInlineEdit($param)
             TTransaction::rollback();
         }
     }
-
+    
     /**
      * method show()
      * Shows the page

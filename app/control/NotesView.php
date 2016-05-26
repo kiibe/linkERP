@@ -1,116 +1,31 @@
 <?php
-/**
-* CalendarView
-*
-* @version    1.0
-* @package    samples
-* @subpackage tutor
-* @author     Pablo Dall'Oglio
-* @copyright  Copyright (c) 2006-2014 Adianti Solutions Ltd. (http://www.adianti.com.br)
-* @license    http://www.adianti.com.br/framework-license
-*/
-class CalendarView extends TPage
+class NotesView extends TPage
 {
-   private $form;
-   private $calendar;
-   private $back_action;
-   private $next_action;
+    /**
+     * Class constructor
+     * Creates the page
+     */
+    function __construct()
+    {
+        parent::__construct();
 
-   /**
-    * Class constructor
-    * Creates the page
-    */
-   function __construct()
-   {
-       parent::__construct();
+       /* $html1 = new THtmlRenderer('app/resources/notes.html');
 
-       // create the calendar
-       $this->calendar = new TCalendar;
-       // Gett actual data
+        // replace the main section variables
+        $html1->enableSection('main', array());
 
-       $this->calendar->setMonth(date('m'));
-       $this->calendar->setYear(date('Y'));
+        $panel1 = new TPanelGroup('Notes');
+        $panel1->add($html1);
 
-       $this->calendar->selectDays(date("j"));
-       $this->calendar->setSize(900,650);
+        // add the template to the page
+        parent::add( $panel1 );
 
-       $this->calendar->setAction( new TAction(array($this, 'onSelect')) );
+        // creates the form
+        $this->form = new TForm('form_notes');
+        $this->form->class = 'tform';*/
 
-       // creates a simple form
-       $this->form = new TQuickForm('calendar_helper');
-
-       // creates the notebook around the form
-       $notebook = new TNotebook(300, 180);
-       $notebook->appendPage('Calendar Helper', $this->form);
-
-       // creates the form fields
-       $year  = new TEntry('year');
-       $month = new TEntry('month');
-       $day   = new TEntry('day');
-       $year->setValue( $this->calendar->getYear() );
-       $month->setValue( $this->calendar->getMonth() );
-       $day->setValue( $this->calendar->getSelectedDays() );
-
-       $this->form->addQuickField('Year',  $year,  100);
-       $this->form->addQuickField('Month', $month, 100);
-       //$this->form->addQuickField('Day',   $day,   100);
-
-       // creates a table to wrap the treeview and the form
+        // creates a table
        $table = new TTable;
-       $this->form->addQuickAction('Back', new TAction(array($this, 'onBack')), 'ico_back.png');
-       $this->form->addQuickAction('Next', new TAction(array($this, 'onNext')), 'ico_next.png');
-       $row = $table->addRow();
-       $cell=$row->addCell($this->calendar)->valign='top';
-       $cell=$row->addCell($notebook)->valign='top';
-
-       // wrap the page content using vertical box
-       $vbox = new TVBox;
-       $vbox->add(new TXMLBreadCrumb('menu.xml', __CLASS__));
-       $vbox->add($table);
-       parent::add($vbox);
-   }
-
-   /**
-    * Next month
-    */
-   public function onNext($param)
-   {
-       $data = $this->form->getData();
-       $data->month ++;
-       if ($data->month ==13)
-       {
-           $data->month = 1;
-           $data->year ++;
-       }
-       $this->form->setData( $data );
-       $this->calendar->setMonth($data->month);
-       $this->calendar->setYear($data->year);
-   }
-
-   /**
-    * Previous month
-    */
-   public function onBack($param)
-   {
-       $data = $this->form->getData();
-       $data->month --;
-       if ($data->month == 0)
-       {
-           $data->month = 12;
-           $data->year --;
-       }
-       $this->form->setData( $data );
-       $this->calendar->setMonth($data->month);
-       $this->calendar->setYear($data->year);
-   }
-
-   /**
-    * Executed when the user clicks at a tree node
-    * @param $param URL parameters containing key and value
-    */
-   public function onSelect($param)
-   {
-      $table = new TTable;
         $table->style = 'width:100%';
 
         $table->addRowSet( new TLabel(_t('Notes')), '' )->class = 'tformtitle';
@@ -149,7 +64,7 @@ class CalendarView extends TPage
         $find_button->setAction(new TAction(array($this, 'onSearch')), _t('Find'));
         $find_button->setImage('fa:search');
         
-        $new_button->setAction(new TAction(array('SystemNoteForm', 'onEdit')), _t('New'));
+        $new_button->setAction(new TAction(array('SystemGroupForm', 'onEdit')), _t('New'));
         $new_button->setImage('fa:plus-square green');
         
         $container = new THBox;
@@ -162,7 +77,7 @@ class CalendarView extends TPage
         $cell->colspan = 2;
         
         // define wich are the form fields
-        $this->form->setFields(array($hour, $place, $description, $find_button, $new_button));
+        $this->form->setFields(array($hour, $place,$description, $find_button, $new_button));
         
         // creates a DataGrid
         $this->datagrid = new TDataGrid;
@@ -198,7 +113,7 @@ class CalendarView extends TPage
         $place->setEditAction($place_edit);
 
         // creates two datagrid actions
-        $action1 = new TDataGridAction(array('SystemNoteForm', 'onEdit'));
+        $action1 = new TDataGridAction(array('SystemGroupForm', 'onEdit'));
         $action1->setLabel(_t('Edit'));
         $action1->setImage('fa:pencil-square-o blue fa-lg');
         $action1->setField('hour');
@@ -221,16 +136,15 @@ class CalendarView extends TPage
         $this->pageNavigation->setWidth($this->datagrid->getWidth());
         
         // creates the page structure using a table
-       /* $container = new TTable;
+        $container = new TTable;
         $container->style = 'width: 80%';
         $container->addRow()->addCell(new TXMLBreadCrumb('menu.xml', __CLASS__));
         $container->addRow()->addCell($this->form);
         $container->addRow()->addCell($this->datagrid);
-        $container->addRow()->addCell($this->pageNavigation);*/
+        $container->addRow()->addCell($this->pageNavigation);
         
         // add the container inside the page
         parent::add($container);
-        new TMessage('info',  $table);
 
     }
 
@@ -463,5 +377,9 @@ function onInlineEdit($param)
         }
         parent::show();
     }
+
+
 }
+
+
 ?>
