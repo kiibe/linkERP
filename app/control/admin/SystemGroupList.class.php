@@ -104,7 +104,7 @@ class SystemGroupList extends TPage
 
         $action2 = new TDataGridAction(array($this, 'onDelete'));
         $action2->setLabel(_t('Delete'));
-        $action2->setImage('fa:trash-o red fa-lg');
+        $action2->setImage('fa:trash-o grey fa-lg');
         $action2->setField('id');
 
         // add the actions to the datagrid

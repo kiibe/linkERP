@@ -13,9 +13,31 @@
               </menuitem>
               <menuitem label='Stocks'>
                   <icon>fa:university fa-fw</icon>
-                  <action>SystemUserList</action>
+                  <action>SystemStockList</action>
               </menuitem>
-              <menuitem label='sales'>
+              <menuitem label='Sales'>
+                  <icon>fa:table fa-fw</icon>
+                  <action>SystemSalesList</action>
+              </menuitem>
+        </menu>
+    </menuitem>
+
+     <menuitem label='Admon'>
+        <icon>fa:university fa-fw</icon>
+        <menu>
+              <menuitem label='Notes/Calendar'>
+                  <icon>fa:file-code-o fa-fw</icon>
+                  <action>CalendarView</action>
+              </menuitem>
+              <menuitem label='Clients'>
+                  <icon>fa:users fa-fw</icon>
+                  <action>SystemClientsList</action>
+              </menuitem>
+              <menuitem label='RRHH'>
+                  <icon>fa:user fa-fw</icon>
+                  <action>SystemRRHHList</action>
+              </menuitem>
+              <menuitem label='Finances'>
                   <icon>fa:table fa-fw</icon>
                   <action>SystemSQLPanel</action>
               </menuitem>
@@ -48,7 +70,7 @@
         </menu>
     </menuitem>
 
-    <menuitem label='Logs'>
+    <!--<menuitem label='Logs'>
         <icon>fa:desktop fa-fw</icon>
         <menu>
               <menuitem label='Access Log'>
@@ -64,7 +86,7 @@
                   <action>SystemSqlLogList</action>
               </menuitem>
         </menu>
-    </menuitem>
+    </menuitem>-->
 
     <menuitem label='Common pages'>
         <menu>
