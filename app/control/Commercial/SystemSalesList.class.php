@@ -42,6 +42,10 @@ class SystemSalesList extends TPage
         $amount->setValue(TSession::getValue('s_amount'));
 
 
+        $id->setSize(100);
+        $client->setSize(200);
+        $amount->setSize(200); 
+
         // add a row for the filter field
         $row=$table->addRow();
         $row->addCell(new TLabel('ID:'));

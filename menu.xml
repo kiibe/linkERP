@@ -7,21 +7,21 @@
                   <action>SystemClientsList</action>
               </menuitem>
               <menuitem label='Notes/Calendar'>
-                  <icon>fa:file-code-o fa-fw</icon>
+                  <icon>fa:calendar fa-fw</icon>
                   <action>CalendarView</action>
               </menuitem>
               <menuitem label='Notes'>
-                  <icon>fa:file-code-o fa-fw</icon>
+                  <icon>fa:book fa-fw</icon>
                   <action>SystemNotesList</action>
               </menuitem>
         </menu>
     </menuitem>
 
     <menuitem label='Commercial'>
-        <icon>fa:user fa-fw</icon>
+        <icon>fa:street-view fa-fw</icon>
         <menu>
               <menuitem label='Stocks'>
-                  <icon>fa:university fa-fw</icon>
+                  <icon>fa:industry fa-fw</icon>
                   <action>SystemStockList</action>
               </menuitem>
               <menuitem label='Sales'>
@@ -35,27 +35,27 @@
         <icon>fa:university fa-fw</icon>
         <menu>
             <menuitem label='RRHH'>
-                <icon>fa:user fa-fw</icon>
+                <icon>fa:life-ring fa-fw</icon>
                       <menu>
                             <menuitem label='Employees'>
-                                <icon>fa:university fa-fw</icon>
-                                <action>SystemRRHHList</action>
+                                <icon>fa:male fa-fw</icon>
+                                <action>SystemEmployeesList</action>
                             </menuitem>
                       </menu>              
             </menuitem>
             <menuitem label='Finances'>
-                <icon>fa:table fa-fw</icon>
+                <icon>fa:briefcase fa-fw</icon>
                       <menu>
                           <menuitem label='Invoices'>
-                              <icon>fa:user fa-fw</icon>
+                              <icon>fa:file-text-o fa-fw</icon>
                               <action>SystemInvoicesList</action>
                           </menuitem>
                           <menuitem label='Payments'>
-                              <icon>fa:table fa-fw</icon>
+                              <icon>fa:usd fa-fw</icon>
                               <action>SystemPaymentsList</action>
                           </menuitem>
                           <menuitem label='Charge'>
-                              <icon>fa:table fa-fw</icon>
+                              <icon>fa:balance-scale fa-fw</icon>
                               <action>SystemChargeList</action>
                           </menuitem>
                       </menu>
@@ -64,7 +64,7 @@
     </menuitem>
 
     <menuitem label='Administration'>
-        <icon>fa:university fa-fw</icon>
+        <icon>fa:key fa-fw</icon>
         <menu>
               <menuitem label='Programs'>
                   <icon>fa:file-code-o fa-fw</icon>
@@ -127,7 +127,7 @@
     <menuitem label='Logout'>
         <menu>
               <menuitem label='Profile'>
-                  <icon></icon>
+                  <icon>fa:user-md fa-fw</icon>
                   <action>SystemProfileView</action>
               </menuitem>
 

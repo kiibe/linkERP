@@ -41,16 +41,12 @@ class SystemPaymentsList extends TPage
         $amount = new TEntry('amount');
         $amount->setValue(TSession::getValue('s_amount'));
 
-        $description = new TText('description');
-        $description->setValue(TSession::getValue('s_description'));
-
         $date = new TEntry('date');
         $date->setValue(TSession::getValue('s_date'));
 
         $id->setSize(100);
         $provider->setSize(200);
         $amount->setSize(200);
-        $description->setSize(200); 
         $date->setSize(200);
 
 
@@ -66,10 +62,6 @@ class SystemPaymentsList extends TPage
         $row=$table->addRow();
         $row->addCell(new TLabel('Amount: '));
         $row->addCell($amount);
-
-        $row=$table->addRow();
-        $row->addCell(new TLabel('Description:'));
-        $row->addCell($description);
 
         $row=$table->addRow();
         $row->addCell(new TLabel('Date: '));
@@ -96,7 +88,7 @@ class SystemPaymentsList extends TPage
         $cell->colspan = 2;
 
         // define wich are the form fields
-        $this->form->setFields(array($id, $provider, $amount, $description, $date, $find_button, $new_button));
+        $this->form->setFields(array($id, $provider, $amount, $date, $find_button, $new_button));
 
         // creates a DataGrid
         $this->datagrid = new TDataGrid;
@@ -248,13 +240,11 @@ class SystemPaymentsList extends TPage
         TSession::setValue('s_id_filter',   NULL);
         TSession::setValue('s_provider_filter', NULL);
         TSession::setValue('s_amount_filter', NULL);
-        TSession::setValue('s_description_filter',   NULL);
         TSession::setValue('s_date_filter', NULL);
 
         TSession::setValue('s_id', '');
         TSession::setValue('s_provider', '');
         TSession::setValue('s_amount', '');
-        TSession::setValue('s_description', '');
         TSession::setValue('s_date', '');
 
         // check if the user has filled the form
@@ -282,15 +272,6 @@ class SystemPaymentsList extends TPage
 
             TSession::setValue('s_amount_filter', $filter);
             TSession::setValue('s_amount', $data->amount);
-        }
-        if ( $data->description )
-        {
-            // creates a filter using what the user has typed
-            $filter = new TFilter('description', '=', "{$data->description}");
-
-            // stores the filter in the session
-            TSession::setValue('s_description_filter',   $filter);
-            TSession::setValue('s_description', $data->description);
         }
         if ( $data->date )
         {

@@ -178,6 +178,9 @@ textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[ty
 {
     background-color: #3c8dbc !important;
     padding: 8px 0px 8px 5px !important;
+    border-radius: 100px 0px 100px 0px;
+    -moz-border-radius:100px 0px 100px 0px;
+    -webkit-border-radius:100px 0px 100px 0px;
 }
 
 .tformtitle > td > label
@@ -201,7 +204,7 @@ textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[ty
 {
     background: white !important;
     border: none !important;
-    border-radius: none !important;
+    /*border-radius: none !important;*/
     padding: 0px !important;
     margin-bottom: 20px !important;
 }

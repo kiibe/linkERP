@@ -3,7 +3,7 @@
  * System_groupList Listing
  * @author  LinkERP
  */
-class SystemRRHHList extends TPage
+class SystemEmployeesList extends TPage
 {
     private $form;     // registration form
     private $datagrid; // listing
@@ -19,7 +19,7 @@ class SystemRRHHList extends TPage
         parent::__construct();
 
         // creates the form
-        $this->form = new TForm('form_search_System_RRHH');
+        $this->form = new TForm('form_search_System_Employees');
         $this->form->class = 'tform';
 
         // creates a table
@@ -49,6 +49,13 @@ class SystemRRHHList extends TPage
 
         $phone = new TEntry('phone');
         $phone->setValue(TSession::getValue('s_phone'));
+
+        $id->setSize(100);
+        $dni->setSize(200);
+        $name->setSize(200); 
+        $address->setSize(200);
+        $email->setSize(200); 
+        $phone->setSize(200);
 
         // add a row for the filter field
         $row=$table->addRow();
@@ -82,7 +89,7 @@ class SystemRRHHList extends TPage
         $find_button->setAction(new TAction(array($this, 'onSearch')), _t('Find'));
         $find_button->setImage('fa:search');
 
-        $new_button->setAction(new TAction(array('SystemRRHHForm', 'onEdit')), _t('New'));
+        $new_button->setAction(new TAction(array('SystemEmployeesForm', 'onEdit')), _t('New'));
         $new_button->setImage('fa:plus-square green');
 
         $container = new THBox;
@@ -168,7 +175,7 @@ class SystemRRHHList extends TPage
 
 
         // creates two datagrid actions
-        $action1 = new TDataGridAction(array('SystemRRHHForm', 'onEdit'));
+        $action1 = new TDataGridAction(array('SystemEmployeesForm', 'onEdit'));
         $action1->setLabel(_t('Edit'));
         $action1->setImage('fa:pencil-square-o blue fa-lg');
         $action1->setField('id');

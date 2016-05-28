@@ -54,7 +54,7 @@ class SystemChargeForm extends TPage
 
         // add a row for the field id
         $table->addRowSet(new TLabel('ID:'), $id);
-        $table->addRowSet(new TLabel('client: '), $client);
+        $table->addRowSet(new TLabel('Client: '), $client);
         $table->addRowSet(new TLabel('Amount: '), $amount);
         $table->addRowSet(new TLabel('Description: '), $description);
         $table->addRowSet(new TLabel('Date: '), $date);
