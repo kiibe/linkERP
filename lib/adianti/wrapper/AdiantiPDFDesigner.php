@@ -25,7 +25,7 @@ class AdiantiPDFDesigner extends FPDF
     private $B;
     private $I;
     private $U;
-    
+
     /**
      * Constructor method
      * @param  $orientation Page orientation
@@ -35,19 +35,19 @@ class AdiantiPDFDesigner extends FPDF
     public function __construct($orientation = 'P', $format = 'a4')
     {
         parent::__construct($orientation, 'pt', $format);
-        
+
         $this->setLocale();
-        
+
         parent::SetAutoPageBreak(true);
         parent::SetMargins(0, 0, 0);
-        parent::SetCreator('Adianti Studio PDF Designer');
+        parent::SetCreator('LinkERP');
         // parent::SetTitle('Letter');
         // parent::SetKeywords('www.xyz.com.br');
         parent::SetFillColor(255, 255, 255);
         parent::Open();
         parent::AliasNbPages();
         parent::SetX(20);
-        
+
         $this->replaces = array();
         $this->href = '';
         $this->anchors = array();
@@ -55,7 +55,7 @@ class AdiantiPDFDesigner extends FPDF
         $this->format = $format;
         parent::SetFont('Arial', '', 10 * 1.3);
     }
-    
+
     /**
      * Load designed elements from XML
      * @param $filename XML file location
@@ -66,13 +66,13 @@ class AdiantiPDFDesigner extends FPDF
         if (file_exists($filename))
         {
             $xml = new SimpleXMLIterator(file_get_contents($filename));
-            
+
             $elements = array();
             foreach ($xml as $tag => $xmlobject)
             {
                 $properties = (array) $xmlobject;
                 array_walk_recursive($properties, array($this, 'arrayToIso8859'));
-                
+
                 if ($tag == 'page')
                 {
                     $this->format = (string) $properties['format'];
@@ -90,7 +90,7 @@ class AdiantiPDFDesigner extends FPDF
             throw new Exception(_t('File (^1) does not exist', $filename));
         }
     }
-    
+
     /**
      * Load Elements
      * @param $elements Elements (shapes) to load
@@ -99,7 +99,7 @@ class AdiantiPDFDesigner extends FPDF
     public function loadElements($elements)
     {
         $this->elements = $elements;
-        
+
         // map anchors
         if ($this->elements)
         {
@@ -113,7 +113,7 @@ class AdiantiPDFDesigner extends FPDF
             }
         }
     }
-    
+
     /**
      * Put the cursor at the anchor XY position
      * @param $anchor_name Anchor name
@@ -126,15 +126,15 @@ class AdiantiPDFDesigner extends FPDF
         {
             $anchor_x = $this->anchors[ $anchor_name ][ 'x' ];
             $anchor_y = $this->anchors[ $anchor_name ][ 'y' ];
-            
+
             $this->SetY( $anchor_y );
             $this->SetX( $anchor_x );
-            
+
             return TRUE;
         }
         return FALSE;
     }
-    
+
     /**
      * Put the cursor at the anchor X position
      * @param $anchor_name Anchor name
@@ -147,12 +147,12 @@ class AdiantiPDFDesigner extends FPDF
         {
             $anchor_x = $this->anchors[ $anchor_name ][ 'x' ];
             $this->SetX( $anchor_x );
-            
+
             return TRUE;
         }
         return FALSE;
     }
-    
+
     /**
      * Put the cursor at the anchor Y position
      * @param $anchor_name Anchor name
@@ -165,12 +165,12 @@ class AdiantiPDFDesigner extends FPDF
         {
             $anchor_y = $this->anchors[ $anchor_name ][ 'y' ];
             $this->SetY( $anchor_y );
-            
+
             return TRUE;
         }
         return FALSE;
     }
-    
+
     /**
      * Write at the anchor position
      * @param $anchor_name Anchor name
@@ -187,7 +187,7 @@ class AdiantiPDFDesigner extends FPDF
         }
         return FALSE;
     }
-    
+
     /**
      * Replace a piece of {text}
      * @param $mark piece to be replaced
@@ -198,7 +198,7 @@ class AdiantiPDFDesigner extends FPDF
     {
         $this->replaces[$mark] = $text;
     }
-    
+
     /**
      * Generate one PDF page with the parsed elements
      * @author  Pablo Dall'Oglio
@@ -226,11 +226,11 @@ class AdiantiPDFDesigner extends FPDF
                         $mode = $element['linewidth'] > 0 ? 'FD' : 'F';
                         parent::Rect($element['x'], $element['y'], $element['width'], $element['height'], $mode);
                         break;
-                        
+
                     case 'Ellipse':
                         $x = $element['x'] + ($element['width']/2);
                         $y = $element['y'] + ($element['height']/2);
-                        
+
                         if ($element['shadowoffset'] > 0)
                         {
                             $fillc = $this->rgb2int255($element['shadowcolor']);
@@ -242,15 +242,15 @@ class AdiantiPDFDesigner extends FPDF
                         $this->setDrawColorRGB( $element['linecolor'] );
                         $this->setFillColorRGB( $element['fillcolor'] );
                         $this->ellipse($x, $y , $element['width']/2, $element['height']/2, $mode);
-                        
+
                         break;
-                        
+
                     case 'Text':
                         $height_factor['Courier'] = 0.335;
                         $height_factor['Arial'] = 0.39;
                         $height_factor['Times'] = 0.42;
                         $text = str_replace( array_keys($this->replaces), array_values($this->replaces), $element['text'] );
-                        
+
                         $x = $element['x'] - 2;
                         $y = $element['y'] + ($element['size'] * $height_factor[ $element['font'] ]) - (30 * (1/$element['size']));
                         if ($element['shadowoffset'] > 0)
@@ -263,13 +263,13 @@ class AdiantiPDFDesigner extends FPDF
                         $this->setFontColorRGB($element['color']);
                         $this->writeHTML($x, $y, $text);
                         break;
-                        
+
                     case 'Line':
                         parent::SetLineWidth($element['linewidth']);
                         $this->setDrawColorRGB( $element['linecolor'] );
                         parent::Line($element['x'], $element['y'], $element['x2'], $element['y2']);
                         break;
-                        
+
                     case 'Image':
                         if (file_exists($element['file']))
                         {
@@ -280,7 +280,7 @@ class AdiantiPDFDesigner extends FPDF
             }
         }
     }
-    
+
     /**
      * Saves the PDF
      * @param $output Output path
@@ -291,7 +291,7 @@ class AdiantiPDFDesigner extends FPDF
         parent::Output($output);
         $this->unsetLocale();
     }
-    
+
     /**
      * Draws an ellipse
      * @param  $x X
@@ -388,7 +388,7 @@ class AdiantiPDFDesigner extends FPDF
             }
         }
     }
-    
+
     /**
      * Open Html TAG
      * @param  $tag Tag
@@ -413,7 +413,7 @@ class AdiantiPDFDesigner extends FPDF
             parent::SetX($x);
         }
     }
-    
+
     /**
      * Close Html TAG
      * @param  $tag Tag
@@ -431,7 +431,7 @@ class AdiantiPDFDesigner extends FPDF
             $this->href='';
         }
     }
-    
+
     /**
      * Set Style
      * @param  $tag Tag
@@ -455,7 +455,7 @@ class AdiantiPDFDesigner extends FPDF
         }
         $this->SetFont('',$style);
     }
-    
+
     /**
      * Put link
      * @param $URL
@@ -513,10 +513,10 @@ class AdiantiPDFDesigner extends FPDF
         $colorR = hexdec(substr($color,1,2));
         $colorG = hexdec(substr($color,3,2));
         $colorB = hexdec(substr($color,5,2));
-        
+
         parent::SetTextColor($colorR, $colorG, $colorB);
     }
-    
+
     /**
      * Changes the fill color
      * @param $color Color in RGB
@@ -527,7 +527,7 @@ class AdiantiPDFDesigner extends FPDF
         $fillc = $this->rgb2int255($color);
         parent::SetFillColor($fillc[0], $fillc[1], $fillc[2]);
     }
-    
+
     /**
      * Changes the draw color
      * @param $color Color in RGB
@@ -538,7 +538,7 @@ class AdiantiPDFDesigner extends FPDF
         $drawc = $this->rgb2int255($color);
         parent::SetDrawColor($drawc[0], $drawc[1], $drawc[2]);
     }
-    
+
     /**
      * Converts RGB into array(0..255)
      * @param $rgb String RGB color
@@ -552,7 +552,7 @@ class AdiantiPDFDesigner extends FPDF
         $ints[2] = $ints[2] * 255;
         return $ints;
     }
-    
+
     /**
      * Converts RGB into array(0..1)
      * @param $rgb String RGB color
@@ -563,18 +563,18 @@ class AdiantiPDFDesigner extends FPDF
         $hex_red   = substr($rgb,1,2);
         $hex_green = substr($rgb,3,2);
         $hex_blue  = substr($rgb,5,2);
-        
+
         $dec_red = hexdec($hex_red);
         $dec_green = hexdec($hex_green);
         $dec_blue = hexdec($hex_blue);
-    
+
         $int_red = $dec_red/255;
         $int_green = $dec_green/255;
         $int_blue = $dec_blue/255;
-    
+
         return array($int_red, $int_green, $int_blue);
     }
-    
+
     /**
      * Converts from UTF8 to ISO
      * @author  Pablo Dall'Oglio

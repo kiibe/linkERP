@@ -9,7 +9,7 @@ class TTableWriterPDF implements ITableWriter
     private $pdf;
     private $widths;
     private $colcounter;
-    
+
     /**
      * Constructor
      * @param $widths Array with column widths
@@ -20,7 +20,7 @@ class TTableWriterPDF implements ITableWriter
         $this->widths = $widths;
         // inicializa atributos
         $this->styles = array();
-        
+
         // define o locale
         setlocale(LC_ALL, 'POSIX');
         // cria o objeto FPDF
@@ -28,7 +28,7 @@ class TTableWriterPDF implements ITableWriter
         $this->pdf->Open();
         $this->pdf->AddPage();
     }
-    
+
     /**
      * Returns the native writer
      */
@@ -36,7 +36,7 @@ class TTableWriterPDF implements ITableWriter
     {
         return $this->pdf;
     }
-    
+
     /**
      * Add a new style
      * @param @stylename style name
@@ -50,7 +50,7 @@ class TTableWriterPDF implements ITableWriter
     {
         $this->styles[$stylename] = array($fontface, $fontsize, $fontstyle, $fontcolor, $fillcolor);
     }
-    
+
     /**
      * Apply a given style
      * @param $stylename style name
@@ -67,7 +67,7 @@ class TTableWriterPDF implements ITableWriter
             $fontstyle   = $style[2];
             $fontcolor   = $style[3];
             $fillcolor   = $style[4];
-            
+
             // aplica os atributos do estilo
             $this->pdf->SetFont($fontface, $fontstyle); // fonte
             $this->pdf->SetFontSize($fontsize); // estilo
@@ -79,7 +79,7 @@ class TTableWriterPDF implements ITableWriter
             $this->pdf->SetFillColor($colorarray[0], $colorarray[1], $colorarray[2]);
         }
     }
-    
+
     /**
      * Convert one RGB color into array of decimals
      * @param $rgb String with a RGB color
@@ -89,10 +89,10 @@ class TTableWriterPDF implements ITableWriter
         $red   = hexdec(substr($rgb,1,2));
         $green = hexdec(substr($rgb,3,2));
         $blue  = hexdec(substr($rgb,5,2));
-        
+
         return array($red, $green, $blue);
     }
-    
+
     /**
      * Add a new row inside the table
      */
@@ -101,13 +101,13 @@ class TTableWriterPDF implements ITableWriter
         $this->pdf->Ln(); // quebra de linha
         $this->colcounter = 0;
     }
-    
+
     /**
      * Add a new cell inside the current row
      * @param $content   cell content
      * @param $align     cell align
      * @param $stylename style to be used
-     * @param $colspan   colspan (merge) 
+     * @param $colspan   colspan (merge)
      */
     public function addCell($content, $align, $stylename, $colspan = 1)
     {
@@ -115,15 +115,15 @@ class TTableWriterPDF implements ITableWriter
         {
             throw new Exception(TAdiantiCoreTranslator::translate('Style ^1 not found in ^2', $stylename, __METHOD__ ) );
         }
-        
+
         $this->applyStyle($stylename); // aplica o estilo
         $fontsize = $this->styles[$stylename][1]; // obtém a fonte
-        
+
         if (utf8_encode(utf8_decode($content)) == $content ) // SE UTF8
         {
             $content = utf8_decode($content);
         }
-        
+
         $width = 0;
         // calcula a largura da célula (incluindo as mescladas)
         for ($n=$this->colcounter; $n<$this->colcounter+$colspan; $n++)
@@ -134,7 +134,20 @@ class TTableWriterPDF implements ITableWriter
         $this->pdf->Cell( $width, $fontsize * 1.5, $content, 1, 0, strtoupper(substr($align,0,1)), true);
         $this->colcounter += $colspan;
     }
-    
+
+    /**
+     * Add a footer message
+     * @param $footerText text for output
+     */
+    function Footer($footerText)
+    {
+      // Go to 1.5 cm from bottom
+      $this->pdf->SetY(-60);
+      // Select Arial italic 8
+      $this->pdf->SetFont('Arial', 'I', 8);
+      // Print centered page number
+      $this->pdf->Cell(0, 0, $footerText, 0, 0, 'C');
+    }
     /**
      * Save the current file
      * @param $filename file name
