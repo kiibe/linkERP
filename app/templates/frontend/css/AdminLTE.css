@@ -1,15 +1,4 @@
 @import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic);
-/*!
- *   AdminLTE v2.3.0
- *   Author: Almsaeed Studio
- *	 Website: Almsaeed Studio <http://almsaeedstudio.com>
- *   License: Open source - MIT
- *           Please visit http://opensource.org/licenses/MIT for more information
-!*/
-/*
- * Core: General Layout Style
- * -------------------------
- */
 html,
 body {
   min-height: 100%;
@@ -290,6 +279,21 @@ a:focus {
   transition: width 0.3s ease-in-out;
   display: block;
   float: left;
+  height: 50px;
+  font-size: 20px;
+  line-height: 50px;
+  text-align: center;
+  width: 230px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  padding: 0 15px;
+  font-weight: 300;
+  overflow: hidden;
+}
+.main-header .manual {
+  color: #fff;
+  background-color: #367fa9;
+  display: block;
+  float: right;;
   height: 50px;
   font-size: 20px;
   line-height: 50px;

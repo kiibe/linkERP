@@ -8,7 +8,7 @@ class AdiantiMenuBuilder
             case 'frontend':
                 ob_start();
                 $callback = array('SystemPermission', 'checkPermission');
-                $xml = new SimpleXMLElement(file_get_contents('menu.xml'));
+                $xml = new SimpleXMLElement(file_get_contents($file));
                 $menu = new TMenu($xml, $callback, 1, 'treeview-menu', 'treeview', '');
                 $menu->class = 'sidebar-menu';
                 $menu->id    = 'side-menu';
