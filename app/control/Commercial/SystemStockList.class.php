@@ -44,6 +44,11 @@ class SystemStockList extends TPage
         $price = new TEntry('price');
         $price->setValue(TSession::getValue('s_price'));
 
+        $id->setSize(100);
+        $product->setSize(200);
+        $quantity->setSize(200); 
+        $price->setSize(200);
+
         // add a row for the filter field
         $row=$table->addRow();
         $row->addCell(new TLabel('ID:'));

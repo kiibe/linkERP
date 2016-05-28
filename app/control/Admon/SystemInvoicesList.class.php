@@ -44,6 +44,10 @@ class SystemInvoicesList extends TPage
         $date = new TEntry('date');
         $date->setValue(TSession::getValue('s_date'));
 
+        $id->setSize(100);
+        $client->setSize(200);
+        $amount->setSize(200); 
+        $date->setSize(200);
 
         // add a row for the filter field
         $row=$table->addRow();

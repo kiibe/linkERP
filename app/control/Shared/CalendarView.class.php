@@ -110,10 +110,7 @@ class CalendarView extends TPage
     */
    public function onSelect($param)
    {
-        $container = new TTable;
-        $container->width = '80%';
-        $container->addRow()->addCell(new TXMLBreadCrumb('menu.xml', 'SystemNotesList'));
-        $container->addRow()->addCell($this->form);
+
    }
 
 

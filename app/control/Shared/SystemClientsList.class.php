@@ -50,6 +50,13 @@ class SystemClientsList extends TPage
         $phone = new TEntry('phone');
         $phone->setValue(TSession::getValue('s_phone'));
 
+        $id->setSize(100);
+        $dni->setSize(200);
+        $name->setSize(200); 
+        $address->setSize(200);
+        $email->setSize(200); 
+        $phone->setSize(200);
+
         // add a row for the filter field
         $row=$table->addRow();
         $row->addCell(new TLabel('ID:'));
