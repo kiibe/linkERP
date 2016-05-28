@@ -3,7 +3,7 @@
  * System_groupList Listing
  * @author  LinkERP
  */
-class SystemRRHHList extends TPage
+class SystemPaymentsList extends TPage
 {
     private $form;     // registration form
     private $datagrid; // listing
@@ -19,14 +19,14 @@ class SystemRRHHList extends TPage
         parent::__construct();
 
         // creates the form
-        $this->form = new TForm('form_search_System_RRHH');
+        $this->form = new TForm('form_search_System_Payments');
         $this->form->class = 'tform';
 
         // creates a table
         $table = new TTable;
         $table->style = 'width:100%';
 
-        $table->addRowSet( new TLabel('Employees'), '' )->class = 'tformtitle';
+        $table->addRowSet( new TLabel('Payments'), '' )->class = 'tformtitle';
 
         // add the table inside the form
         $this->form->add($table);
@@ -35,45 +35,46 @@ class SystemRRHHList extends TPage
         $id = new TEntry('id');
         $id->setValue(TSession::getValue('s_id'));
 
-        $dni = new TEntry('dni');
-        $dni->setValue(TSession::getValue('s_dni'));
+        $provider = new TEntry('provider');
+        $provider->setValue(TSession::getValue('s_provider'));
 
-        $name = new TEntry('name');
-        $name->setValue(TSession::getValue('s_name'));
+        $amount = new TEntry('amount');
+        $amount->setValue(TSession::getValue('s_amount'));
 
-        $address = new TEntry('address');
-        $address->setValue(TSession::getValue('s_address'));
+        $description = new TText('description');
+        $description->setValue(TSession::getValue('s_description'));
 
-        $email = new TEntry('email');
-        $email->setValue(TSession::getValue('s_email'));
+        $date = new TEntry('date');
+        $date->setValue(TSession::getValue('s_date'));
 
-        $phone = new TEntry('phone');
-        $phone->setValue(TSession::getValue('s_phone'));
+        $id->setSize(100);
+        $provider->setSize(200);
+        $amount->setSize(200);
+        $description->setSize(200); 
+        $date->setSize(200);
+
 
         // add a row for the filter field
         $row=$table->addRow();
-        $row->addCell(new TLabel('ID:'));
+        $row->addCell(new TLabel('ID: '));
         $row->addCell($id);
 
         $row=$table->addRow();
-        $row->addCell(new TLabel('DNI:'));
-        $row->addCell($dni);
+        $row->addCell(new TLabel('Provider: '));
+        $row->addCell($provider);
 
         $row=$table->addRow();
-        $row->addCell(new TLabel('Name: '));
-        $row->addCell($name);
+        $row->addCell(new TLabel('Amount: '));
+        $row->addCell($amount);
 
         $row=$table->addRow();
-        $row->addCell(new TLabel('Address: '));
-        $row->addCell($address);
+        $row->addCell(new TLabel('Description:'));
+        $row->addCell($description);
 
         $row=$table->addRow();
-        $row->addCell(new TLabel('Email: '));
-        $row->addCell($email);
+        $row->addCell(new TLabel('Date: '));
+        $row->addCell($date);
 
-        $row=$table->addRow();
-        $row->addCell(new TLabel('Phone: '));
-        $row->addCell($phone);
 
         // create two action buttons to the form
         $find_button = new TButton('find');
@@ -82,7 +83,7 @@ class SystemRRHHList extends TPage
         $find_button->setAction(new TAction(array($this, 'onSearch')), _t('Find'));
         $find_button->setImage('fa:search');
 
-        $new_button->setAction(new TAction(array('SystemRRHHForm', 'onEdit')), _t('New'));
+        $new_button->setAction(new TAction(array('SystemPaymentsForm', 'onEdit')), _t('New'));
         $new_button->setImage('fa:plus-square green');
 
         $container = new THBox;
@@ -95,7 +96,7 @@ class SystemRRHHList extends TPage
         $cell->colspan = 2;
 
         // define wich are the form fields
-        $this->form->setFields(array($id, $dni, $name, $address, $email, $phone, $find_button, $new_button));
+        $this->form->setFields(array($id, $provider, $amount, $description, $date, $find_button, $new_button));
 
         // creates a DataGrid
         $this->datagrid = new TDataGrid;
@@ -104,71 +105,62 @@ class SystemRRHHList extends TPage
 
         // creates the datagrid columns
         $id   = new TDataGridColumn('id', 'ID', 'center');
-        $dni   = new TDataGridColumn('dni', 'DNI', 'center');
-        $name = new TDataGridColumn('name', 'Name', 'center');
-        $address = new TDataGridColumn('address', 'Address', 'center');
-        $email = new TDataGridColumn('email', 'Email', 'center');
-        $phone = new TDataGridColumn('phone', 'Phone', 'center');
+        $provider = new TDataGridColumn('provider', 'Provider', 'center');
+        $amount = new TDataGridColumn('amount', 'Amount', 'center');
+        $description   = new TDataGridColumn('description', 'Description', 'center');
+        $date = new TDataGridColumn('date', 'Date', 'center');
 
 
         // add the columns to the DataGrid
         $this->datagrid->addColumn($id);
-        $this->datagrid->addColumn($dni);
-        $this->datagrid->addColumn($name);
-        $this->datagrid->addColumn($address);
-        $this->datagrid->addColumn($email);
-        $this->datagrid->addColumn($phone);
+        $this->datagrid->addColumn($provider);
+        $this->datagrid->addColumn($amount);
+        $this->datagrid->addColumn($description);
+        $this->datagrid->addColumn($date);
 
         // creates the datagrid column actions
         $order_id= new TAction(array($this, 'onReload'));
         $order_id->setParameter('order', 'id');
         $id->setAction($order_id);
 
-        $order_dni= new TAction(array($this, 'onReload'));
-        $order_dni->setParameter('order', 'dni');
-        $dni->setAction($order_dni);
+        $order_provider= new TAction(array($this, 'onReload'));
+        $order_provider->setParameter('order', 'provider');
+        $provider->setAction($order_provider);
 
-        $order_name= new TAction(array($this, 'onReload'));
-        $order_name->setParameter('order', 'name');
-        $name->setAction($order_name);
+        $order_amount= new TAction(array($this, 'onReload'));
+        $order_amount->setParameter('order', 'amount');
+        $amount->setAction($order_amount);
 
-        $order_address= new TAction(array($this, 'onReload'));
-        $order_address->setParameter('order', 'address');
-        $address->setAction($order_address);
+        $order_description= new TAction(array($this, 'onReload'));
+        $order_description->setParameter('order', 'description');
+        $description->setAction($order_description);
 
-        $order_email= new TAction(array($this, 'onReload'));
-        $order_email->setParameter('order', 'email');
-        $email->setAction($order_email);
-
-        $order_phone= new TAction(array($this, 'onReload'));
-        $order_phone->setParameter('order', 'phone');
-        $phone->setAction($order_phone);
+        $order_date= new TAction(array($this, 'onReload'));
+        $order_date->setParameter('order', 'date');
+        $date->setAction($order_date);
 
 
         // inline editing
-        $dni_edit = new TDataGridAction(array($this, 'onInlineEdit'));
-        $dni_edit->setField('id');
-        $dni->setEditAction($dni_edit);
+        $provider_edit = new TDataGridAction(array($this, 'onInlineEdit'));
+        $provider_edit->setField('id');
+        $provider->setEditAction($provider_edit);
 
-        $name_edit = new TDataGridAction(array($this, 'onInlineEdit'));
-        $name_edit->setField('id');
-        $name->setEditAction($name_edit);
+        $amount_edit = new TDataGridAction(array($this, 'onInlineEdit'));
+        $amount_edit->setField('id');
+        $amount->setEditAction($amount_edit);
 
-        $address_edit = new TDataGridAction(array($this, 'onInlineEdit'));
-        $address_edit->setField('id');
-        $address->setEditAction($address_edit);
+        $description_edit = new TDataGridAction(array($this, 'onInlineEdit'));
+        $description_edit->setField('id');
+        $description->setEditAction($description_edit);
 
-        $email_edit = new TDataGridAction(array($this, 'onInlineEdit'));
-        $email_edit->setField('id');
-        $email->setEditAction($email_edit);
+        $date_edit = new TDataGridAction(array($this, 'onInlineEdit'));
+        $date_edit->setField('id');
+        $date->setEditAction($date_edit);
 
-        $phone_edit = new TDataGridAction(array($this, 'onInlineEdit'));
-        $phone_edit->setField('id');
-        $phone->setEditAction($phone_edit);
 
 
         // creates two datagrid actions
-        $action1 = new TDataGridAction(array('SystemRRHHForm', 'onEdit'));
+        $action1 = new TDataGridAction(array('SystemPaymentsForm', 'onEdit'));
         $action1->setLabel(_t('Edit'));
         $action1->setImage('fa:pencil-square-o blue fa-lg');
         $action1->setField('id');
@@ -254,18 +246,16 @@ class SystemRRHHList extends TPage
         $data = $this->form->getData();
 
         TSession::setValue('s_id_filter',   NULL);
-        TSession::setValue('s_dni_filter',   NULL);
-        TSession::setValue('s_name_filter', NULL);
-        TSession::setValue('s_address_filter', NULL);
-        TSession::setValue('s_email_filter', NULL);
-        TSession::setValue('s_phone_filter', NULL);
+        TSession::setValue('s_provider_filter', NULL);
+        TSession::setValue('s_amount_filter', NULL);
+        TSession::setValue('s_description_filter',   NULL);
+        TSession::setValue('s_date_filter', NULL);
 
         TSession::setValue('s_id', '');
-        TSession::setValue('s_dni', '');
-        TSession::setValue('s_name', '');
-        TSession::setValue('s_address', '');
-        TSession::setValue('s_email', '');
-        TSession::setValue('s_phone', '');
+        TSession::setValue('s_provider', '');
+        TSession::setValue('s_amount', '');
+        TSession::setValue('s_description', '');
+        TSession::setValue('s_date', '');
 
         // check if the user has filled the form
         if ( $data->id )
@@ -277,38 +267,38 @@ class SystemRRHHList extends TPage
             TSession::setValue('s_id_filter',   $filter);
             TSession::setValue('s_id', $data->id);
         }
-        if ( $data->dni )
+        if ( $data->provider )
         {
             // creates a filter using what the user has typed
-            $filter = new TFilter('dni', '=', "{$data->dni}");
+            $filter = new TFilter('provider', 'like', "%{$data->provider}%");
+
+            TSession::setValue('s_provider_filter', $filter);
+            TSession::setValue('s_provider', $data->provider);
+        }
+        if ( $data->amount )
+        {
+            // creates a filter using what the user has typed
+            $filter = new TFilter('amount', 'like', "%{$data->amount}%");
+
+            TSession::setValue('s_amount_filter', $filter);
+            TSession::setValue('s_amount', $data->amount);
+        }
+        if ( $data->description )
+        {
+            // creates a filter using what the user has typed
+            $filter = new TFilter('description', '=', "{$data->description}");
 
             // stores the filter in the session
-            TSession::setValue('s_dni_filter',   $filter);
-            TSession::setValue('s_dni', $data->dni);
+            TSession::setValue('s_description_filter',   $filter);
+            TSession::setValue('s_description', $data->description);
         }
-        if ( $data->name )
+        if ( $data->date )
         {
             // creates a filter using what the user has typed
-            $filter = new TFilter('name', 'like', "%{$data->name}%");
+            $filter = new TFilter('date', 'like', "%{$data->date}%");
 
-            TSession::setValue('s_name_filter', $filter);
-            TSession::setValue('s_name', $data->name);
-        }
-        if ( $data->address )
-        {
-            // creates a filter using what the user has typed
-            $filter = new TFilter('address', 'like', "%{$data->address}%");
-
-            TSession::setValue('s_address_filter', $filter);
-            TSession::setValue('s_address', $data->address);
-        }
-        if ( $data->email )
-        {
-            // creates a filter using what the user has typed
-            $filter = new TFilter('email', 'like', "%{$data->email}%");
-
-            TSession::setValue('s_email_filter', $filter);
-            TSession::setValue('s_email', $data->email);
+            TSession::setValue('s_date_filter', $filter);
+            TSession::setValue('s_date', $data->date);
         }
 
 
@@ -352,30 +342,25 @@ class SystemRRHHList extends TPage
                 // add the filter stored in the session to the criteria
                 $criteria->add(TSession::getValue('s_id_filter'));
             }
-            if (TSession::getValue('s_dni_filter'))
+            if (TSession::getValue('s_provider_filter'))
             {
                 // add the filter stored in the session to the criteria
-                $criteria->add(TSession::getValue('s_dni_filter'));
+                $criteria->add(TSession::getValue('s_provider_filter'));
             }
-            if (TSession::getValue('s_name_filter'))
+            if (TSession::getValue('s_amount_filter'))
             {
                 // add the filter stored in the session to the criteria
-                $criteria->add(TSession::getValue('s_name_filter'));
+                $criteria->add(TSession::getValue('s_amount_filter'));
             }
-            if (TSession::getValue('s_address_filter'))
+            if (TSession::getValue('s_description_filter'))
             {
                 // add the filter stored in the session to the criteria
-                $criteria->add(TSession::getValue('s_address_filter'));
+                $criteria->add(TSession::getValue('s_description_filter'));
             }
-            if (TSession::getValue('s_email_filter'))
+            if (TSession::getValue('s_date_filter'))
             {
                 // add the filter stored in the session to the criteria
-                $criteria->add(TSession::getValue('s_email_filter'));
-            }
-            if (TSession::getValue('s_phone_filter'))
-            {
-                // add the filter stored in the session to the criteria
-                $criteria->add(TSession::getValue('s_phone_filter'));
+                $criteria->add(TSession::getValue('s_date_filter'));
             }
 
 

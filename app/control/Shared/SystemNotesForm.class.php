@@ -3,7 +3,7 @@
  * System_groupForm Registration
  * @author  LinkERP
  */
-class SystemRRHHForm extends TPage
+class SystemNotesForm extends TPage
 {
     protected $form; // form
 
@@ -22,45 +22,38 @@ class SystemRRHHForm extends TPage
         $frame_programs = new TFrame;
 
         // creates the form
-        $this->form = new TForm('form_System_RRHH');
+        $this->form = new TForm('form_System_Notes');
         $this->form->class = 'tform';
 
 
         // add the notebook inside the form
         $this->form->add($table);
-        $table->addRowSet( new TLabel('Employees'), '' )->class = 'tformtitle';
+        $table->addRowSet( new TLabel('Notes'), '' )->class = 'tformtitle';
 
         // create the form fields
-        $id             = new TEntry('id');
-        $dni            = new TEntry('dni');
-        $name           = new TEntry('name');
-        $address        = new TEntry('address');
-        $email          = new TEntry('email');
-        $phone          = new TEntry('phone');
+        $id            = new TEntry('id');
+        $hour          = new TEntry('hour');
+        $place         = new TEntry('place');
+        $description   = new TText('description');
+
 
         // define the sizes
         $id->setSize(100);
-        $dni->setSize(100);
-        $name->setSize(200);
-        $address->setSize(200);
-        $email->setSize(200);
-        $phone->setSize(200);
+        $hour->setSize(200);
+        $place->setSize(200);
+        $description->setSize(200); 
 
         // validations
         $id->addValidation('id', new TRequiredValidator);
-        $dni->addValidation('dni', new TRequiredValidator);
-        $name->addValidation('name', new TRequiredValidator);
-        $address->addValidation('addres', new TRequiredValidator);
-        $email->addValidation('email', new TRequiredValidator);
-        $phone->addValidation('phone', new TRequiredValidator);
+        $hour->addValidation('hour', new TRequiredValidator);
+        $place->addValidation('place', new TRequiredValidator);
+        $description->addValidation('description', new TRequiredValidator);
 
         // add a row for the field id
-        $table->addRowSet(new TLabel('ID:'), $dni);
-        $table->addRowSet(new TLabel('DNI:'), $dni);
-        $table->addRowSet(new TLabel('Name: '), $name);
-        $table->addRowSet(new TLabel('Address: '), $address);
-        $table->addRowSet(new TLabel('Email: '), $email);
-        $table->addRowSet(new TLabel('Phone: '), $phone);
+        $table->addRowSet(new TLabel('ID:'), $id);
+        $table->addRowSet(new TLabel('Hour: '), $hour);
+        $table->addRowSet(new TLabel('Place: '), $place);
+        $table->addRowSet(new TLabel('Description: '), $description);
 
 
         // create an action button (save)
@@ -74,11 +67,11 @@ class SystemRRHHForm extends TPage
         $new_button->setImage('fa:plus-square green');
 
         $list_button=new TButton('list');
-        $list_button->setAction(new TAction(array('SystemStockList','onReload')), _t('Back to the listing'));
+        $list_button->setAction(new TAction(array('SystemChargeList','onReload')), _t('Back to the listing'));
         $list_button->setImage('fa:table blue');
 
         // define the form fields
-        $this->form->setFields(array($id, $dni,$name,$address,$email,$phone,$save_button,$new_button,$list_button));
+        $this->form->setFields(array($id,$hour,$place,$description,$save_button,$new_button,$list_button));
 
         $buttons = new THBox;
         $buttons->add($save_button);
@@ -87,7 +80,7 @@ class SystemRRHHForm extends TPage
 
         $container = new TTable;
         $container->width = '80%';
-        $container->addRow()->addCell(new TXMLBreadCrumb('menu.xml', 'SystemRRHHList'));
+        $container->addRow()->addCell(new TXMLBreadCrumb('menu.xml', 'SystemNotesList'));
         $container->addRow()->addCell($this->form);
 
         $row=$table->addRow();

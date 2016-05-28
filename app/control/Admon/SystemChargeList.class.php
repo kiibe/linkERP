@@ -1,70 +1,89 @@
 <?php
-class NotesView extends TPage
+/**
+ * System_groupList Listing
+ * @author  LinkERP
+ */
+class SystemChargeList extends TPage
 {
+    private $form;     // registration form
+    private $datagrid; // listing
+    private $pageNavigation;
+    private $loaded;
+
     /**
      * Class constructor
-     * Creates the page
+     * Creates the page, the form and the listing
      */
-    function __construct()
+    public function __construct()
     {
         parent::__construct();
 
-       /* $html1 = new THtmlRenderer('app/resources/notes.html');
-
-        // replace the main section variables
-        $html1->enableSection('main', array());
-
-        $panel1 = new TPanelGroup('Notes');
-        $panel1->add($html1);
-
-        // add the template to the page
-        parent::add( $panel1 );
-
         // creates the form
-        $this->form = new TForm('form_notes');
-        $this->form->class = 'tform';*/
+        $this->form = new TForm('form_search_System_Charge');
+        $this->form->class = 'tform';
 
         // creates a table
-       $table = new TTable;
+        $table = new TTable;
         $table->style = 'width:100%';
 
-        $table->addRowSet( new TLabel(_t('Notes')), '' )->class = 'tformtitle';
+        $table->addRowSet( new TLabel('Charge'), '' )->class = 'tformtitle';
 
         // add the table inside the form
         $this->form->add($table);
 
         // create the form fields
-        $hour = new TEntry('Hour');
-        $hour->setValue(TSession::getValue('s_hour'));
+        $id = new TEntry('id');
+        $id->setValue(TSession::getValue('s_id'));
 
-        $place = new TEntry('Place');
-        $place->setValue(TSession::getValue('s_place'));
+        $client = new TEntry('client');
+        $client->setValue(TSession::getValue('s_client'));
 
-        $description = new TEntry('Description');
+        $amount = new TEntry('amount');
+        $amount->setValue(TSession::getValue('s_amount'));
+
+        $description = new TText('description');
         $description->setValue(TSession::getValue('s_description'));
+
+        $date = new TEntry('date');
+        $date->setValue(TSession::getValue('s_date'));
+
+        $id->setSize(100);
+        $client->setSize(200);
+        $amount->setSize(200);
+        $description->setSize(200); 
+        $date->setSize(200);
+
 
         // add a row for the filter field
         $row=$table->addRow();
-        $row->addCell(new TLabel(_t('Hour') . ': '));
-        $row->addCell($hour);
+        $row->addCell(new TLabel('ID: '));
+        $row->addCell($id);
 
         $row=$table->addRow();
-        $row->addCell(new TLabel(_t('Place') . ': '));
-        $row->addCell($place);
+        $row->addCell(new TLabel('Client: '));
+        $row->addCell($client);
 
         $row=$table->addRow();
-        $row->addCell(new TLabel(_t('Description') . ': '));
+        $row->addCell(new TLabel('Amount: '));
+        $row->addCell($amount);
+
+        $row=$table->addRow();
+        $row->addCell(new TLabel('Description:'));
         $row->addCell($description);
+
+        $row=$table->addRow();
+        $row->addCell(new TLabel('Date: '));
+        $row->addCell($date);
+
 
         // create two action buttons to the form
         $find_button = new TButton('find');
         $new_button  = new TButton('new');
-
         // define the button actions
         $find_button->setAction(new TAction(array($this, 'onSearch')), _t('Find'));
         $find_button->setImage('fa:search');
 
-        $new_button->setAction(new TAction(array('SystemGroupForm', 'onEdit')), _t('New'));
+        $new_button->setAction(new TAction(array('SystemChargeForm', 'onEdit')), _t('New'));
         $new_button->setImage('fa:plus-square green');
 
         $container = new THBox;
@@ -77,7 +96,7 @@ class NotesView extends TPage
         $cell->colspan = 2;
 
         // define wich are the form fields
-        $this->form->setFields(array($hour, $place,$description, $find_button, $new_button));
+        $this->form->setFields(array($id, $client, $amount, $description, $date, $find_button, $new_button));
 
         // creates a DataGrid
         $this->datagrid = new TDataGrid;
@@ -85,48 +104,75 @@ class NotesView extends TPage
         $this->datagrid->setHeight(320);
 
         // creates the datagrid columns
-        $hour   = new TDataGridColumn('hour', _t('Hour'), 'center');
-        $place = new TDataGridColumn('Place', _t('Place'), 'center');
-        $description = new TDataGridColumn('Description', _t('Description'), 'center');
+        $id   = new TDataGridColumn('id', 'ID', 'center');
+        $client = new TDataGridColumn('client', 'Client', 'center');
+        $amount = new TDataGridColumn('amount', 'Amount', 'center');
+        $description   = new TDataGridColumn('description', 'Description', 'center');
+        $date = new TDataGridColumn('date', 'Date', 'center');
+
 
         // add the columns to the DataGrid
-        $this->datagrid->addColumn($hour);
-        $this->datagrid->addColumn($place);
+        $this->datagrid->addColumn($id);
+        $this->datagrid->addColumn($client);
+        $this->datagrid->addColumn($amount);
         $this->datagrid->addColumn($description);
+        $this->datagrid->addColumn($date);
 
         // creates the datagrid column actions
-        $order_hour= new TAction(array($this, 'onReload'));
-        $order_hour->setParameter('order', 'hour');
-        $hour->setAction($order_hour);
+        $order_id= new TAction(array($this, 'onReload'));
+        $order_id->setParameter('order', 'id');
+        $id->setAction($order_id);
 
-        $order_place= new TAction(array($this, 'onReload'));
-        $order_place->setParameter('order', 'place');
-        $place->setAction($order_place);
+        $order_client= new TAction(array($this, 'onReload'));
+        $order_client->setParameter('order', 'client');
+        $client->setAction($order_client);
+
+        $order_amount= new TAction(array($this, 'onReload'));
+        $order_amount->setParameter('order', 'amount');
+        $amount->setAction($order_amount);
 
         $order_description= new TAction(array($this, 'onReload'));
         $order_description->setParameter('order', 'description');
         $description->setAction($order_description);
 
+        $order_date= new TAction(array($this, 'onReload'));
+        $order_date->setParameter('order', 'date');
+        $date->setAction($order_date);
+
+
         // inline editing
-        $place_edit = new TDataGridAction(array($this, 'onInlineEdit'));
-        $place_edit->setField('hour');
-        $place->setEditAction($place_edit);
+        $client_edit = new TDataGridAction(array($this, 'onInlineEdit'));
+        $client_edit->setField('id');
+        $client->setEditAction($client_edit);
+
+        $amount_edit = new TDataGridAction(array($this, 'onInlineEdit'));
+        $amount_edit->setField('id');
+        $amount->setEditAction($amount_edit);
+
+        $description_edit = new TDataGridAction(array($this, 'onInlineEdit'));
+        $description_edit->setField('id');
+        $description->setEditAction($description_edit);
+
+        $date_edit = new TDataGridAction(array($this, 'onInlineEdit'));
+        $date_edit->setField('id');
+        $date->setEditAction($date_edit);
+
+
 
         // creates two datagrid actions
-        $action1 = new TDataGridAction(array('SystemGroupForm', 'onEdit'));
+        $action1 = new TDataGridAction(array('SystemPaymentsForm', 'onEdit'));
         $action1->setLabel(_t('Edit'));
         $action1->setImage('fa:pencil-square-o blue fa-lg');
-        $action1->setField('hour');
+        $action1->setField('id');
 
         $action2 = new TDataGridAction(array($this, 'onDelete'));
         $action2->setLabel(_t('Delete'));
         $action2->setImage('fa:trash-o grey fa-lg');
-        $action2->setField('hour');
+        $action2->setField('id');
 
         // add the actions to the datagrid
         $this->datagrid->addAction($action1);
         $this->datagrid->addAction($action2);
-
         // create the datagrid model
         $this->datagrid->createModel();
 
@@ -145,10 +191,9 @@ class NotesView extends TPage
 
         // add the container inside the page
         parent::add($container);
-
     }
 
-   /**
+    /**
      * method onInlineEdit()
      * Inline record editing
      * @param $param Array containing:
@@ -156,10 +201,7 @@ class NotesView extends TPage
      *              field name: object attribute to be updated
      *              value: new attribute content
      */
-
-
-
-function onInlineEdit($param)
+    function onInlineEdit($param)
     {
         try
         {
@@ -192,44 +234,75 @@ function onInlineEdit($param)
             // undo all pending operations
             TTransaction::rollback();
         }
-    }//end onInlineEdit
+    }
 
     /**
      * method onSearch()
      * Register the filter in the session when the user performs a search
      */
-
     function onSearch()
     {
         // get the search form data
         $data = $this->form->getData();
 
-        TSession::setValue('s_hour_filter',   NULL);
-        TSession::setValue('s_place_filter', NULL);
-        TSession::setValue('s_description_filter', NULL);
+        TSession::setValue('s_id_filter',   NULL);
+        TSession::setValue('s_client_filter', NULL);
+        TSession::setValue('s_amount_filter', NULL);
+        TSession::setValue('s_description_filter',   NULL);
+        TSession::setValue('s_date_filter', NULL);
 
-        TSession::setValue('s_hour', '');
-        TSession::setValue('s_place', '');
+        TSession::setValue('s_id', '');
+        TSession::setValue('s_client', '');
+        TSession::setValue('s_amount', '');
         TSession::setValue('s_description', '');
+        TSession::setValue('s_date', '');
 
         // check if the user has filled the form
-        if ( $data->hour )
+        if ( $data->id )
         {
             // creates a filter using what the user has typed
-            $filter = new TFilter('hour', '=', "{$data->hour}");
+            $filter = new TFilter('id', '=', "{$data->id}");
 
             // stores the filter in the session
-            TSession::setValue('s_hour_filter',   $filter);
-            TSession::setValue('s_hour', $data->hour);
+            TSession::setValue('s_id_filter',   $filter);
+            TSession::setValue('s_id', $data->id);
         }
-        if ( $data->place )
+        if ( $data->client )
         {
             // creates a filter using what the user has typed
-            $filter = new TFilter('place', 'like', "%{$data->place}%");
+            $filter = new TFilter('client', 'like', "%{$data->client}%");
 
-            TSession::setValue('s_place_filter', $filter);
-            TSession::setValue('s_place', $data->place);
+            TSession::setValue('s_client_filter', $filter);
+            TSession::setValue('s_client', $data->client);
         }
+        if ( $data->amount )
+        {
+            // creates a filter using what the user has typed
+            $filter = new TFilter('amount', 'like', "%{$data->amount}%");
+
+            TSession::setValue('s_amount_filter', $filter);
+            TSession::setValue('s_amount', $data->amount);
+        }
+        if ( $data->description )
+        {
+            // creates a filter using what the user has typed
+            $filter = new TFilter('description', '=', "{$data->description}");
+
+            // stores the filter in the session
+            TSession::setValue('s_description_filter',   $filter);
+            TSession::setValue('s_description', $data->description);
+        }
+        if ( $data->date )
+        {
+            // creates a filter using what the user has typed
+            $filter = new TFilter('date', 'like', "%{$data->date}%");
+
+            TSession::setValue('s_date_filter', $filter);
+            TSession::setValue('s_date', $data->date);
+        }
+
+
+
         // fill the form with data again
         $this->form->setData($data);
 
@@ -252,7 +325,7 @@ function onInlineEdit($param)
 
             if( ! isset($param['order']) )
             {
-                $param['order'] = 'hour';
+                $param['order'] = 'id';
                 $param['direction'] = 'asc';
             }
 
@@ -264,16 +337,32 @@ function onInlineEdit($param)
             $criteria->setProperties($param); // order, offset
             $criteria->setProperty('limit', $limit);
 
-            if (TSession::getValue('s_hour_filter'))
+            if (TSession::getValue('s_id_filter'))
             {
                 // add the filter stored in the session to the criteria
-                $criteria->add(TSession::getValue('s_hour_filter'));
+                $criteria->add(TSession::getValue('s_id_filter'));
             }
-            if (TSession::getValue('s_place_filter'))
+            if (TSession::getValue('s_client_filter'))
             {
                 // add the filter stored in the session to the criteria
-                $criteria->add(TSession::getValue('s_place_filter'));
+                $criteria->add(TSession::getValue('s_client_filter'));
             }
+            if (TSession::getValue('s_amount_filter'))
+            {
+                // add the filter stored in the session to the criteria
+                $criteria->add(TSession::getValue('s_amount_filter'));
+            }
+            if (TSession::getValue('s_description_filter'))
+            {
+                // add the filter stored in the session to the criteria
+                $criteria->add(TSession::getValue('s_description_filter'));
+            }
+            if (TSession::getValue('s_date_filter'))
+            {
+                // add the filter stored in the session to the criteria
+                $criteria->add(TSession::getValue('s_date_filter'));
+            }
+
 
             // load the objects according to criteria
             $objects = $repository->load($criteria);
@@ -311,8 +400,7 @@ function onInlineEdit($param)
         }
     }
 
-
-     /**
+    /**
      * method onDelete()
      * executed whenever the user clicks at the delete button
      * Ask if the user really wants to delete the record
@@ -377,9 +465,5 @@ function onInlineEdit($param)
         }
         parent::show();
     }
-
-
 }
-
-
 ?>
