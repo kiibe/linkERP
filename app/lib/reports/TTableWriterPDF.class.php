@@ -138,7 +138,11 @@ class TTableWriterPDF implements ITableWriter
     /**
      * Add a footer message
      * @param $footerText text for output
+<<<<<<< HEAD
     */
+=======
+     */
+>>>>>>> origin/master
     function Footer($footerText)
     {
       // Go to 1.5 cm from bottom
@@ -147,8 +151,12 @@ class TTableWriterPDF implements ITableWriter
       $this->pdf->SetFont('Arial', 'I', 8);
       // Print centered page number
       $this->pdf->Cell(0, 0, $footerText, 0, 0, 'C');
+<<<<<<< HEAD
      }
 
+=======
+    }
+>>>>>>> origin/master
     /**
      * Save the current file
      * @param $filename file name

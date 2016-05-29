@@ -54,11 +54,19 @@ class SystemEmployeesList extends TPage
         $phone->setValue(TSession::getValue('s_phone'));
 
         $id->setSize(100);
+<<<<<<< HEAD
         $dni->setSize(300);
         $name->setSize(300);
         $address->setSize(300);
         $email->setSize(300);
         $phone->setSize(300);
+=======
+        $dni->setSize(200);
+        $name->setSize(200);
+        $address->setSize(200);
+        $email->setSize(200);
+        $phone->setSize(200);
+>>>>>>> origin/master
 
         // add a row for the filter field
         $row=$table->addRow();
@@ -551,6 +559,7 @@ class SystemEmployeesList extends TPage
         // footer row
         $tr->addRow();
         $tr->addCell(date('l jS \of F Y h:i:s A'), 'center', 'footer', 5);
+<<<<<<< HEAD
         $tr->Footer('This document contains information about employees of the company.');
 
         if (!file_exists("app/output/employees_".date("Ymd").".pdf") OR is_writable("app/output/employees_".date("Ymd").".pdf"))
@@ -563,6 +572,20 @@ class SystemEmployeesList extends TPage
         }
 
         parent::openFile("app/output/employees_".date("Ymd").".pdf");
+=======
+        $tr->Footer('This document contains information about clients of the company.');
+
+        if (!file_exists("app/output/clientsList.pdf") OR is_writable("app/output/clientsList.pdf"))
+        {
+            $tr->save("app/output/clientsList.pdf");
+        }
+        else
+        {
+            throw new Exception(_t('Permission denied') . ': ' . "app/output/tabular.pdf");
+        }
+
+        parent::openFile("app/output/clientsList.pdf");
+>>>>>>> origin/master
 
         // shows the success message
         new TMessage('info', 'Report generated. Please, enable popups in the browser (just in the web).');
