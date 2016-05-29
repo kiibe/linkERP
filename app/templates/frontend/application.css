@@ -88,9 +88,9 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
     line-height: 20px;
     color: #555555;
     vertical-align: middle;
-    -webkit-border-radius: 0;
-    -moz-border-radius: 0;
-    border-radius: 0;
+    -webkit-border-radius: 1;
+    -moz-border-radius: 1;
+    border-radius: 1;
     border: 1px solid #ccc;
 }
 
@@ -126,7 +126,7 @@ select.tcombo
     border-color: #3c8dbc !important;
     box-shadow: none !important;
     border-radius         : 0;
-    -webkit-border-radius : none !important;
+   -webkit-border-radius : none !important;
     -moz-border-radius    : none !important;
     -webkit-box-shadow : none !important;
        -moz-box-shadow : none !important;
@@ -144,11 +144,12 @@ textarea, .select2-choices, .select2-container-multi .select2-choices
 label
 {
     margin-bottom: 5px;
+    margin-left: 5px
 }
 
 label, input, button, select, textarea
 {
-    font-size: 14px;
+    font-size: 18px;
     font-weight: normal;
     line-height: 20px;
 }
@@ -176,37 +177,69 @@ textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[ty
 
 .tformtitle > td
 {
-    background-color: #3c8dbc !important;
     padding: 8px 0px 8px 5px !important;
-    border-radius: 100px 0px 100px 0px;
-    -moz-border-radius:100px 0px 100px 0px;
-    -webkit-border-radius:100px 0px 100px 0px;
 }
+
+.tformtitle > td /* degradado*/
+{
+
+/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#3f4c6b+0,606c88+100 */
+background: rgb(63,76,107); /* Old browsers */
+background: -moz-linear-gradient(top,  rgba(63,76,107,1) 0%, rgba(96,108,136,1) 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(top,  rgba(63,76,107,1) 0%,rgba(96,108,136,1) 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(to bottom,  rgba(63,76,107,1) 0%,rgba(96,108,136,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3f4c6b', endColorstr='#606c88',GradientType=0 ); /* IE6-9 */
+
+}
+
 
 .tformtitle > td > label
 {
     color: white !important;
+    font-size: 24px !important;
+    text-align: center !important;
+    margin-left: 10px !important;
 }
 
 .tformaction > td
 {
     padding: 12px !important;
+    border-radius:0px 0px 10px 10px !important; 
+   -moz-border-radius:0px 0px 10px 10px !important; /* Firefox */ 
+   -webkit-border-radius:0px 0px 10px 10px !important; /* Safari y Chrome */
+
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#b0d4e3+0,88bacf+100 */
+    background: rgb(176,212,227); /* Old browsers */
+    background: -moz-linear-gradient(top,  rgba(176,212,227,1) 0%, rgba(136,186,207,1) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top,  rgba(176,212,227,1) 0%,rgba(136,186,207,1) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom,  rgba(176,212,227,1) 0%,rgba(136,186,207,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b0d4e3', endColorstr='#88bacf',GradientType=0 ); /* IE6-9 */
+
 }
 
 .tform > table
 {
-    background: #fff;
+    background: #FAFAFA;
     border: 1px solid #C6C6C6 !important;
     padding: 0px !important;
+    -webkit-box-shadow: 9px 6px 20px -6px rgba(0,0,0,0.75);
+    -moz-box-shadow: 9px 6px 20px -6px rgba(0,0,0,0.75);
+    box-shadow: 9px 6px 20px -6px rgba(0,0,0,0.75);
+    border-radius:0px 0px 12px 12px !important; 
+   -moz-border-radius:0px 0px 12px 12px !important; /* Firefox */ 
+   -webkit-border-radius:0px 0px 12px 12px !important; /* Safari y Chrome */
+
+   border-radius:0px 0px 10px 10px !important; 
+   -moz-border-radius:0px 0px 10px 10px !important; /* Firefox */ 
+   -webkit-border-radius:0px 0px 10px 10px !important; /* Safari y Chrome */
+
 }
+
 
 .tform
 {
     background: white !important;
     border: none !important;
-    /*border-radius: none !important;*/
-    padding: 0px !important;
-    margin-bottom: 20px !important;
 }
 
 .tdatagrid_head tr td
@@ -217,6 +250,9 @@ textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[ty
 .tdatagrid_body tr td
 {
     height: 30px;
+    border-radius:10px !important; 
+   -moz-border-radius:10px !important; /* Firefox */ 
+   -webkit-border-radius:10px !important; /* Safari y Chrome */
 }
 
 .tdatagrid_body tr td input
@@ -289,6 +325,18 @@ ul.navbar-top-links .open>a, ul.navbar-top-links .open>a:hover, ul.navbar-top-li
 
 .btn.btn-default {
     background: white;
+    margin-right: 20px;
+    margin-left: 5px;
+    border-radius: 20px !important; 
+   -moz-border-radius: 20px !important; /* Firefox */ 
+   -webkit-border-radius: 20px !important; /* Safari y Chrome */
+
+   -webkit-box-shadow: 9px 6px 20px -6px rgba(0,0,0,0.75);
+    -moz-box-shadow: 9px 6px 20px -6px rgba(0,0,0,0.75);
+    box-shadow: 9px 6px 20px -6px rgba(0,0,0,0.75);
+
+    font-size: 16px;
+    font-weight: bold;
 }
 
 .navbar-custom-menu > .navbar-nav {
@@ -330,20 +378,24 @@ ul.navbar-top-links .open>a, ul.navbar-top-links .open>a:hover, ul.navbar-top-li
 
 .tform .tformtitle > td:last-child
 {
-    -webkit-border-radius: 0;
-    -moz-border-radius: 0;
-    border-radius: 0;
+    -webkit-border-radius: 10;
+    -moz-border-radius: 10;
+    border-radius: 10;
 }
 
 table.tdatagrid_table
 {
-    -moz-box-shadow: none;
-    -webkit-box-shadow: none;
-    box-shadow: none;
-    -moz-border-radius: 0;
-    -webkit-border-radius: 0;
-    border-radius: 0;
+    margin-top: 20px !important;
+    margin-bottom: 10px !important;
+    -webkit-box-shadow: 9px 6px 20px -6px rgba(0,0,0,0.75);
+    -moz-box-shadow: 9px 6px 20px -6px rgba(0,0,0,0.75);
+    box-shadow: 9px 6px 20px -6px rgba(0,0,0,0.75);
+    border-radius:0px 0px 12px 12px !important; 
+   -moz-border-radius:0px 0px 12px 12px !important; /* Firefox */ 
+   -webkit-border-radius:0px 0px 12px 12px !important; /* Safari y Chrome */ 
+
 }
+
 
 #form_login table > tbody > tr.tformtitle > td
 {
@@ -355,4 +407,71 @@ table.tdatagrid_table
     padding: 0;
     padding: 8px;
     font-size: 17pt;
+}
+
+.tformactionLogin > td
+{
+    padding: 12px !important;
+
+/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#b0d4e3+0,88bacf+100 */
+background: rgb(176,212,227); /* Old browsers */
+background: -moz-linear-gradient(top,  rgba(176,212,227,1) 0%, rgba(136,186,207,1) 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(top,  rgba(176,212,227,1) 0%,rgba(136,186,207,1) 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(to bottom,  rgba(176,212,227,1) 0%,rgba(136,186,207,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b0d4e3', endColorstr='#88bacf',GradientType=0 ); /* IE6-9 */
+
+}
+
+.btn.btn-success {
+    margin-right: 20px;
+    font-weight: bold;
+    border-radius: 20px !important; 
+   -moz-border-radius: 20px !important; /* Firefox */ 
+   -webkit-border-radius: 20px !important; /* Safari y Chrome */
+
+   -webkit-box-shadow: 9px 6px 20px -6px rgba(0,0,0,0.75);
+    -moz-box-shadow: 9px 6px 20px -6px rgba(0,0,0,0.75);
+    box-shadow: 9px 6px 20px -6px rgba(0,0,0,0.75);
+
+
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#b4ddb4+0,83c783+17,52b152+33,008a00+67,005700+83,002400+100;Green+3D+%231 */
+background: rgb(180,221,180); /* Old browsers */
+background: -moz-linear-gradient(top,  rgba(180,221,180,1) 0%, rgba(131,199,131,1) 17%, rgba(82,177,82,1) 33%, rgba(0,138,0,1) 67%, rgba(0,87,0,1) 83%, rgba(0,36,0,1) 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(top,  rgba(180,221,180,1) 0%,rgba(131,199,131,1) 17%,rgba(82,177,82,1) 33%,rgba(0,138,0,1) 67%,rgba(0,87,0,1) 83%,rgba(0,36,0,1) 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(to bottom,  rgba(180,221,180,1) 0%,rgba(131,199,131,1) 17%,rgba(82,177,82,1) 33%,rgba(0,138,0,1) 67%,rgba(0,87,0,1) 83%,rgba(0,36,0,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b4ddb4', endColorstr='#002400',GradientType=0 ); /* IE6-9 */
+
+}
+
+.btn.btn-success:hover
+{
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#002400+0,005700+0,008a00+33,52b152+67,83c783+83,b4ddb4+100 */
+background: rgb(0,36,0); /* Old browsers */
+background: -moz-linear-gradient(top,  rgba(0,36,0,1) 0%, rgba(0,87,0,1) 0%, rgba(0,138,0,1) 33%, rgba(82,177,82,1) 67%, rgba(131,199,131,1) 83%, rgba(180,221,180,1) 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(top,  rgba(0,36,0,1) 0%,rgba(0,87,0,1) 0%,rgba(0,138,0,1) 33%,rgba(82,177,82,1) 67%,rgba(131,199,131,1) 83%,rgba(180,221,180,1) 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(to bottom,  rgba(0,36,0,1) 0%,rgba(0,87,0,1) 0%,rgba(0,138,0,1) 33%,rgba(82,177,82,1) 67%,rgba(131,199,131,1) 83%,rgba(180,221,180,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#002400', endColorstr='#b4ddb4',GradientType=0 ); /* IE6-9 */
+
+}
+
+.loginBgColor
+{
+    /*background-color: #222D32*/
+
+/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#3c8dbc+0,222d32+100 */
+background: rgb(60,141,188); /* Old browsers */
+background: -moz-linear-gradient(45deg,  rgba(60,141,188,1) 0%, rgba(34,45,50,1) 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(45deg,  rgba(60,141,188,1) 0%,rgba(34,45,50,1) 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(45deg,  rgba(60,141,188,1) 0%,rgba(34,45,50,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3c8dbc', endColorstr='#222d32',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+}
+
+.tfield
+{
+    -webkit-box-shadow: 9px 6px 20px -6px rgba(0,0,0,0.75);
+    -moz-box-shadow: 9px 6px 20px -6px rgba(0,0,0,0.75);
+    box-shadow: 9px 6px 20px -6px rgba(0,0,0,0.75);
+    border-radius:8px !important; 
+   -moz-border-radius:8px !important; /* Firefox */ 
+   -webkit-border-radius:8px !important; /* Safari y Chrome */
 }

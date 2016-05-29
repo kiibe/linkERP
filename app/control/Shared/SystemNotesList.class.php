@@ -26,7 +26,10 @@ class SystemNotesList extends TPage
         $table = new TTable;
         $table->style = 'width:100%';
 
-        $table->addRowSet( new TLabel('Notes'), '' )->class = 'tformtitle';
+        $row1 = $table->addRow();
+        $row1->class = 'tformtitle';
+        $cell1 = $row1-> addCell(new TLabel('Notes'), '' );
+        $cell1->colspan = 2 ;
 
         // add the table inside the form
         $this->form->add($table);
@@ -43,8 +46,8 @@ class SystemNotesList extends TPage
 
 
         $id->setSize(100);
-        $hour->setSize(200);
-        $place->setSize(200);
+        $hour->setSize(300);
+        $place->setSize(300);
 
 
         // add a row for the filter field

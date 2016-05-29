@@ -138,7 +138,9 @@ class SystemUserForm extends TPage
 
         $row=$table->addRow();
         $row->class = 'tformaction';
-        $row->addCell( $buttons );
+        $cell = $row->addCell( $buttons );
+        $cell->colspan = 4;
+
 
         $container = new TTable;
         $container->style = 'width: 80%';

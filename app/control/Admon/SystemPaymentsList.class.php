@@ -26,7 +26,10 @@ class SystemPaymentsList extends TPage
         $table = new TTable;
         $table->style = 'width:100%';
 
-        $table->addRowSet( new TLabel('Payments'), '' )->class = 'tformtitle';
+        $row1 = $table->addRow();
+        $row1->class = 'tformtitle';
+        $cell1 = $row1-> addCell(new TLabel('Payments'), '' );
+        $cell1->colspan = 2 ;
 
         // add the table inside the form
         $this->form->add($table);
@@ -45,9 +48,9 @@ class SystemPaymentsList extends TPage
         $date->setValue(TSession::getValue('s_date'));
 
         $id->setSize(100);
-        $provider->setSize(200);
-        $amount->setSize(200);
-        $date->setSize(200);
+        $provider->setSize(300);
+        $amount->setSize(300);
+        $date->setSize(300);
 
 
         // add a row for the filter field

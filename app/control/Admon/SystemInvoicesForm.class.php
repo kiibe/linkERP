@@ -28,7 +28,10 @@ class SystemInvoicesForm extends TPage
 
         // add the notebook inside the form
         $this->form->add($table);
-        $table->addRowSet( new TLabel('Invoices'), '' )->class = 'tformtitle';
+        $row1 = $table->addRow();
+        $row1->class = 'tformtitle';
+        $cell1 = $row1-> addCell(new TLabel('Add new invoice'), '' );
+        $cell1->colspan = 2 ;
 
         // create the form fields
         $id            = new TEntry('id');
@@ -39,9 +42,9 @@ class SystemInvoicesForm extends TPage
 
         // define the sizes
         $id->setSize(100);
-        $client->setSize(200);
-        $amount->setSize(200);
-        $date->setSize(200);
+        $client->setSize(300);
+        $amount->setSize(300);
+        $date->setSize(300);
 
         // validations
         $id->addValidation('id', new TRequiredValidator);

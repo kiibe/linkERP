@@ -26,7 +26,10 @@ class SystemSalesList extends TPage
         $table = new TTable;
         $table->style = 'width:100%';
 
-        $table->addRowSet( new TLabel('Sales'), '' )->class = 'tformtitle';
+        $row1 = $table->addRow();
+        $row1->class = 'tformtitle';
+        $cell1 = $row1-> addCell(new TLabel('Sales'), '' );
+        $cell1->colspan = 2 ;
 
         // add the table inside the form
         $this->form->add($table);
@@ -43,8 +46,8 @@ class SystemSalesList extends TPage
 
 
         $id->setSize(100);
-        $client->setSize(200);
-        $amount->setSize(200); 
+        $client->setSize(300);
+        $amount->setSize(300); 
 
         // add a row for the filter field
         $row=$table->addRow();

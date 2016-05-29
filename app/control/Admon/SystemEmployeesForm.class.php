@@ -19,7 +19,6 @@ class SystemEmployeesForm extends TPage
         $table = new TTable;
         $table->style = 'width:100%';
 
-        $frame_programs = new TFrame;
 
         // creates the form
         $this->form = new TForm('form_System_RRHH');
@@ -27,8 +26,13 @@ class SystemEmployeesForm extends TPage
 
 
         // add the notebook inside the form
+        $row1 = $table->addRow();
+        $row1->class = 'tformtitle';
+        $cell1 = $row1-> addCell(new TLabel('Add new Employee'), '' );
+        $cell1->colspan = 2 ;
+        
         $this->form->add($table);
-        $table->addRowSet( new TLabel('Employees'), '' )->class = 'tformtitle';
+
 
         // create the form fields
         $id             = new TEntry('id');
@@ -40,11 +44,11 @@ class SystemEmployeesForm extends TPage
 
         // define the sizes
         $id->setSize(100);
-        $dni->setSize(100);
-        $name->setSize(200);
-        $address->setSize(200);
-        $email->setSize(200);
-        $phone->setSize(200);
+        $dni->setSize(300);
+        $name->setSize(300);
+        $address->setSize(300);
+        $email->setSize(300);
+        $phone->setSize(300);
 
         // validations
         $id->addValidation('id', new TRequiredValidator);

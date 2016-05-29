@@ -28,7 +28,10 @@ class SystemStockForm extends TPage
 
         // add the notebook inside the form
         $this->form->add($table);
-        $table->addRowSet( new TLabel('Stock'), '' )->class = 'tformtitle';
+        $row1 = $table->addRow();
+        $row1->class = 'tformtitle';
+        $cell1 = $row1-> addCell(new TLabel('Add new product'), '' );
+        $cell1->colspan = 2 ;
 
         // create the form fields
         $id              = new TEntry('id');
@@ -38,9 +41,9 @@ class SystemStockForm extends TPage
 
         // define the sizes
         $id->setSize(100);
-        $product->setSize(200);
-        $quantity->setSize(200);
-        $price->setSize(200);
+        $product->setSize(300);
+        $quantity->setSize(300);
+        $price->setSize(300);
 
         // validations
         $product->addValidation('product', new TRequiredValidator);

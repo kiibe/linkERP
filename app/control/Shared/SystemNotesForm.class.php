@@ -28,7 +28,10 @@ class SystemNotesForm extends TPage
 
         // add the notebook inside the form
         $this->form->add($table);
-        $table->addRowSet( new TLabel('Notes'), '' )->class = 'tformtitle';
+        $row1 = $table->addRow();
+        $row1->class = 'tformtitle';
+        $cell1 = $row1-> addCell(new TLabel('Add new note'), '' );
+        $cell1->colspan = 2 ;
 
         // create the form fields
         $id            = new TEntry('id');
@@ -39,9 +42,9 @@ class SystemNotesForm extends TPage
 
         // define the sizes
         $id->setSize(100);
-        $hour->setSize(200);
-        $place->setSize(200);
-        $description->setSize(200); 
+        $hour->setSize(300);
+        $place->setSize(300);
+        $description->setSize(300); 
 
         // validations
         $id->addValidation('id', new TRequiredValidator);

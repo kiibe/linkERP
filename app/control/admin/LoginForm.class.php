@@ -1,7 +1,7 @@
 <?php
 /**
  * LoginForm Registration
- * @author  <your name here>
+ * @author  LinkERP
  */
 class LoginForm extends TPage
 {
@@ -14,23 +14,6 @@ class LoginForm extends TPage
     function __construct($param)
     {
         parent::__construct();
-
-       /* $container3 = new TElement('div');
-        $companyName= '<span style="font-size:30px"/>'
-        $companyName -> ddCell( new TLabel('Nombre de la empresa') )
-        $container3 -> add($companyName)*/
-
-       /* $table2 = new TTable;
-        $table2 -> width = '1000px';
-        $table2 -> height = '100px';
-
-        $row2=$table2->addRow();
-        $row2->addCell( new TLabel('Nombre empresa') )-> colspan = 2;
-        //$row2->class='tformtitle';
-
-        $container1 = new TElement('div');
-        $container1->add($user);*/
-
 
         $table = new TTable;
         $table->width = '100%';
@@ -50,8 +33,8 @@ class LoginForm extends TPage
         $login->setSize('70%', 40);
         $password->setSize('70%', 40);
 
-        $login->style = 'height:55px; font-size:18px;float:left;border-bottom-left-radius: 0;border-top-left-radius: 0;';
-        $password->style = 'height:55px;margin-bottom: 15px;font-size:18px;float:left;border-bottom-left-radius: 0;border-top-left-radius: 0;';
+        $login->style = 'height:35px; font-size:18px;float:left;border-bottom-left-radius: 0;border-top-left-radius: 0;';
+        $password->style = 'height:35px;margin-bottom: 15px;font-size:18px;float:left;border-bottom-left-radius: 0;border-top-left-radius: 0;';
 
         $row=$table->addRow();
         $row->addCell( new TLabel('Log in') )->colspan = 2;
@@ -60,8 +43,8 @@ class LoginForm extends TPage
         $login->placeholder = _t('User');
         $password->placeholder = _t('Password');
 
-        $user = '<span style="float:left;width:35px;margin-left:55px;height:55px;" class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>';
-        $locker = '<span style="float:left;width:35px;margin-left:55px;height:55px;" class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>';
+        $user = '<span style="float:left;width:35px;margin-left:55px;height:35px;" class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>';
+        $locker = '<span style="float:left;width:35px;margin-left:55px;height:35px;" class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>';
 
         $container1 = new TElement('div');
         $container1->add($user);
@@ -83,10 +66,10 @@ class LoginForm extends TPage
         // define the button action
         $save_button->setAction(new TAction(array($this, 'onLogin')), _t('Log in'));
         $save_button->class = 'btn btn-success';
-        $save_button->style = 'font-size:18px;width:70%;padding:10px';
+        $save_button->style = 'font-size:24px;width:50%;padding:5px';
 
         $row=$table->addRow();
-        $row->class = 'tformaction';
+        $row->class = 'tformactionLogin';
         $cell = $row->addCell( $save_button );
         $cell->colspan = 2;
         $cell->style = 'text-align:center';

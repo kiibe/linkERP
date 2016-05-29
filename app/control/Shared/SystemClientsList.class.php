@@ -26,7 +26,10 @@ class SystemClientsList extends TPage
         $table = new TTable;
         $table->style = 'width:100%';
 
-        $table->addRowSet( new TLabel('Clients'), '' )->class = 'tformtitle';
+        $row1 = $table->addRow();
+        $row1->class = 'tformtitle';
+        $cell1 = $row1-> addCell(new TLabel('Clients'), '' );
+        $cell1->colspan = 2 ;
 
         // add the table inside the form
         $this->form->add($table);
@@ -38,8 +41,8 @@ class SystemClientsList extends TPage
         $name = new TEntry('name');
         $name->setValue(TSession::getValue('s_name'));
 
-        $adress = new TEntry('adress');
-        $adress->setValue(TSession::getValue('s_adress'));
+        $address = new TEntry('adress');
+        $address->setValue(TSession::getValue('s_adress'));
 
         $dni = new TEntry('dni');
         $dni->setValue(TSession::getValue('s_dni'));
@@ -51,11 +54,11 @@ class SystemClientsList extends TPage
         $phone->setValue(TSession::getValue('s_phone'));
 
         $id->setSize(100);
-        $dni->setSize(200);
-        $name->setSize(200); 
-        $address->setSize(200);
-        $email->setSize(200); 
-        $phone->setSize(200);
+        $dni->setSize(300);
+        $name->setSize(300); 
+        $address->setSize(300);
+        $email->setSize(300); 
+        $phone->setSize(300);
 
         // add a row for the filter field
         $row=$table->addRow();
@@ -68,7 +71,7 @@ class SystemClientsList extends TPage
 
         $row=$table->addRow();
         $row->addCell(new TLabel('Adress: '));
-        $row->addCell($adress);
+        $row->addCell($address);
 
         $row=$table->addRow();
         $row->addCell(new TLabel('DNI: '));
@@ -102,7 +105,7 @@ class SystemClientsList extends TPage
         $cell->colspan = 2;
 
         // define wich are the form fields
-        $this->form->setFields(array($id, $name, $adress, $dni, $email, $phone, $find_button, $new_button));
+        $this->form->setFields(array($id, $name, $address, $dni, $email, $phone, $find_button, $new_button));
 
         // creates a DataGrid
         $this->datagrid = new TDataGrid;

@@ -23,10 +23,13 @@ class SystemEmployeesList extends TPage
         $this->form->class = 'tform';
 
         // creates a table
-        $table = new TTable;
+        $table = new TTable; 
         $table->style = 'width:100%';
 
-        $table->addRowSet( new TLabel('Employees'), '' )->class = 'tformtitle';
+        $row1 = $table->addRow();
+        $row1->class = 'tformtitle';
+        $cell1 = $row1-> addCell(new TLabel('Employees'), '' );
+        $cell1->colspan = 2 ;
 
         // add the table inside the form
         $this->form->add($table);
@@ -51,11 +54,11 @@ class SystemEmployeesList extends TPage
         $phone->setValue(TSession::getValue('s_phone'));
 
         $id->setSize(100);
-        $dni->setSize(200);
-        $name->setSize(200); 
-        $address->setSize(200);
-        $email->setSize(200); 
-        $phone->setSize(200);
+        $dni->setSize(300);
+        $name->setSize(300); 
+        $address->setSize(300);
+        $email->setSize(300); 
+        $phone->setSize(300);
 
         // add a row for the filter field
         $row=$table->addRow();
@@ -99,7 +102,7 @@ class SystemEmployeesList extends TPage
         $row=$table->addRow();
         $row->class = 'tformaction';
         $cell = $row->addCell( $container );
-        $cell->colspan = 2;
+        $cell->colspan = 2 ;
 
         // define wich are the form fields
         $this->form->setFields(array($id, $dni, $name, $address, $email, $phone, $find_button, $new_button));

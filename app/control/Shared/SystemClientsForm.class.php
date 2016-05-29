@@ -28,7 +28,10 @@ class SystemClientsForm extends TPage
 
         // add the notebook inside the form
         $this->form->add($table);
-        $table->addRowSet( new TLabel('Clients'), '' )->class = 'tformtitle';
+        $row1 = $table->addRow();
+        $row1->class = 'tformtitle';
+        $cell1 = $row1-> addCell(new TLabel('Add new client'), '' );
+        $cell1->colspan = 2 ;
 
         // create the form fields
         $id              = new TEntry('id');
@@ -40,11 +43,11 @@ class SystemClientsForm extends TPage
 
         // define the sizes
         $id->setSize(100);
-        $name->setSize(200);
-        $adress->setSize(200);
-        $dni->setSize(200);
-        $email->setSize(200);
-        $phone->setSize(200);
+        $name->setSize(300);
+        $adress->setSize(300);
+        $dni->setSize(300);
+        $email->setSize(300);
+        $phone->setSize(300);
 
         // validations
         $name->addValidation('name', new TRequiredValidator);

@@ -19,8 +19,6 @@ class SystemChargeForm extends TPage
         $table = new TTable;
         $table->style = 'width:100%';
 
-        $frame_programs = new TFrame;
-
         // creates the form
         $this->form = new TForm('form_System_Charge');
         $this->form->class = 'tform';
@@ -28,7 +26,10 @@ class SystemChargeForm extends TPage
 
         // add the notebook inside the form
         $this->form->add($table);
-        $table->addRowSet( new TLabel('Charge'), '' )->class = 'tformtitle';
+        $row1 = $table->addRow();
+        $row1->class = 'tformtitle';
+        $cell1 = $row1-> addCell(new TLabel('Add new charge'), '' );
+        $cell1->colspan = 2 ;
 
         // create the form fields
         $id            = new TEntry('id');
@@ -40,10 +41,10 @@ class SystemChargeForm extends TPage
 
         // define the sizes
         $id->setSize(100);
-        $client->setSize(200);
-        $amount->setSize(200);
-        $description->setSize(200); 
-        $date->setSize(200);
+        $client->setSize(300);
+        $amount->setSize(300);
+        $description->setSize(300); 
+        $date->setSize(300);
 
         // validations
         $id->addValidation('id', new TRequiredValidator);
