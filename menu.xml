@@ -34,8 +34,8 @@
      <menuitem label='Admon'>
         <icon>fa:university fa-fw</icon>
         <menu>
-            <menuitem label='RRHH'>
-                <icon>fa:life-ring fa-fw</icon>
+            <menuitem label='RRHH'>       
+               <icon>fa:life-ring fa-fw</icon>
                       <menu>
                             <menuitem label='Employees'>
                                 <icon>fa:male fa-fw</icon>

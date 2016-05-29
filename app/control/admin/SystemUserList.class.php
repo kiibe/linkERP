@@ -71,10 +71,10 @@ class SystemUserList extends TPage
         $this->datagrid->style = 'width: 100%';
 
         // creates the datagrid columns
-        $id     = new TDataGridColumn('id',    'ID', 'right');
-        $name   = new TDataGridColumn('name',  _t('Name'), 'left');
-        $login  = new TDataGridColumn('login', _t('Login'), 'left');
-        $email  = new TDataGridColumn('email', _t('Email'), 'left');
+        $id     = new TDataGridColumn('id',    'ID', 'center');
+        $name   = new TDataGridColumn('name',  _t('Name'), 'center');
+        $login  = new TDataGridColumn('login', _t('Login'), 'center');
+        $email  = new TDataGridColumn('email', _t('Email'), 'center');
 
 
         // add the columns to the DataGrid
@@ -93,7 +93,13 @@ class SystemUserList extends TPage
         $order_name->setParameter('order', 'name');
         $name->setAction($order_name);
 
+        $order_login= new TAction(array($this, 'onReload'));
+        $order_login->setParameter('order', 'login');
+        $login->setAction($order_login);
 
+        $order_email= new TAction(array($this, 'onReload'));
+        $order_email->setParameter('order', 'email');
+        $email->setAction($order_email);
 
         // inline editing
         $name_edit = new TDataGridAction(array($this, 'onInlineEdit'));

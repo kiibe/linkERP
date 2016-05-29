@@ -23,11 +23,12 @@ class WelcomeView extends TPage
 
         // replace the main section variables
         $html1->enableSection('main', array());
-
+/*
         $panel1 = new TPanelGroup('Welcome!');
         $panel1->add($html1);
-
+        */
         // add the template to the page
-        parent::add( $panel1 );
+        parent::add( $html1 );
+
     }
 }
