@@ -454,5 +454,30 @@ class SystemChargeList extends TPage
         }
         parent::show();
     }
+
+    /**
+     * method onPDF()
+     * executed whenever the user clicks at the pdf button
+     */
+    function onPDF($param)
+    {
+
+      $pdf = new pdf_invoice();
+
+      if (!file_exists("app/output/charge_".date("Ymd").".pdf") OR is_writable("app/output/charge_".date("Ymd").".pdf"))
+      {
+          $pdf->Output('app/output/charge_'.date('Ymd').'.pdf');
+      }
+      else
+      {
+          throw new Exception(_t('Permission denied') . ': ' . "app/output/charge_".date("Ymd").".pdf");
+      }
+
+      parent::openFile("app/output/charge_".date("Ymd").".pdf");
+
+      // shows the success message
+      new TMessage('info', 'Report generated. Please, enable popups in the browser (just in the web).');
+
+    }
 }
 ?>
