@@ -48,7 +48,7 @@ class SystemChargeList extends TPage
 
         $id->setSize(100);
         $client->setSize(300);
-        $amount->setSize(300); 
+        $amount->setSize(300);
         $date->setSize(300);
 
 
@@ -164,9 +164,15 @@ class SystemChargeList extends TPage
         $action2->setImage('fa:trash-o grey fa-lg');
         $action2->setField('id');
 
+        $action3 = new TDataGridAction(array($this, 'onPDF'));
+        $action3->setLabel('Generate PDF');
+        $action3->setImage('fa:file-pdf-o red');
+        $action3->setField('id');
+
         // add the actions to the datagrid
         $this->datagrid->addAction($action1);
         $this->datagrid->addAction($action2);
+        $this->datagrid->addAction($action3);
         // create the datagrid model
         $this->datagrid->createModel();
 

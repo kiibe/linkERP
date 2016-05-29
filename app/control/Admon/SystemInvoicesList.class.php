@@ -49,7 +49,7 @@ class SystemInvoicesList extends TPage
 
         $id->setSize(100);
         $client->setSize(300);
-        $amount->setSize(300); 
+        $amount->setSize(300);
         $date->setSize(300);
 
         // add a row for the filter field
@@ -154,9 +154,15 @@ class SystemInvoicesList extends TPage
         $action2->setImage('fa:trash-o grey fa-lg');
         $action2->setField('id');
 
+        $action3 = new TDataGridAction(array($this, 'onPDF'));
+        $action3->setLabel('Generate PDF');
+        $action3->setImage('fa:file-pdf-o red');
+        $action3->setField('id');
+
         // add the actions to the datagrid
         $this->datagrid->addAction($action1);
         $this->datagrid->addAction($action2);
+        $this->datagrid->addAction($action3);
         // create the datagrid model
         $this->datagrid->createModel();
 
@@ -434,6 +440,31 @@ class SystemInvoicesList extends TPage
             $this->onReload( func_get_arg(0) );
         }
         parent::show();
+    }
+
+    /**
+     * method onPDF()
+     * executed whenever the user clicks at the pdf button
+     */
+    function onPDF($param)
+    {
+
+      $pdf = new pdf_invoice();
+
+      if (!file_exists("app/output/invoice_".date("Ymd").".pdf") OR is_writable("app/output/invoice_".date("Ymd").".pdf"))
+      {
+          $pdf->Output('app/output/invoice_'.date('Ymd').'.pdf');
+      }
+      else
+      {
+          throw new Exception(_t('Permission denied') . ': ' . "app/output/invoice_".date("Ymd").".pdf");
+      }
+
+      parent::openFile("app/output/invoice_".date("Ymd").".pdf");
+
+      // shows the success message
+      new TMessage('info', 'Report generated. Please, enable popups in the browser (just in the web).');
+
     }
 }
 ?>

@@ -55,9 +55,9 @@ class SystemClientsList extends TPage
 
         $id->setSize(100);
         $dni->setSize(300);
-        $name->setSize(300); 
+        $name->setSize(300);
         $address->setSize(300);
-        $email->setSize(300); 
+        $email->setSize(300);
         $phone->setSize(300);
 
         // add a row for the filter field
@@ -88,6 +88,8 @@ class SystemClientsList extends TPage
         // create two action buttons to the form
         $find_button = new TButton('find');
         $new_button  = new TButton('new');
+        $pdf_button  = new TButton('pdf');
+
         // define the button actions
         $find_button->setAction(new TAction(array($this, 'onSearch')), _t('Find'));
         $find_button->setImage('fa:search');
@@ -95,9 +97,13 @@ class SystemClientsList extends TPage
         $new_button->setAction(new TAction(array('SystemClientsForm', 'onEdit')), _t('New'));
         $new_button->setImage('fa:plus-square green');
 
+        $pdf_button->setAction(new TAction(array($this, 'onPDF')), 'PDF');
+        $pdf_button->setImage('fa:file-pdf-o red');
+
         $container = new THBox;
         $container->add($find_button);
         $container->add($new_button);
+        $container->add($pdf_button);
 
         $row=$table->addRow();
         $row->class = 'tformaction';
@@ -105,7 +111,7 @@ class SystemClientsList extends TPage
         $cell->colspan = 2;
 
         // define wich are the form fields
-        $this->form->setFields(array($id, $name, $address, $dni, $email, $phone, $find_button, $new_button));
+        $this->form->setFields(array($id, $name, $address, $dni, $email, $phone, $find_button, $new_button, $pdf_button));
 
         // creates a DataGrid
         $this->datagrid = new TDataGrid;
@@ -495,6 +501,85 @@ class SystemClientsList extends TPage
             $this->onReload( func_get_arg(0) );
         }
         parent::show();
+    }
+
+    /**
+     * method onPDF()
+     * executed whenever the user clicks at the pdf button
+     */
+    function onPDF($param)
+    {
+      try
+      {
+        TTransaction::open('permission'); // open transaction
+        $conn = TTransaction::get(); // get PDO connection
+
+        // run query
+        $result = $conn->query('SELECT id, name from system_user order by id');
+
+        // get the form data into an active record Customer
+        $widths = array(60, 125, 125, 150, 70);
+        $tr = new TTableWriterPDF($widths);
+
+        // create the document styles
+        $tr->addStyle('title', 'Arial', '12', 'B',  '#000000', '#CDCDCD');
+        $tr->addStyle('par', 'Arial', '10', '',    '#000000', '#CFCFCF');
+        $tr->addStyle('impar', 'Arial', '10', '',    '#000000', '#FFFFFF');
+        $tr->addStyle('header', 'Times', '16', 'B', '#000000', '#CDCDCD');
+        $tr->addStyle('footer', 'Times', '12', 'B', '#000000', '#CDCDCD');
+
+        // add a header row
+        $tr->addRow();
+        $tr->addCell('Clients', 'center', 'header', 5);
+
+        // add titles row
+        $tr->addRow();
+        $tr->addCell('DNI','center', 'title');
+        $tr->addCell('Name','center', 'title');
+        $tr->addCell('Address','center', 'title');
+        $tr->addCell('Email','center', 'title');
+        $tr->addCell('Phone','center', 'title');
+
+        // controls the background filling
+        $colour= FALSE;
+        foreach ($result as $row)
+        {
+            $style = $colour ? 'par' : 'impar';
+            $tr->addRow();
+            $tr->addCell('53321548G', 'left', $style);
+            $tr->addCell('Jordi Aguilà Cortés', 'left', $style);
+            $tr->addCell('Pere Massallach 21 1 2', 'left', $style);
+            $tr->addCell('jac274@gmail.com', 'left', $style);
+            $tr->addCell('617186879', 'left', $style);
+            $colour = !$colour;
+        }
+
+        // footer row
+        $tr->addRow();
+        $tr->addCell(date('l jS \of F Y h:i:s A'), 'center', 'footer', 5);
+        $tr->Footer('This document contains information about clients of the company.');
+
+        if (!file_exists("app/output/clientsList_".date("Ymd")."pdf") OR is_writable("app/output/clientsList_".date("Ymd").".pdf"))
+        {
+            $tr->save("app/output/clientsList_".date("Ymd").".pdf");
+        }
+        else
+        {
+            throw new Exception(_t('Permission denied') . ': ' . "app/output/clientsList_".date("Ymd").".pdf");
+        }
+
+        parent::openFile("app/output/clientsList_".date("Ymd").".pdf");
+
+        // shows the success message
+        new TMessage('info', 'Report generated. Please, enable popups in the browser (just in the web).');
+
+        TTransaction::close(); // close transaction
+      }
+      catch (Exception $e) // in case of exception
+      {
+        // shows the exception error message
+        new TMessage('error', '<b>Error</b> ' . $e->getMessage());
+      }
     }
 }
 ?>
