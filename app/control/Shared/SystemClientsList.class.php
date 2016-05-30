@@ -515,7 +515,7 @@ class SystemClientsList extends TPage
         $conn = TTransaction::get(); // get PDO connection
 
         // run query
-        $result = $conn->query('SELECT id, name from system_user order by id');
+        $result = $conn->query('SELECT dni, name, address, email, phone from system_clients order by id');
 
         // get the form data into an active record Customer
         $widths = array(60, 125, 125, 150, 70);
@@ -546,11 +546,11 @@ class SystemClientsList extends TPage
         {
             $style = $colour ? 'par' : 'impar';
             $tr->addRow();
-            $tr->addCell('53321548G', 'left', $style);
-            $tr->addCell('Jordi Aguilà Cortés', 'left', $style);
-            $tr->addCell('Pere Massallach 21 1 2', 'left', $style);
-            $tr->addCell('jac274@gmail.com', 'left', $style);
-            $tr->addCell('617186879', 'left', $style);
+            $tr->addCell($row['dni'], 'left', $style);
+            $tr->addCell($row['name'], 'left', $style);
+            $tr->addCell($row['address'], 'left', $style);
+            $tr->addCell($row['email'], 'left', $style);
+            $tr->addCell($row['phone'], 'left', $style);
             $colour = !$colour;
         }
 

@@ -32,7 +32,7 @@ class CalendarView extends TPage
        $this->calendar->setYear(date('Y'));
 
        $this->calendar->selectDays(date("j"));
-       $this->calendar->setSize(900,650);
+       $this->calendar->setSize(750,500);
 
        $this->calendar->setAction( new TAction(array($this, 'onSelect')) );
 

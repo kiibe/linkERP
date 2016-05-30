@@ -38,7 +38,7 @@ class TQuickForm extends TForm
     private   $titleCell;
     private   $actionCell;
     private   $fieldPositions;
-     
+
     /**
      * Class Constructor
      * @param $name Form Name
@@ -46,17 +46,17 @@ class TQuickForm extends TForm
     public function __construct($name = 'my_form')
     {
         parent::__construct($name);
-        
+
         // creates a table
         $this->table = new TTable;
         $this->hasAction = FALSE;
-        
+
         $this->fieldsByRow = 1;
-        
+
         // add the table to the form
         parent::add($this->table);
     }
-    
+
     /**
      * Returns the inner table
      */
@@ -64,7 +64,7 @@ class TQuickForm extends TForm
     {
         return $this->table;
     }
-    
+
     /**
      * Define the field quantity per row
      * @param $count Field count
@@ -88,7 +88,7 @@ class TQuickForm extends TForm
             throw new Exception(AdiantiCoreTranslator::translate('The method (^1) just accept values of type ^2 between ^3 and ^4', __METHOD__, 'integer', 1, 3));
         }
     }
-    
+
     /**
      * Return the fields by row count
      */
@@ -96,7 +96,7 @@ class TQuickForm extends TForm
     {
         return $this->fieldsByRow;
     }
-    
+
     /**
      * Intercepts whenever someones assign a new property's value
      * @param $name     Property Name
@@ -108,13 +108,13 @@ class TQuickForm extends TForm
         {
             $this->table->{'width'} = '100%';
         }
-        
+
         if (method_exists('TForm', '__set'))
         {
             parent::__set($name, $value);
         }
     }
-    
+
     /**
      * Returns the form container
      */
@@ -122,7 +122,7 @@ class TQuickForm extends TForm
     {
         return $this->table;
     }
-    
+
     /**
      * Add a form title
      * @param $title     Form title
@@ -136,7 +136,7 @@ class TQuickForm extends TForm
         $this->titleCell = $row->addCell( new TLabel($title) );
         $this->titleCell->{'colspan'} = 2 * $this->fieldsByRow;
     }
-    
+
     /**
      * Add a form field
      * @param $label     Field Label
@@ -149,14 +149,14 @@ class TQuickForm extends TForm
         $object->setSize($size, $size);
         parent::addField($object);
         $object->setLabel($label);
-        
+
         if ( empty($this->currentRow) OR ( $this->fieldPositions % $this->fieldsByRow ) == 0 )
         {
             // add the field to the container
             $this->currentRow = $this->table->addRow();
         }
         $row = $this->currentRow;
-        
+
         if ($validator instanceof TRequiredValidator)
         {
             $label_field = new TLabel($label . ' (*)');
@@ -175,16 +175,16 @@ class TQuickForm extends TForm
             $row->addCell( $label_field );
         }
         $row->addCell( $object );
-        
+
         if ($validator)
         {
             $object->addValidation($label, $validator);
         }
-        
+
         $this->fieldPositions ++;
         return $row;
     }
-    
+
     /**
      * Add a form field
      * @param $label     Field Label
@@ -199,7 +199,7 @@ class TQuickForm extends TForm
             $this->currentRow = $this->table->addRow();
         }
         $row = $this->currentRow;
-        
+
         if ($required)
         {
             $label_field = new TLabel($label . '(*)');
@@ -209,9 +209,9 @@ class TQuickForm extends TForm
         {
             $label_field = new TLabel($label);
         }
-        
+
         $row->addCell( $label_field );
-        
+
         $hbox = new THBox;
         foreach ($objects as $object)
         {
@@ -220,11 +220,11 @@ class TQuickForm extends TForm
             $hbox->add($object);
         }
         $row->addCell( $hbox );
-        
+
         $this->fieldPositions ++;
         return $row;
     }
-    
+
     /**
      * Add a form action
      * @param $label  Action Label
@@ -236,30 +236,32 @@ class TQuickForm extends TForm
         $name   = strtolower(str_replace(' ', '_', $label));
         $button = new TButton($name);
         parent::addField($button);
-        
+
         // define the button action
         $button->setAction($action, $label);
         $button->setImage($icon);
-        
+
         if (!$this->hasAction)
         {
             $this->actionsContainer = new THBox;
-            
+
             $row  = $this->table->addRow();
-            $row->{'class'} = 'tformaction';
+            if ($label != 'Back') {
+                $row->{'class'} = 'tformaction';
+            }
             $this->actionCell = $row->addCell( $this->actionsContainer );
             $this->actionCell->{'colspan'} = 2 * $this->fieldsByRow;
         }
-        
+
         // add cell for button
         $this->actionsContainer->add($button);
-        
+
         $this->hasAction = TRUE;
         $this->actionButtons[] = $button;
-        
+
         return $button;
     }
-    
+
     /**
      * Clear actions row
      */
@@ -275,7 +277,7 @@ class TQuickForm extends TForm
             $this->actionsContainer->clearChildren();
         }
     }
-    
+
     /**
      * Return an array with action buttons
      */
@@ -283,7 +285,7 @@ class TQuickForm extends TForm
     {
         return $this->actionButtons;
     }
-    
+
     /**
      * Detach action buttons
      */
@@ -293,7 +295,7 @@ class TQuickForm extends TForm
         $this->delActions();
         return $buttons;
     }
-    
+
     /**
      * Add a row
      */

@@ -6,7 +6,7 @@
                   <icon>fa:users fa-fw</icon>
                   <action>SystemClientsList</action>
               </menuitem>
-              <menuitem label='Notes/Calendar'>
+              <menuitem label='Calendar'>
                   <icon>fa:calendar fa-fw</icon>
                   <action>CalendarView</action>
               </menuitem>
@@ -34,14 +34,14 @@
      <menuitem label='Admon'>
         <icon>fa:university fa-fw</icon>
         <menu>
-            <menuitem label='RRHH'>       
+            <menuitem label='RRHH'>
                <icon>fa:life-ring fa-fw</icon>
                       <menu>
                             <menuitem label='Employees'>
                                 <icon>fa:male fa-fw</icon>
                                 <action>SystemEmployeesList</action>
                             </menuitem>
-                      </menu>              
+                      </menu>
             </menuitem>
             <menuitem label='Finances'>
                 <icon>fa:briefcase fa-fw</icon>
