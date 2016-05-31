@@ -38,6 +38,9 @@ class SystemSalesList extends TPage
         $id = new TEntry('id');
         $id->setValue(TSession::getValue('s_id'));
 
+        $date = new TDate('date');
+        $date->setValue(TSession::getValue('s_date'));
+
         $client = new TEntry('client');
         $client->setValue(TSession::getValue('s_client'));
 
@@ -46,13 +49,18 @@ class SystemSalesList extends TPage
 
 
         $id->setSize(100);
+        $date->setSize(300);
         $client->setSize(300);
-        $amount->setSize(300); 
+        $amount->setSize(300);
 
         // add a row for the filter field
         $row=$table->addRow();
         $row->addCell(new TLabel('ID:'));
         $row->addCell($id);
+
+        $row=$table->addRow();
+        $row->addCell(new TLabel('Date: '));
+        $row->addCell($client);
 
         $row=$table->addRow();
         $row->addCell(new TLabel('Client: '));
@@ -83,7 +91,7 @@ class SystemSalesList extends TPage
         $cell->colspan = 2;
 
         // define wich are the form fields
-        $this->form->setFields(array($id, $client, $amount, $find_button, $new_button));
+        $this->form->setFields(array($id, $date, $client, $amount, $find_button, $new_button));
 
         // creates a DataGrid
         $this->datagrid = new TDataGrid;
@@ -92,12 +100,14 @@ class SystemSalesList extends TPage
 
         // creates the datagrid columns
         $id   = new TDataGridColumn('id', 'ID', 'center');
+        $date = new TDataGridColumn('date', 'Date', 'center');
         $client = new TDataGridColumn('client', 'Client', 'center');
         $amount = new TDataGridColumn('amount', 'Amount', 'center');
 
 
         // add the columns to the DataGrid
         $this->datagrid->addColumn($id);
+        $this->datagrid->addColumn($date);
         $this->datagrid->addColumn($client);
         $this->datagrid->addColumn($amount);
 
@@ -105,6 +115,10 @@ class SystemSalesList extends TPage
         $order_id= new TAction(array($this, 'onReload'));
         $order_id->setParameter('order', 'id');
         $id->setAction($order_id);
+
+        $order_date= new TAction(array($this, 'onReload'));
+        $order_date->setParameter('order', 'date');
+        $date->setAction($order_date);
 
         $order_client= new TAction(array($this, 'onReload'));
         $order_client->setParameter('order', 'client');
@@ -116,6 +130,10 @@ class SystemSalesList extends TPage
 
 
         // inline editing
+        $date_edit = new TDataGridAction(array($this, 'onInlineEdit'));
+        $date_edit->setField('id');
+        $date->setEditAction($date_edit);
+
         $client_edit = new TDataGridAction(array($this, 'onInlineEdit'));
         $client_edit->setField('id');
         $client->setEditAction($client_edit);
@@ -136,15 +154,10 @@ class SystemSalesList extends TPage
         $action2->setImage('fa:trash-o grey fa-lg');
         $action2->setField('id');
 
-        $action3 = new TDataGridAction(array($this, 'onPDF'));
-        $action3->setLabel('PDF');
-        $action3->setImage('fa:file-pdf-o red fa-lg');
-        $action3->setField('id');
-
         // add the actions to the datagrid
         $this->datagrid->addAction($action1);
         $this->datagrid->addAction($action2);
-        $this->datagrid->addAction($action3);
+
         // create the datagrid model
         $this->datagrid->createModel();
 
@@ -218,10 +231,12 @@ class SystemSalesList extends TPage
         $data = $this->form->getData();
 
         TSession::setValue('s_id_filter',   NULL);
+        TSession::setValue('s_date_filter', NULL);
         TSession::setValue('s_client_filter', NULL);
         TSession::setValue('s_amount_filter', NULL);
 
         TSession::setValue('s_id', '');
+        TSession::setValue('s_date', '');
         TSession::setValue('s_client', '');
         TSession::setValue('s_amount', '');
 
@@ -234,6 +249,14 @@ class SystemSalesList extends TPage
             // stores the filter in the session
             TSession::setValue('s_id_filter',   $filter);
             TSession::setValue('s_id', $data->id);
+        }
+        if ( $data->date )
+        {
+            // creates a filter using what the user has typed
+            $filter = new TFilter('date', 'like', "%{$data->date}%");
+
+            TSession::setValue('s_date_filter', $filter);
+            TSession::setValue('s_date', $data->date);
         }
         if ( $data->client )
         {
@@ -292,6 +315,11 @@ class SystemSalesList extends TPage
             {
                 // add the filter stored in the session to the criteria
                 $criteria->add(TSession::getValue('s_id_filter'));
+            }
+            if (TSession::getValue('s_date_filter'))
+            {
+                // add the filter stored in the session to the criteria
+                $criteria->add(TSession::getValue('s_date_filter'));
             }
             if (TSession::getValue('s_client_filter'))
             {
@@ -407,19 +435,5 @@ class SystemSalesList extends TPage
         parent::show();
     }
 
-    /**
-     * method onPDF()
-     * executed whenever the user clicks at the delete button
-     * Ask if the user really wants to delete the record
-     */
-    function onPDF($param)
-    {
-       /* // define the delete action
-        $action = new TAction(array($this, 'Delete'));
-        $action->setParameters($param); // pass the key parameter ahead
-
-        // shows a dialog to the user
-        new TQuestion(TAdiantiCoreTranslator::translate('Do you really want to delete ?'), $action);*/
-    }
 }
 ?>

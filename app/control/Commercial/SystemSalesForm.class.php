@@ -35,21 +35,26 @@ class SystemSalesForm extends TPage
 
         // create the form fields
         $id              = new TEntry('id');
+        $date            = new TDate('date');
         $client          = new TEntry('client');
         $amount          = new TEntry('amount');
+        $id->setEditable(false);
 
         // define the sizes
         $id->setSize(100);
+        $date->setSize(300);
         $client->setSize(300);
         $amount->setSize(300);
 
         // validations
+        $date->addValidation('date', new TRequiredValidator);
         $client->addValidation('client', new TRequiredValidator);
         $amount->addValidation('amount', new TRequiredValidator);
 
         // add a row for the field id
         $table->addRowSet(new TLabel('ID:'), $id);
-        $table->addRowSet(new TLabel('client: '), $client);
+        $table->addRowSet(new TLabel('Date: '), $date);
+        $table->addRowSet(new TLabel('Client: '), $client);
         $table->addRowSet(new TLabel('Amount: '), $amount);
 
 
@@ -68,7 +73,7 @@ class SystemSalesForm extends TPage
         $list_button->setImage('fa:table blue');
 
         // define the form fields
-        $this->form->setFields(array($id,$client,$amount,$save_button,$new_button,$list_button));
+        $this->form->setFields(array($id,$date,$client,$amount,$save_button,$new_button,$list_button));
 
         $buttons = new THBox;
         $buttons->add($save_button);

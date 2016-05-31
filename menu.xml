@@ -46,17 +46,22 @@
             <menuitem label='Finances'>
                 <icon>fa:briefcase fa-fw</icon>
                       <menu>
-                          <menuitem label='Invoices'>
+                          <menuitem label='Receipt'>
                               <icon>fa:file-text-o fa-fw</icon>
                               <action>SystemInvoicesList</action>
                           </menuitem>
-                          <menuitem label='Payments'>
-                              <icon>fa:usd fa-fw</icon>
-                              <action>SystemPaymentsList</action>
-                          </menuitem>
-                          <menuitem label='Charge'>
-                              <icon>fa:balance-scale fa-fw</icon>
-                              <action>SystemChargeList</action>
+                          <menuitem label='Invoices'>
+                              <icon>fa:file-text-o fa-fw</icon>
+                              <menu>
+                                  <menuitem label='Payments'>
+                                      <icon>fa:usd fa-fw</icon>
+                                      <action>SystemPaymentsList</action>
+                                  </menuitem>
+                                  <menuitem label='Charge'>
+                                      <icon>fa:balance-scale fa-fw</icon>
+                                      <action>SystemChargeList</action>
+                                  </menuitem>
+                              </menu>
                           </menuitem>
                       </menu>
             </menuitem>

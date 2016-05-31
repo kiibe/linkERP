@@ -38,14 +38,14 @@ class SystemClientsList extends TPage
         $id = new TEntry('id');
         $id->setValue(TSession::getValue('s_id'));
 
+        $dni = new TEntry('dni');
+        $dni->setValue(TSession::getValue('s_dni'));
+
         $name = new TEntry('name');
         $name->setValue(TSession::getValue('s_name'));
 
-        $address = new TEntry('adress');
-        $address->setValue(TSession::getValue('s_adress'));
-
-        $dni = new TEntry('dni');
-        $dni->setValue(TSession::getValue('s_dni'));
+        $address = new TEntry('address');
+        $address->setValue(TSession::getValue('s_address'));
 
         $email = new TEntry('email');
         $email->setValue(TSession::getValue('s_email'));
@@ -66,16 +66,16 @@ class SystemClientsList extends TPage
         $row->addCell($id);
 
         $row=$table->addRow();
+        $row->addCell(new TLabel('DNI: '));
+        $row->addCell($dni);
+
+        $row=$table->addRow();
         $row->addCell(new TLabel('Name: '));
         $row->addCell($name);
 
         $row=$table->addRow();
-        $row->addCell(new TLabel('Adress: '));
+        $row->addCell(new TLabel('Address: '));
         $row->addCell($address);
-
-        $row=$table->addRow();
-        $row->addCell(new TLabel('DNI: '));
-        $row->addCell($dni);
 
         $row=$table->addRow();
         $row->addCell(new TLabel('Email: '));
@@ -111,7 +111,7 @@ class SystemClientsList extends TPage
         $cell->colspan = 2;
 
         // define wich are the form fields
-        $this->form->setFields(array($id, $name, $address, $dni, $email, $phone, $find_button, $new_button, $pdf_button));
+        $this->form->setFields(array($id, $dni, $name, $address, $email, $phone, $find_button, $new_button, $pdf_button));
 
         // creates a DataGrid
         $this->datagrid = new TDataGrid;
@@ -120,17 +120,17 @@ class SystemClientsList extends TPage
 
         // creates the datagrid columns
         $id   = new TDataGridColumn('id', 'ID', 'center');
-        $name = new TDataGridColumn('name', 'Name', 'center');
-        $adress = new TDataGridColumn('adress', 'Adress', 'center');
         $dni = new TDataGridColumn('dni', 'DNI', 'center');
+        $name = new TDataGridColumn('name', 'Name', 'center');
+        $address = new TDataGridColumn('address', 'Address', 'center');
         $email = new TDataGridColumn('email', 'Email', 'center');
         $phone = new TDataGridColumn('phone', 'Phone', 'center');
 
         // add the columns to the DataGrid
         $this->datagrid->addColumn($id);
-        $this->datagrid->addColumn($name);
-        $this->datagrid->addColumn($adress);
         $this->datagrid->addColumn($dni);
+        $this->datagrid->addColumn($name);
+        $this->datagrid->addColumn($address);
         $this->datagrid->addColumn($email);
         $this->datagrid->addColumn($phone);
 
@@ -139,17 +139,17 @@ class SystemClientsList extends TPage
         $order_id->setParameter('order', 'id');
         $id->setAction($order_id);
 
+        $order_dni= new TAction(array($this, 'onReload'));
+        $order_dni->setParameter('order', 'dni');
+        $dni->setAction($order_dni);
+
         $order_name= new TAction(array($this, 'onReload'));
         $order_name->setParameter('order', 'name');
         $name->setAction($order_name);
 
-        $order_adress= new TAction(array($this, 'onReload'));
-        $order_adress->setParameter('order', 'adress');
-        $adress->setAction($order_adress);
-
-        $order_dni= new TAction(array($this, 'onReload'));
-        $order_dni->setParameter('order', 'dni');
-        $dni->setAction($order_dni);
+        $order_address= new TAction(array($this, 'onReload'));
+        $order_address->setParameter('order', 'address');
+        $address->setAction($order_address);
 
         $order_email= new TAction(array($this, 'onReload'));
         $order_email->setParameter('order', 'email');
@@ -161,17 +161,17 @@ class SystemClientsList extends TPage
 
 
         // inline editing
+        $dni_edit = new TDataGridAction(array($this, 'onInlineEdit'));
+        $dni_edit->setField('id');
+        $dni->setEditAction($dni_edit);
+
         $name_edit = new TDataGridAction(array($this, 'onInlineEdit'));
         $name_edit->setField('id');
         $name->setEditAction($name_edit);
 
-        $adress_edit = new TDataGridAction(array($this, 'onInlineEdit'));
-        $adress_edit->setField('id');
-        $adress->setEditAction($adress_edit);
-
-        $dni_edit = new TDataGridAction(array($this, 'onInlineEdit'));
-        $dni_edit->setField('id');
-        $dni->setEditAction($dni_edit);
+        $address_edit = new TDataGridAction(array($this, 'onInlineEdit'));
+        $address_edit->setField('id');
+        $address->setEditAction($address_edit);
 
         $email_edit = new TDataGridAction(array($this, 'onInlineEdit'));
         $email_edit->setField('id');
@@ -237,7 +237,7 @@ class SystemClientsList extends TPage
             TTransaction::open('permission');
 
             // instantiates object System_group
-            $object = new SystemGroup($key);
+            $object = new SystemClients($key);
             // deletes the object from the database
             $object->{$field} = $value;
             $object->store();
@@ -269,16 +269,16 @@ class SystemClientsList extends TPage
         $data = $this->form->getData();
 
         TSession::setValue('s_id_filter',   NULL);
-        TSession::setValue('s_name_filter', NULL);
-        TSession::setValue('s_adress_filter', NULL);
         TSession::setValue('s_dni_filter', NULL);
+        TSession::setValue('s_name_filter', NULL);
+        TSession::setValue('s_address_filter', NULL);
         TSession::setValue('s_email_filter', NULL);
         TSession::setValue('s_phone_filter', NULL);
 
         TSession::setValue('s_id', '');
-        TSession::setValue('s_name', '');
-        TSession::setValue('s_adress', '');
         TSession::setValue('s_dni', '');
+        TSession::setValue('s_name', '');
+        TSession::setValue('s_address', '');
         TSession::setValue('s_email', '');
         TSession::setValue('s_phone', '');
 
@@ -292,6 +292,14 @@ class SystemClientsList extends TPage
             TSession::setValue('s_id_filter',   $filter);
             TSession::setValue('s_id', $data->id);
         }
+        if ( $data->dni )
+        {
+            // creates a filter using what the user has typed
+            $filter = new TFilter('dni', 'like', "%{$data->dni}%");
+
+            TSession::setValue('s_dni_filter', $filter);
+            TSession::setValue('s_dni', $data->dni);
+        }
         if ( $data->name )
         {
             // creates a filter using what the user has typed
@@ -300,21 +308,13 @@ class SystemClientsList extends TPage
             TSession::setValue('s_name_filter', $filter);
             TSession::setValue('s_name', $data->name);
         }
-        if ( $data->adress )
+        if ( $data->address )
         {
             // creates a filter using what the user has typed
-            $filter = new TFilter('adress', 'like', "%{$data->adress}%");
+            $filter = new TFilter('address', 'like', "%{$data->address}%");
 
-            TSession::setValue('s_adress_filter', $filter);
-            TSession::setValue('s_adress', $data->adress);
-        }
-        if ( $data->dni )
-        {
-            // creates a filter using what the user has typed
-            $filter = new TFilter('dni', 'like', "%{$data->dni}%");
-
-            TSession::setValue('s_dni_filter', $filter);
-            TSession::setValue('s_dni', $data->dni);
+            TSession::setValue('s_address_filter', $filter);
+            TSession::setValue('s_address', $data->address);
         }
         if ( $data->email )
         {
@@ -362,7 +362,7 @@ class SystemClientsList extends TPage
             }
 
             // creates a repository for System_group
-            $repository = new TRepository('SystemGroup');
+            $repository = new TRepository('SystemClients');
             $limit = 10;
             // creates a criteria
             $criteria = new TCriteria;
@@ -374,20 +374,20 @@ class SystemClientsList extends TPage
                 // add the filter stored in the session to the criteria
                 $criteria->add(TSession::getValue('s_id_filter'));
             }
+            if (TSession::getValue('s_dni_filter'))
+            {
+                // add the filter stored in the session to the criteria
+                $criteria->add(TSession::getValue('s_dni_filter'));
+            }
             if (TSession::getValue('s_name_filter'))
             {
                 // add the filter stored in the session to the criteria
                 $criteria->add(TSession::getValue('s_name_filter'));
             }
-            if (TSession::getValue('s_adress_filter'))
+            if (TSession::getValue('s_address_filter'))
             {
                 // add the filter stored in the session to the criteria
-                $criteria->add(TSession::getValue('s_adress_filter'));
-            }
-            if (TSession::getValue('s_dni_filter'))
-            {
-                // add the filter stored in the session to the criteria
-                $criteria->add(TSession::getValue('s_dni_filter'));
+                $criteria->add(TSession::getValue('s_address_filter'));
             }
             if (TSession::getValue('s_email_filter'))
             {
@@ -466,7 +466,7 @@ class SystemClientsList extends TPage
             TTransaction::open('permission');
 
             // instantiates object System_group
-            $object = new SystemGroup($key);
+            $object = new SystemClients($key);
 
             // deletes the object from the database
             $object->delete();

@@ -36,8 +36,8 @@ class SystemChargeForm extends TPage
         $client        = new TEntry('client');
         $amount        = new TEntry('amount');
         $description   = new TText('description');
-        $date          = new TEntry('date');
-
+        $date          = new TDate('date');
+        $id->setEditable(false);
 
         // define the sizes
         $id->setSize(100);

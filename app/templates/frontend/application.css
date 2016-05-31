@@ -476,6 +476,13 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3c8dbc', end
    -webkit-border-radius:8px !important; /* Safari y Chrome */
 }
 
+.tfield_disabled
+{
+    border-radius:8px !important; 
+   -moz-border-radius:8px !important; /* Firefox */ 
+   -webkit-border-radius:8px !important; /* Safari y Chrome */
+}
+
 .tdatagrid_col,.tdatagrid_action
 {
 /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#748b93+0,cedce7+100,cedce7+100 */

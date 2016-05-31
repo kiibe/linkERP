@@ -43,7 +43,7 @@ class SystemChargeList extends TPage
         $amount = new TEntry('amount');
         $amount->setValue(TSession::getValue('s_amount'));
 
-        $date = new TEntry('date');
+        $date = new TDate('date');
         $date->setValue(TSession::getValue('s_date'));
 
         $id->setSize(100);

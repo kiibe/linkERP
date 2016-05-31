@@ -49,6 +49,8 @@ class SystemEmployeesForm extends TPage
         $address->setSize(300);
         $email->setSize(300);
         $phone->setSize(300);
+        $id->setEditable(false);
+
 
         // validations
         $id->addValidation('id', new TRequiredValidator);

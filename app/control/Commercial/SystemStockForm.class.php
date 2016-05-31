@@ -38,6 +38,7 @@ class SystemStockForm extends TPage
         $product         = new TEntry('product');
         $quantity        = new TEntry('quantity');
         $price           = new TEntry('price');
+        $id->setEditable(false);
 
         // define the sizes
         $id->setSize(100);

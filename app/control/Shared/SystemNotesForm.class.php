@@ -35,25 +35,29 @@ class SystemNotesForm extends TPage
 
         // create the form fields
         $id            = new TEntry('id');
+        $date          = new TDate('date');
         $hour          = new TEntry('hour');
         $place         = new TEntry('place');
         $description   = new TText('description');
-
+        $id->setEditable(false);
 
         // define the sizes
         $id->setSize(100);
+        $date->setSize(300);
         $hour->setSize(300);
         $place->setSize(300);
         $description->setSize(300); 
 
         // validations
         $id->addValidation('id', new TRequiredValidator);
+        $date->addValidation('date', new TRequiredValidator);
         $hour->addValidation('hour', new TRequiredValidator);
         $place->addValidation('place', new TRequiredValidator);
         $description->addValidation('description', new TRequiredValidator);
 
         // add a row for the field id
         $table->addRowSet(new TLabel('ID:'), $id);
+        $table->addRowSet(new TLabel('Date: '), $date);
         $table->addRowSet(new TLabel('Hour: '), $hour);
         $table->addRowSet(new TLabel('Place: '), $place);
         $table->addRowSet(new TLabel('Description: '), $description);
@@ -74,7 +78,7 @@ class SystemNotesForm extends TPage
         $list_button->setImage('fa:table blue');
 
         // define the form fields
-        $this->form->setFields(array($id,$hour,$place,$description,$save_button,$new_button,$list_button));
+        $this->form->setFields(array($id,$date,$hour,$place,$description,$save_button,$new_button,$list_button));
 
         $buttons = new THBox;
         $buttons->add($save_button);

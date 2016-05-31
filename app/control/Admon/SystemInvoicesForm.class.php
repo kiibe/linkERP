@@ -30,15 +30,15 @@ class SystemInvoicesForm extends TPage
         $this->form->add($table);
         $row1 = $table->addRow();
         $row1->class = 'tformtitle';
-        $cell1 = $row1-> addCell(new TLabel('Add new invoice'), '' );
+        $cell1 = $row1-> addCell(new TLabel('Add new receipt'), '' );
         $cell1->colspan = 2 ;
 
         // create the form fields
         $id            = new TEntry('id');
         $client        = new TEntry('client');
         $amount        = new TEntry('amount');
-        $date          = new TEntry('date');
-
+        $date          = new TDate('date');
+        $id->setEditable(false);
 
         // define the sizes
         $id->setSize(100);
@@ -55,7 +55,7 @@ class SystemInvoicesForm extends TPage
         // add a row for the field id
         $table->addRowSet(new TLabel('ID:'), $id);
         $table->addRowSet(new TLabel('Client: '), $client);
-        $table->addRowSet(new TLabel('Amount: '), $amount);
+        $table->addRowSet(new TLabel('Account money: '), $amount);
         $table->addRowSet(new TLabel('Date: '), $date);
 
 

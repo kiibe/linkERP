@@ -28,7 +28,7 @@ class SystemInvoicesList extends TPage
 
         $row1 = $table->addRow();
         $row1->class = 'tformtitle';
-        $cell1 = $row1-> addCell(new TLabel('Invoices'), '' );
+        $cell1 = $row1-> addCell(new TLabel('Receipt'), '' );
         $cell1->colspan = 2 ;
 
         // add the table inside the form
@@ -44,7 +44,7 @@ class SystemInvoicesList extends TPage
         $amount = new TEntry('amount');
         $amount->setValue(TSession::getValue('s_amount'));
 
-        $date = new TEntry('date');
+        $date = new TDate('date');
         $date->setValue(TSession::getValue('s_date'));
 
         $id->setSize(100);
@@ -62,7 +62,7 @@ class SystemInvoicesList extends TPage
         $row->addCell($client);
 
         $row=$table->addRow();
-        $row->addCell(new TLabel('Amount: '));
+        $row->addCell(new TLabel('Account money: '));
         $row->addCell($amount);
 
         $row=$table->addRow();
@@ -100,7 +100,7 @@ class SystemInvoicesList extends TPage
         // creates the datagrid columns
         $id   = new TDataGridColumn('id', 'ID', 'center');
         $client   = new TDataGridColumn('client', 'Client', 'center');
-        $amount = new TDataGridColumn('amount', 'Amount', 'center');
+        $amount = new TDataGridColumn('amount', 'Account money', 'center');
         $date = new TDataGridColumn('date', 'Date', 'center');
 
 

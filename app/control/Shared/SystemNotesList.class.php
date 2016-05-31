@@ -38,6 +38,9 @@ class SystemNotesList extends TPage
         $id = new TEntry('id');
         $id->setValue(TSession::getValue('s_id'));
 
+        $date = new TDate('date');
+        $date->setValue(TSession::getValue('s_date'));
+
         $hour = new TEntry('hour');
         $hour->setValue(TSession::getValue('s_hour'));
 
@@ -46,6 +49,7 @@ class SystemNotesList extends TPage
 
 
         $id->setSize(100);
+        $date->setSize(300);
         $hour->setSize(300);
         $place->setSize(300);
 
@@ -54,6 +58,10 @@ class SystemNotesList extends TPage
         $row=$table->addRow();
         $row->addCell(new TLabel('ID: '));
         $row->addCell($id);
+
+        $row=$table->addRow();
+        $row->addCell(new TLabel('Date: '));
+        $row->addCell($date);
 
         $row=$table->addRow();
         $row->addCell(new TLabel('Hour: '));
@@ -84,7 +92,7 @@ class SystemNotesList extends TPage
         $cell->colspan = 2;
 
         // define wich are the form fields
-        $this->form->setFields(array($id, $hour, $place, $find_button, $new_button));
+        $this->form->setFields(array($id, $date, $hour, $place, $find_button, $new_button));
 
         // creates a DataGrid
         $this->datagrid = new TDataGrid;
@@ -93,6 +101,7 @@ class SystemNotesList extends TPage
 
         // creates the datagrid columns
         $id   = new TDataGridColumn('id', 'ID', 'center');
+        $date = new TDataGridColumn('date', 'Date', 'center');
         $hour = new TDataGridColumn('hour', 'Hour', 'center');
         $place = new TDataGridColumn('place', 'Place', 'center');
         $description   = new TDataGridColumn('description', 'Description', 'center');
@@ -100,6 +109,7 @@ class SystemNotesList extends TPage
 
         // add the columns to the DataGrid
         $this->datagrid->addColumn($id);
+        $this->datagrid->addColumn($date);
         $this->datagrid->addColumn($hour);
         $this->datagrid->addColumn($place);
         $this->datagrid->addColumn($description);
@@ -108,6 +118,10 @@ class SystemNotesList extends TPage
         $order_id= new TAction(array($this, 'onReload'));
         $order_id->setParameter('order', 'id');
         $id->setAction($order_id);
+
+        $order_date= new TAction(array($this, 'onReload'));
+        $order_date->setParameter('order', 'date');
+        $date->setAction($order_date);
 
         $order_hour= new TAction(array($this, 'onReload'));
         $order_hour->setParameter('order', 'hour');
@@ -123,6 +137,10 @@ class SystemNotesList extends TPage
 
 
         // inline editing
+        $date_edit = new TDataGridAction(array($this, 'onInlineEdit'));
+        $date_edit->setField('id');
+        $date->setEditAction($date_edit);
+
         $hour_edit = new TDataGridAction(array($this, 'onInlineEdit'));
         $hour_edit->setField('id');
         $hour->setEditAction($hour_edit);
@@ -224,10 +242,12 @@ class SystemNotesList extends TPage
         $data = $this->form->getData();
 
         TSession::setValue('s_id_filter',   NULL);
+        TSession::setValue('s_date_filter', NULL);
         TSession::setValue('s_hour_filter', NULL);
         TSession::setValue('s_place_filter', NULL);
 
         TSession::setValue('s_id', '');
+        TSession::setValue('s_date', '');
         TSession::setValue('s_hour', '');
         TSession::setValue('s_place', '');
 
@@ -240,6 +260,14 @@ class SystemNotesList extends TPage
             // stores the filter in the session
             TSession::setValue('s_id_filter',   $filter);
             TSession::setValue('s_id', $data->id);
+        }
+        if ( $data->date )
+        {
+            // creates a filter using what the user has typed
+            $filter = new TFilter('date', 'like', "%{$data->date}%");
+
+            TSession::setValue('s_date_filter', $filter);
+            TSession::setValue('s_date', $data->date);
         }
         if ( $data->hour )
         {
@@ -298,6 +326,11 @@ class SystemNotesList extends TPage
             {
                 // add the filter stored in the session to the criteria
                 $criteria->add(TSession::getValue('s_id_filter'));
+            }
+            if (TSession::getValue('s_date_filter'))
+            {
+                // add the filter stored in the session to the criteria
+                $criteria->add(TSession::getValue('s_date_filter'));
             }
             if (TSession::getValue('s_hour_filter'))
             {
