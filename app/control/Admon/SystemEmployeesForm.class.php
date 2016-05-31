@@ -30,7 +30,7 @@ class SystemEmployeesForm extends TPage
         $row1->class = 'tformtitle';
         $cell1 = $row1-> addCell(new TLabel('Add new Employee'), '' );
         $cell1->colspan = 2 ;
-        
+
         $this->form->add($table);
 
 
@@ -61,7 +61,7 @@ class SystemEmployeesForm extends TPage
         $phone->addValidation('phone', new TRequiredValidator);
 
         // add a row for the field id
-        $table->addRowSet(new TLabel('ID:'), $dni);
+        $table->addRowSet(new TLabel('ID:'), $id);
         $table->addRowSet(new TLabel('DNI:'), $dni);
         $table->addRowSet(new TLabel('Name: '), $name);
         $table->addRowSet(new TLabel('Address: '), $address);

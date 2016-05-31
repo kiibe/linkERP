@@ -60,7 +60,7 @@ class SystemSalesList extends TPage
 
         $row=$table->addRow();
         $row->addCell(new TLabel('Date: '));
-        $row->addCell($client);
+        $row->addCell($date);
 
         $row=$table->addRow();
         $row->addCell(new TLabel('Client: '));
