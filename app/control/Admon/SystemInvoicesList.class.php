@@ -19,7 +19,7 @@ class SystemInvoicesList extends TPage
         parent::__construct();
 
         // creates the form
-        $this->form = new TForm('form_search_System_Invoices');
+        $this->form = new TForm('form_search_System_Receipt');
         $this->form->class = 'tform';
 
         // creates a table
@@ -310,7 +310,7 @@ class SystemInvoicesList extends TPage
             }
 
             // creates a repository for System_group
-            $repository = new TRepository('SystemGroup');
+            $repository = new TRepository('SystemReceipt');
             $limit = 10;
             // creates a criteria
             $criteria = new TCriteria;

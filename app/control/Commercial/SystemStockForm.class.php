@@ -106,7 +106,7 @@ class SystemStockForm extends TPage
             TTransaction::open('permission');
 
             // get the form data into an active record System_group
-            $object = $this->form->getData('SystemGroup');
+            $object = $this->form->getData('SystemStock');
 
             $this->form->validate(); // form validation
             $object->store(); // stores the object

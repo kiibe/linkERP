@@ -35,7 +35,7 @@ class SystemPaymentsForm extends TPage
 
         // create the form fields
         $id            = new TEntry('id');
-        $provider      = new TEntry('provider');
+        $provider      = new TDBCombo('provider', 'permission', 'SystemProviders', 'name', 'name');
         $amount        = new TEntry('amount');
         $description   = new TText('description');
         $date          = new TDate('date');
@@ -49,7 +49,6 @@ class SystemPaymentsForm extends TPage
         $date->setSize(300);
 
         // validations
-        $id->addValidation('id', new TRequiredValidator);
         $provider->addValidation('provider', new TRequiredValidator);
         $amount->addValidation('amount', new TRequiredValidator);
         $description->addValidation('description', new TRequiredValidator);
@@ -111,7 +110,7 @@ class SystemPaymentsForm extends TPage
             TTransaction::open('permission');
 
             // get the form data into an active record System_group
-            $object = $this->form->getData('SystemGroup');
+            $object = $this->form->getData('SystemPayments');
 
             $this->form->validate(); // form validation
             $object->store(); // stores the object

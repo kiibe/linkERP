@@ -522,11 +522,11 @@ class SystemClientsList extends TPage
         $tr = new TTableWriterPDF($widths);
 
         // create the document styles
-        $tr->addStyle('title', 'Arial', '12', 'B',  '#000000', '#CDCDCD');
-        $tr->addStyle('par', 'Arial', '10', '',    '#000000', '#CFCFCF');
+        $tr->addStyle('title', 'Arial', '12', 'B',  '#000000', '#A0B2BC');
+        $tr->addStyle('par', 'Arial', '10', '',    '#000000', '#ECE9E9');
         $tr->addStyle('impar', 'Arial', '10', '',    '#000000', '#FFFFFF');
-        $tr->addStyle('header', 'Times', '16', 'B', '#000000', '#CDCDCD');
-        $tr->addStyle('footer', 'Times', '12', 'B', '#000000', '#CDCDCD');
+        $tr->addStyle('header', 'Times', '16', 'B', '#FFFFFF', '#4C5976');
+        $tr->addStyle('footer', 'Times', '12', 'B', '#000000', '#88BACF');
 
         // add a header row
         $tr->addRow();

@@ -47,7 +47,6 @@ class SystemRRHHForm extends TPage
         $phone->setSize(200);
 
         // validations
-        $id->addValidation('id', new TRequiredValidator);
         $dni->addValidation('dni', new TRequiredValidator);
         $name->addValidation('name', new TRequiredValidator);
         $address->addValidation('addres', new TRequiredValidator);

@@ -357,7 +357,7 @@ class SystemEmployeesList extends TPage
             }
 
             // creates a repository for System_group
-            $repository = new TRepository('SystemGroup');
+            $repository = new TRepository('SystemEmployees');
             $limit = 10;
             // creates a criteria
             $criteria = new TCriteria;

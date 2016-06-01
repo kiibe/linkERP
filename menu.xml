@@ -47,7 +47,7 @@
                 <icon>fa:briefcase fa-fw</icon>
                       <menu>
                           <menuitem label='Receipt'>
-                              <icon>fa:file-text-o fa-fw</icon>
+                              <icon>fa:money fa-fw</icon>
                               <action>SystemInvoicesList</action>
                           </menuitem>
                           <menuitem label='Invoices'>
@@ -64,6 +64,10 @@
                               </menu>
                           </menuitem>
                       </menu>
+            </menuitem>
+            <menuitem label='Provider'>
+                <icon>fa:suitcase fa-fw</icon>
+                <action>SystemProvidersList</action>
             </menuitem>
         </menu>
     </menuitem>

@@ -46,10 +46,9 @@ class SystemNotesForm extends TPage
         $date->setSize(300);
         $hour->setSize(300);
         $place->setSize(300);
-        $description->setSize(300); 
+        $description->setSize(300);
 
         // validations
-        $id->addValidation('id', new TRequiredValidator);
         $date->addValidation('date', new TRequiredValidator);
         $hour->addValidation('hour', new TRequiredValidator);
         $place->addValidation('place', new TRequiredValidator);
@@ -111,7 +110,7 @@ class SystemNotesForm extends TPage
             TTransaction::open('permission');
 
             // get the form data into an active record System_group
-            $object = $this->form->getData('SystemGroup');
+            $object = $this->form->getData('SystemNotes');
 
             $this->form->validate(); // form validation
             $object->store(); // stores the object

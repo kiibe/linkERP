@@ -78,7 +78,7 @@ class SystemSalesList extends TPage
         $find_button->setAction(new TAction(array($this, 'onSearch')), _t('Find'));
         $find_button->setImage('fa:search');
 
-        $new_button->setAction(new TAction(array('SystemSalesForm', 'onEdit')), _t('New'));
+        $new_button->setAction(new TAction(array('SystemSalesForm', 'onReload')), _t('New'));
         $new_button->setImage('fa:plus-square green');
 
         $container = new THBox;
@@ -144,10 +144,10 @@ class SystemSalesList extends TPage
 
 
         // creates two datagrid actions
-        $action1 = new TDataGridAction(array('SystemSalesForm', 'onEdit'));
+        /*$action1 = new TDataGridAction(array('SystemSalesForm', 'onEdit'));
         $action1->setLabel(_t('Edit'));
         $action1->setImage('fa:pencil-square-o blue fa-lg');
-        $action1->setField('id');
+        $action1->setField('id');*/
 
         $action2 = new TDataGridAction(array($this, 'onDelete'));
         $action2->setLabel(_t('Delete'));
@@ -155,7 +155,7 @@ class SystemSalesList extends TPage
         $action2->setField('id');
 
         // add the actions to the datagrid
-        $this->datagrid->addAction($action1);
+        //$this->datagrid->addAction($action1);
         $this->datagrid->addAction($action2);
 
         // create the datagrid model
@@ -304,7 +304,7 @@ class SystemSalesList extends TPage
             }
 
             // creates a repository for System_group
-            $repository = new TRepository('SystemGroup');
+            $repository = new TRepository('SystemSales');
             $limit = 10;
             // creates a criteria
             $criteria = new TCriteria;

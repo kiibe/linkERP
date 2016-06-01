@@ -5,174 +5,306 @@
  */
 class SystemSalesForm extends TPage
 {
-    protected $form; // form
+    private $form_item;
+    private $form_customer;
+    private $datagrid;  // listing
+    private $total;
+    private $cartgrid;
+    private $loaded;
 
     /**
      * Class constructor
-     * Creates the page and the registration form
+     * Creates the page
      */
-    function __construct()
+    public function __construct()
     {
         parent::__construct();
+        new TSession;
 
-        // creates the table container
-        $table = new TTable;
-        $table->style = 'width:100%';
-
-        $frame_programs = new TFrame;
-
-        // creates the form
-        $this->form = new TForm('form_System_sales');
-        $this->form->class = 'tform';
-
-
-        // add the notebook inside the form
-        $this->form->add($table);
-        $row1 = $table->addRow();
-        $row1->class = 'tformtitle';
-        $cell1 = $row1-> addCell(new TLabel('Add new Sale'), '' );
-        $cell1->colspan = 2 ;
+        // creates the items form and add a table inside
+        $this->form_item = new TForm('form_pos');
+        $this->form_item->class = 'tform';
+        $table_item = new TTable;
+        $table_item-> width = '100%';
+        $this->form_item->add($table_item);
 
         // create the form fields
-        $id              = new TEntry('id');
-        $date            = new TDate('date');
-        $client          = new TEntry('client');
-        $amount          = new TEntry('amount');
-        $id->setEditable(false);
+        $product_id           = new TDBSeekButton('product_id', 'permission', 'form_pos', 'SystemStock', 'product', 'product_id', 'product');
+        $product_description = new TEntry('product_description');
+        $sale_price           = new TEntry('sale_price');
+        $amount               = new TEntry('amount');
+        $total                = new TEntry('total');
 
-        // define the sizes
-        $id->setSize(100);
-        $date->setSize(300);
-        $client->setSize(300);
-        $amount->setSize(300);
+        // add validators
+        $product_id->addValidation('Product', new TRequiredValidator);
+        $amount->addValidation('Amount', new TRequiredValidator);
 
-        // validations
-        $date->addValidation('date', new TRequiredValidator);
-        $client->addValidation('client', new TRequiredValidator);
-        $amount->addValidation('amount', new TRequiredValidator);
+        // define the exit actions
+        $product_id->setExitAction(new TAction(array($this, 'onExitProduct')));
+        $amount->setExitAction(new TAction(array($this, 'onUpdateTotal')));
 
-        // add a row for the field id
-        $table->addRowSet(new TLabel('ID:'), $id);
-        $table->addRowSet(new TLabel('Date: '), $date);
-        $table->addRowSet(new TLabel('Client: '), $client);
-        $table->addRowSet(new TLabel('Amount: '), $amount);
+        // define some properties
+        $product_id->setSize(50);
+        $product_description->setEditable(FALSE);
+        $sale_price->setEditable(FALSE);
+        $total->setEditable(FALSE);
+        $sale_price->setNumericMask(2, '.', ',');
+        $total->setNumericMask(2, '.', ',');
+        $sale_price->setSize(100);
+        $amount->setSize(100);
+        $total->setSize(100);
 
+        // add a row for the form title
+        $row  = $table_item->addRow();
+        $row->class = 'tformtitle'; // CSS class
+        $cell = $row->addCell( new TLabel('Point of Sales'));
+        $cell->colspan = 4;
 
-        // create an action button (save)
-        $save_button=new TButton('save');
-        $save_button->setAction(new TAction(array($this, 'onSave')), _t('Save'));
-        $save_button->setImage('fa:floppy-o');
+        // create the field labels
+        $lab_pro = new TLabel('ID');
+        $lab_des = new TLabel('Prodcut');
+        $lab_pri = new TLabel('Price');
+        $lab_amo = new TLabel('Amount');
+        $lab_dis = new TLabel('Discount');
+        $lab_tot = new TLabel('Total');
 
-        // create an new button (edit with no parameters)
-        $new_button=new TButton('new');
-        $new_button->setAction(new TAction(array($this, 'onEdit')), _t('New'));
-        $new_button->setImage('fa:plus-square green');
+        // creates the action button
+        $button1 = new TButton('add');
+        $button1->setAction(new TAction(array($this, 'onAddItem')), 'Add item');
+        $button1->setImage('ico_add.png');
 
-        $list_button=new TButton('list');
-        $list_button->setAction(new TAction(array('SystemSalesList','onReload')), _t('Back to the listing'));
-        $list_button->setImage('fa:table blue');
+        // add the form fields
+        $table_item->addRowSet($lab_pro, $product_id,  $lab_des, $product_description);
+        $table_item->addRowSet($lab_pri, $sale_price,  $lab_amo, $amount);
 
         // define the form fields
-        $this->form->setFields(array($id,$date,$client,$amount,$save_button,$new_button,$list_button));
+        $this->form_item->setFields(array($product_id, $product_description, $sale_price, $amount, $total, $button1));
 
-        $buttons = new THBox;
-        $buttons->add($save_button);
-        $buttons->add($new_button);
-        $buttons->add($list_button);
 
-        $container = new TTable;
-        $container->width = '80%';
-        $container->addRow()->addCell(new TXMLBreadCrumb('menu.xml', 'SystemSalesList'));
-        $container->addRow()->addCell($this->form);
 
-        $row=$table->addRow();
-        $row->class = 'tformaction';
-        $cell = $row->addCell( $buttons );
-        $cell->colspan = 2;
+        // creates the customer form and add a table inside it
+        $this->form_customer = new TForm('form_customer');
+        $this->form_customer->class = 'tform';
+        $table_customer = new TTable;
+        $table_customer-> width = '100%';
+        $this->form_customer->add($table_customer);
 
-        // add the form to the page
-        parent::add($container);
+        // add a row for the form title
+        $row  = $table_customer->addRow();
+        $row->class = 'tformtitle'; // CSS class
+        $cell = $row->addCell( new TLabel('Client'));
+        $cell->colspan = 5;
+
+        // create the form fields
+        $customer_id          = new TDBSeekButton('customer_id', 'permission', 'form_customer', 'SystemClients', 'name', 'customer_id', 'customer_name');
+        $customer_name        = new TEntry('customer_name');
+
+        // define validation and other properties
+        $customer_id->addValidation('Client', new TRequiredValidator);
+
+        $customer_id->setSize(50);
+        $customer_name->setEditable(FALSE);
+
+        // create tha form labels
+        $lab_cus = new TLabel('Client');
+        $lab_nam = new TLabel('Name');
+
+        // action button
+        $button2 = new TButton('save');
+        $button2->setAction(new TAction(array($this, 'onSave')), 'Save and finish');
+        $button2->setImage('ico_save.png');
+
+        // add the form fields inside the table
+        $table_customer->addRowSet($lab_cus, $customer_id, $lab_nam, $customer_name, $button2);
+
+        // define the form fields
+        $this->form_customer->setFields(array($customer_id, $customer_name, $button2));
+
+        // creates the grid for items
+        $this->cartgrid = new TQuickGrid;
+        $this->cartgrid->class = 'tdatagrid_table customized-table';
+        $this->cartgrid->makeScrollable();
+        $this->cartgrid->setHeight( 150 );
+
+        $this->cartgrid->addQuickColumn('ID', 'product_id', 'right', 25);
+        $this->cartgrid->addQuickColumn('Description', 'product_description', 'left', 230);
+        $this->cartgrid->addQuickColumn('Price', 'sale_price', 'right', 80);
+        $this->cartgrid->addQuickColumn('Amount', 'amount', 'right', 70);
+        $this->cartgrid->addQuickColumn('Discount', 'discount', 'right', 70);
+        $this->cartgrid->addQuickColumn('Total', 'total', 'right', 100);
+
+        $this->cartgrid->addQuickAction('Delete', new TDataGridAction(array($this, 'onDelete')), 'product_id', 'ico_delete.png');
+        $this->cartgrid->createModel();
+
+
+
+        // wrap the page content using vertical box
+        $vbox = new TVBox;
+        $vbox->add(new TXMLBreadCrumb('menu.xml', 'SystemSalesList'));
+        $vbox->add($this->form_item);
+        $vbox->add(new TLabel('&nbsp;'));
+        $vbox->add($this->cartgrid);
+        $vbox->add(new TLabel('&nbsp;'));
+        $vbox->add($this->form_customer);
+        parent::add($vbox);
     }
 
     /**
-     * method onSave()
-     * Executed whenever the user clicks at the save button
+     * Add a product into the cart
      */
-    function onSave()
+    public function onAddItem()
     {
         try
         {
-            // open a transaction with database 'permission'
+            $this->form_item->validate(); // validate form data
+
+            $items = TSession::getValue('items'); // get items from session
+            $item = $this->form_item->getData('SaleItem');
+            $items[ $item->product_id ] = $item; // add the item
+            TSession::setValue('items', $items); // store back tthe session
+            $this->form_item->clear(); // clear form
+            $this->onReload(); // reload data
+        }
+        catch (Exception $e) // in case of exception
+        {
+            new TMessage('error', '<b>Error</b> ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Saves the cart
+     */
+    public function onSave()
+    {
+        try
+        {
+            $this->form_customer->validate(); // validate form data
+
+            $data = $this->form_customer->getData();
+
             TTransaction::open('permission');
-
-            // get the form data into an active record System_group
-            $object = $this->form->getData('SystemGroup');
-
-            $this->form->validate(); // form validation
-            $object->store(); // stores the object
-            $object->clearParts();
-            if( $object->programs )
+            $items = TSession::getValue('items'); // get items
+            if ($items)
             {
-                foreach( $object->programs as $program )
+                $sale = new Sale; // create a new Sale
+                $sale->customer_id = $data->customer_id;
+                $sale->date = date('Y-m-d');
+                $total = 0;
+                foreach ($items as $item)
                 {
-                    $object->addSystemProgram( $program );
+                    $item->sale_price = str_replace(',', '', $item->sale_price);
+                    $item->total      = str_replace(',', '', $item->total);
+                    $total += str_replace(',', '', $item->total);
+
+                    $sale->addSaleItem($item); // add the item to the Sale
+                }
+                $sale->total = $total;
+                $sale->store(); // store the Sale
+
+                // clear items
+                TSession::setValue('items', NULL);
+                $this->form_customer->clear(); // clear form
+                new TMessage('info', 'Record saved successfully');
+            }
+            TTransaction::close();
+            $this->onReload();
+        }
+        catch (Exception $e)
+        {
+            new TMessage('error', $e->getMessage());
+        }
+    }
+
+    /**
+     * Exit action for the field product
+     * Fill some form fields (sale_price, amount, discount, total)
+     */
+    public static function onExitProduct($param)
+    {
+        $product_id = $param['product_id']; // get the product code
+        try
+        {
+            TTransaction::open('permission');
+            //$product = new Product($product_id); // reads the product
+            $conn = TTransaction::get(); // get PDO connection
+            // run query
+            $result = $conn->query('SELECT product, quantity, price from system_stock where id = '.$product_id.' order by id LIMIT 1');
+            print_r($result);
+
+            $obj = new StdClass;
+            $obj->sale_price  = number_format($result['price'], 2, '.', ',');
+            $obj->amount = 1;
+            $obj->total       = number_format($result['quantity'], 2, '.', ',');
+            TTransaction::close();
+            TForm::sendData('form_pos', $obj);
+        }
+        catch (Exception $e)
+        {
+            // does nothing
+        }
+    }
+
+    /**
+     * Update the total based on the sale price, amount and discount
+     */
+    public static function onUpdateTotal($param)
+    {
+        $sale_price = (double) str_replace(',', '', $param['sale_price']);
+        $amount     = (double) str_replace(',', '', $param['amount']);
+
+        $obj = new StdClass;
+        $obj->total       = number_format( ($sale_price * $amount), 2, '.', ',');
+        TForm::sendData('form_pos', $obj);
+    }
+
+    /**
+     * Remove a product from the cart
+     */
+    public function onDelete($param)
+    {
+        // get the cart objects from session
+        $items = TSession::getValue('items');
+        unset($items[ $param['key'] ]); // remove the product from the array
+        TSession::setValue('items', $items); // put the array back to the session
+
+        // reload datagrid
+        $this->onReload( func_get_arg(0) );
+    }
+
+    /**
+     * Reload the datagrid with the objects from the session
+     */
+    function onReload($param = NULL)
+    {
+        try
+        {
+            $this->cartgrid->clear(); // clear datagrid
+            $items = TSession::getValue('items');
+            if ($items)
+            {
+                foreach ($items as $object)
+                {
+                    // add the item inside the datagrid
+                    $this->cartgrid->addItem($object);
                 }
             }
-
-            $this->form->setData($object); // fill the form with the active record data
-
-            TTransaction::close(); // close the transaction
-            new TMessage('info', _t('Record saved')); // shows the success message
+            $this->loaded = true;
         }
         catch (Exception $e) // in case of exception
         {
-            // shows the exception error message
             new TMessage('error', '<b>Error</b> ' . $e->getMessage());
-
-            // undo all pending operations
-            TTransaction::rollback();
         }
     }
 
     /**
-     * method onEdit()
-     * Executed whenever the user clicks at the edit button da datagrid
+     * Show the page
      */
-    function onEdit($param)
+    public function show()
     {
-        try
+        if (!$this->loaded)
         {
-            if (isset($param['key']))
-            {
-                // get the parameter $key
-                $key=$param['key'];
-
-                // open a transaction with database 'permission'
-                TTransaction::open('permission');
-
-                // instantiates object System_group
-                $object = new SystemGroup($key);
-
-                $object->programs = $object->getSystemPrograms();
-
-                // fill the form with the active record data
-                $this->form->setData($object);
-
-                // close the transaction
-                TTransaction::close();
-            }
-            else
-            {
-                $this->form->clear();
-            }
+            $this->onReload( func_get_arg(0) );
         }
-        catch (Exception $e) // in case of exception
-        {
-            // shows the exception error message
-            new TMessage('error', '<b>Error</b> ' . $e->getMessage());
-
-            // undo all pending operations
-            TTransaction::rollback();
-        }
+        parent::show();
     }
 }

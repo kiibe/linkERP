@@ -33,7 +33,7 @@ class SystemChargeForm extends TPage
 
         // create the form fields
         $id            = new TEntry('id');
-        $client        = new TEntry('client');
+        $client        = new TDBCombo('client', 'permission', 'SystemClients', 'name', 'name');
         $amount        = new TEntry('amount');
         $description   = new TText('description');
         $date          = new TDate('date');
@@ -43,11 +43,10 @@ class SystemChargeForm extends TPage
         $id->setSize(100);
         $client->setSize(300);
         $amount->setSize(300);
-        $description->setSize(300); 
+        $description->setSize(300);
         $date->setSize(300);
 
         // validations
-        $id->addValidation('id', new TRequiredValidator);
         $client->addValidation('client', new TRequiredValidator);
         $amount->addValidation('amount', new TRequiredValidator);
         $description->addValidation('description', new TRequiredValidator);
@@ -109,7 +108,7 @@ class SystemChargeForm extends TPage
             TTransaction::open('permission');
 
             // get the form data into an active record System_group
-            $object = $this->form->getData('SystemGroup');
+            $object = $this->form->getData('SystemCharge');
 
             $this->form->validate(); // form validation
             $object->store(); // stores the object

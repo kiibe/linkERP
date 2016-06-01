@@ -3,7 +3,7 @@
  * System_groupList Listing
  * @author  LinkERP
  */
-class SystemStockList extends TPage
+class SystemProvidersList extends TPage
 {
     private $form;     // registration form
     private $datagrid; // listing
@@ -19,7 +19,7 @@ class SystemStockList extends TPage
         parent::__construct();
 
         // creates the form
-        $this->form = new TForm('form_search_System_Stock');
+        $this->form = new TForm('form_search_System_Provider');
         $this->form->class = 'tform';
 
         // creates a table
@@ -28,9 +28,8 @@ class SystemStockList extends TPage
 
         $row1 = $table->addRow();
         $row1->class = 'tformtitle';
-        $cell1 = $row1-> addCell(new TLabel('Stock'), '' );
+        $cell1 = $row1-> addCell(new TLabel('Provider'), '' );
         $cell1->colspan = 2 ;
-
         // add the table inside the form
         $this->form->add($table);
 
@@ -38,50 +37,48 @@ class SystemStockList extends TPage
         $id = new TEntry('id');
         $id->setValue(TSession::getValue('s_id'));
 
-        $product = new TEntry('product');
-        $product->setValue(TSession::getValue('s_product'));
+        $nif = new TEntry('nif');
+        $nif->setValue(TSession::getValue('s_nif'));
 
-        $quantity = new TEntry('quantity');
-        $quantity->setValue(TSession::getValue('s_quantity'));
-
-        $price = new TEntry('price');
-        $price->setValue(TSession::getValue('s_price'));
+        $name = new TEntry('name');
+        $name->setValue(TSession::getValue('s_name'));
 
         $id->setSize(100);
-        $product->setSize(300);
-        $quantity->setSize(300); 
-        $price->setSize(300);
+        $nif->setSize(300);
+        $name->setSize(300);
+
 
         // add a row for the filter field
         $row=$table->addRow();
-        $row->addCell(new TLabel('ID:'));
+        $row->addCell(new TLabel('ID: '));
         $row->addCell($id);
 
         $row=$table->addRow();
-        $row->addCell(new TLabel('Product: '));
-        $row->addCell($product);
+        $row->addCell(new TLabel('NIF: '));
+        $row->addCell($nif);
 
         $row=$table->addRow();
-        $row->addCell(new TLabel('Quantity: '));
-        $row->addCell($quantity);
-
-        $row=$table->addRow();
-        $row->addCell(new TLabel('Price: '));
-        $row->addCell($price);
+        $row->addCell(new TLabel('Name: '));
+        $row->addCell($name);
 
         // create two action buttons to the form
         $find_button = new TButton('find');
         $new_button  = new TButton('new');
+        $pdf_button = new TButton('pdf');
         // define the button actions
         $find_button->setAction(new TAction(array($this, 'onSearch')), _t('Find'));
         $find_button->setImage('fa:search');
 
-        $new_button->setAction(new TAction(array('SystemStockForm', 'onEdit')), _t('New'));
+        $new_button->setAction(new TAction(array('SystemProvidersForm', 'onEdit')), _t('New'));
         $new_button->setImage('fa:plus-square green');
+
+        $pdf_button->setAction(new TAction(array($this, 'onPDF')), 'PDF');
+        $pdf_button->setImage('fa:file-pdf-o red');
 
         $container = new THBox;
         $container->add($find_button);
         $container->add($new_button);
+        $container->add($pdf_button);
 
         $row=$table->addRow();
         $row->class = 'tformaction';
@@ -89,7 +86,7 @@ class SystemStockList extends TPage
         $cell->colspan = 2;
 
         // define wich are the form fields
-        $this->form->setFields(array($id, $product, $quantity, $price, $find_button, $new_button));
+        $this->form->setFields(array($id, $nif, $name, $find_button, $new_button, $pdf_button));
 
         // creates a DataGrid
         $this->datagrid = new TDataGrid;
@@ -98,51 +95,42 @@ class SystemStockList extends TPage
 
         // creates the datagrid columns
         $id   = new TDataGridColumn('id', 'ID', 'center');
-        $product = new TDataGridColumn('product', 'Product', 'center');
-        $quantity = new TDataGridColumn('quantity', 'Quantity', 'center');
-        $price = new TDataGridColumn('price', 'Price', 'center');
+        $nif = new TDataGridColumn('nif', 'NIF', 'center');
+        $name = new TDataGridColumn('name', 'Name', 'center');
 
 
         // add the columns to the DataGrid
         $this->datagrid->addColumn($id);
-        $this->datagrid->addColumn($product);
-        $this->datagrid->addColumn($quantity);
-        $this->datagrid->addColumn($price);
+        $this->datagrid->addColumn($nif);
+        $this->datagrid->addColumn($name);
 
         // creates the datagrid column actions
         $order_id= new TAction(array($this, 'onReload'));
         $order_id->setParameter('order', 'id');
         $id->setAction($order_id);
 
-        $order_product= new TAction(array($this, 'onReload'));
-        $order_product->setParameter('order', 'product');
-        $product->setAction($order_product);
+        $order_nif= new TAction(array($this, 'onReload'));
+        $order_nif->setParameter('order', 'nif');
+        $nif->setAction($order_nif);
 
-        $order_quantity= new TAction(array($this, 'onReload'));
-        $order_quantity->setParameter('order', 'quantity');
-        $quantity->setAction($order_quantity);
-
-        $order_price= new TAction(array($this, 'onReload'));
-        $order_price->setParameter('order', 'price');
-        $price->setAction($order_price);
+        $order_name= new TAction(array($this, 'onReload'));
+        $order_name->setParameter('order', 'name');
+        $name->setAction($order_name);
 
 
         // inline editing
-        $product_edit = new TDataGridAction(array($this, 'onInlineEdit'));
-        $product_edit->setField('id');
-        $product->setEditAction($product_edit);
+        $nif_edit = new TDataGridAction(array($this, 'onInlineEdit'));
+        $nif_edit->setField('id');
+        $nif->setEditAction($nif_edit);
 
-        $quantity_edit = new TDataGridAction(array($this, 'onInlineEdit'));
-        $quantity_edit->setField('id');
-        $quantity->setEditAction($quantity_edit);
+        $name_edit = new TDataGridAction(array($this, 'onInlineEdit'));
+        $name_edit->setField('id');
+        $name->setEditAction($name_edit);
 
-        $price_edit = new TDataGridAction(array($this, 'onInlineEdit'));
-        $price_edit->setField('id');
-        $price->setEditAction($price_edit);
 
 
         // creates two datagrid actions
-        $action1 = new TDataGridAction(array('SystemStockForm', 'onEdit'));
+        $action1 = new TDataGridAction(array('SystemProvidersForm', 'onEdit'));
         $action1->setLabel(_t('Edit'));
         $action1->setImage('fa:pencil-square-o blue fa-lg');
         $action1->setField('id');
@@ -229,14 +217,12 @@ class SystemStockList extends TPage
         $data = $this->form->getData();
 
         TSession::setValue('s_id_filter',   NULL);
-        TSession::setValue('s_product_filter', NULL);
-        TSession::setValue('s_quantity_filter', NULL);
-        TSession::setValue('s_price_filter', NULL);
+        TSession::setValue('s_nif_filter', NULL);
+        TSession::setValue('s_name_filter', NULL);
 
         TSession::setValue('s_id', '');
-        TSession::setValue('s_product', '');
-        TSession::setValue('s_quantity', '');
-        TSession::setValue('s_price', '');
+        TSession::setValue('s_nif', '');
+        TSession::setValue('s_name', '');
 
         // check if the user has filled the form
         if ( $data->id )
@@ -248,29 +234,21 @@ class SystemStockList extends TPage
             TSession::setValue('s_id_filter',   $filter);
             TSession::setValue('s_id', $data->id);
         }
-        if ( $data->product )
+        if ( $data->nif )
         {
             // creates a filter using what the user has typed
-            $filter = new TFilter('product', 'like', "%{$data->product}%");
+            $filter = new TFilter('nif', 'like', "%{$data->nif}%");
 
-            TSession::setValue('s_product_filter', $filter);
-            TSession::setValue('s_product', $data->product);
+            TSession::setValue('s_nif_filter', $filter);
+            TSession::setValue('s_nif', $data->nif);
         }
-        if ( $data->quantity )
+        if ( $data->name )
         {
             // creates a filter using what the user has typed
-            $filter = new TFilter('quantity', 'like', "%{$data->quantity}%");
+            $filter = new TFilter('name', 'like', "%{$data->name}%");
 
-            TSession::setValue('s_quantity_filter', $filter);
-            TSession::setValue('s_quantity', $data->quantity);
-        }
-        if ( $data->price )
-        {
-            // creates a filter using what the user has typed
-            $filter = new TFilter('price', 'like', "%{$data->price}%");
-
-            TSession::setValue('s_price_filter', $filter);
-            TSession::setValue('s_price', $data->price);
+            TSession::setValue('s_name_filter', $filter);
+            TSession::setValue('s_name', $data->name);
         }
 
 
@@ -302,7 +280,7 @@ class SystemStockList extends TPage
             }
 
             // creates a repository for System_group
-            $repository = new TRepository('SystemStock');
+            $repository = new TRepository('SystemProviders');
             $limit = 10;
             // creates a criteria
             $criteria = new TCriteria;
@@ -314,20 +292,15 @@ class SystemStockList extends TPage
                 // add the filter stored in the session to the criteria
                 $criteria->add(TSession::getValue('s_id_filter'));
             }
-            if (TSession::getValue('s_product_filter'))
+            if (TSession::getValue('s_nif_filter'))
             {
                 // add the filter stored in the session to the criteria
-                $criteria->add(TSession::getValue('s_product_filter'));
+                $criteria->add(TSession::getValue('s_nif_filter'));
             }
-            if (TSession::getValue('s_quantity_filter'))
+            if (TSession::getValue('s_name_filter'))
             {
                 // add the filter stored in the session to the criteria
-                $criteria->add(TSession::getValue('s_quantity_filter'));
-            }
-            if (TSession::getValue('s_price_filter'))
-            {
-                // add the filter stored in the session to the criteria
-                $criteria->add(TSession::getValue('s_price_filter'));
+                $criteria->add(TSession::getValue('s_name_filter'));
             }
 
 
@@ -431,6 +404,79 @@ class SystemStockList extends TPage
             $this->onReload( func_get_arg(0) );
         }
         parent::show();
+    }
+
+    /**
+     * method onPDF()
+     * executed whenever the user clicks at the pdf button
+     */
+    function onPDF($param)
+    {
+        try
+        {
+          TTransaction::open('permission'); // open transaction
+          $conn = TTransaction::get(); // get PDO connection
+
+          // run query
+          $result = $conn->query('SELECT nif, name from system_providers order by id');
+
+          // get the form data into an active record Customer
+          $widths = array(60, 125, 125, 150, 70);
+          $tr = new TTableWriterPDF($widths);
+
+          // create the document styles
+          $tr->addStyle('title', 'Arial', '12', 'B',  '#000000', '#A0B2BC');
+          $tr->addStyle('par', 'Arial', '10', '',    '#000000', '#ECE9E9');
+          $tr->addStyle('impar', 'Arial', '10', '',    '#000000', '#FFFFFF');
+          $tr->addStyle('header', 'Times', '16', 'B', '#FFFFFF', '#4C5976');
+          $tr->addStyle('footer', 'Times', '12', 'B', '#000000', '#88BACF');
+
+          // add a header row
+          $tr->addRow();
+          $tr->addCell('Providers', 'center', 'header', 5);
+
+          // add titles row
+          $tr->addRow();
+          $tr->addCell('NIF','center', 'title');
+          $tr->addCell('Name','center', 'title');
+
+          // controls the background filling
+          $colour= FALSE;
+          foreach ($result as $row)
+          {
+              $style = $colour ? 'par' : 'impar';
+              $tr->addRow();
+              $tr->addCell($row['nif'], 'left', $style);
+              $tr->addCell($row['name'], 'left', $style);
+              $colour = !$colour;
+          }
+
+          // footer row
+          $tr->addRow();
+          $tr->addCell(date('l jS \of F Y h:i:s A'), 'center', 'footer', 5);
+          $tr->Footer('This document contains information about clients of the company.');
+
+          if (!file_exists("app/output/providersList_".date("Ymd")."pdf") OR is_writable("app/output/providersList_".date("Ymd").".pdf"))
+          {
+              $tr->save("app/output/providersList_".date("Ymd").".pdf");
+          }
+          else
+          {
+              throw new Exception(_t('Permission denied') . ': ' . "app/output/providersList_".date("Ymd").".pdf");
+          }
+
+          parent::openFile("app/output/providersList_".date("Ymd").".pdf");
+
+          // shows the success message
+          new TMessage('info', 'Report generated. Please, enable popups in the browser (just in the web).');
+
+          TTransaction::close(); // close transaction
+        }
+        catch (Exception $e) // in case of exception
+        {
+          // shows the exception error message
+          new TMessage('error', '<b>Error</b> ' . $e->getMessage());
+        }
     }
 }
 ?>

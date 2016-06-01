@@ -319,7 +319,7 @@ class SystemChargeList extends TPage
             }
 
             // creates a repository for System_group
-            $repository = new TRepository('SystemGroup');
+            $repository = new TRepository('SystemCharge');
             $limit = 10;
             // creates a criteria
             $criteria = new TCriteria;

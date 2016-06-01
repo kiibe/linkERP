@@ -3,7 +3,7 @@
  * System_groupForm Registration
  * @author  LinkERP
  */
-class SystemEmployeesForm extends TPage
+class SystemProvidersForm extends TPage
 {
     protected $form; // form
 
@@ -19,53 +19,37 @@ class SystemEmployeesForm extends TPage
         $table = new TTable;
         $table->style = 'width:100%';
 
-
         // creates the form
-        $this->form = new TForm('form_System_Employees');
+        $this->form = new TForm('form_System_Provider');
         $this->form->class = 'tform';
 
 
         // add the notebook inside the form
+        $this->form->add($table);
         $row1 = $table->addRow();
         $row1->class = 'tformtitle';
-        $cell1 = $row1-> addCell(new TLabel('Add new Employee'), '' );
+        $cell1 = $row1-> addCell(new TLabel('Add new provider'), '' );
         $cell1->colspan = 2 ;
 
-        $this->form->add($table);
-
-
         // create the form fields
-        $id             = new TEntry('id');
-        $dni            = new TEntry('dni');
-        $name           = new TEntry('name');
-        $address        = new TEntry('address');
-        $email          = new TEntry('email');
-        $phone          = new TEntry('phone');
+        $id            = new TEntry('id');
+        $nif           = new TEntry('nif');
+        $name          = new TEntry('name');
+        $id->setEditable(false);
 
         // define the sizes
         $id->setSize(100);
-        $dni->setSize(300);
+        $nif->setSize(300);
         $name->setSize(300);
-        $address->setSize(300);
-        $email->setSize(300);
-        $phone->setSize(300);
-        $id->setEditable(false);
-
 
         // validations
-        $dni->addValidation('dni', new TRequiredValidator);
+        $nif->addValidation('nif', new TRequiredValidator);
         $name->addValidation('name', new TRequiredValidator);
-        $address->addValidation('addres', new TRequiredValidator);
-        $email->addValidation('email', new TRequiredValidator);
-        $phone->addValidation('phone', new TRequiredValidator);
 
         // add a row for the field id
         $table->addRowSet(new TLabel('ID:'), $id);
-        $table->addRowSet(new TLabel('DNI:'), $dni);
+        $table->addRowSet(new TLabel('NIF: '), $nif);
         $table->addRowSet(new TLabel('Name: '), $name);
-        $table->addRowSet(new TLabel('Address: '), $address);
-        $table->addRowSet(new TLabel('Email: '), $email);
-        $table->addRowSet(new TLabel('Phone: '), $phone);
 
 
         // create an action button (save)
@@ -79,11 +63,11 @@ class SystemEmployeesForm extends TPage
         $new_button->setImage('fa:plus-square green');
 
         $list_button=new TButton('list');
-        $list_button->setAction(new TAction(array('SystemEmployeesList','onReload')), _t('Back to the listing'));
+        $list_button->setAction(new TAction(array('SystemProvidersList','onReload')), _t('Back to the listing'));
         $list_button->setImage('fa:table blue');
 
         // define the form fields
-        $this->form->setFields(array($id, $dni,$name,$address,$email,$phone,$save_button,$new_button,$list_button));
+        $this->form->setFields(array($id,$nif,$name,$save_button,$new_button,$list_button));
 
         $buttons = new THBox;
         $buttons->add($save_button);
@@ -92,7 +76,7 @@ class SystemEmployeesForm extends TPage
 
         $container = new TTable;
         $container->width = '80%';
-        $container->addRow()->addCell(new TXMLBreadCrumb('menu.xml', 'SystemEmployeesList'));
+        $container->addRow()->addCell(new TXMLBreadCrumb('menu.xml', 'SystemProvidersList'));
         $container->addRow()->addCell($this->form);
 
         $row=$table->addRow();
@@ -116,7 +100,7 @@ class SystemEmployeesForm extends TPage
             TTransaction::open('permission');
 
             // get the form data into an active record System_group
-            $object = $this->form->getData('SystemEmployees');
+            $object = $this->form->getData('SystemProviders');
 
             $this->form->validate(); // form validation
             $object->store(); // stores the object
