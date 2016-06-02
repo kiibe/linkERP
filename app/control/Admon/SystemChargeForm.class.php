@@ -112,14 +112,6 @@ class SystemChargeForm extends TPage
 
             $this->form->validate(); // form validation
             $object->store(); // stores the object
-            $object->clearParts();
-            if( $object->programs )
-            {
-                foreach( $object->programs as $program )
-                {
-                    $object->addSystemProgram( $program );
-                }
-            }
 
             $this->form->setData($object); // fill the form with the active record data
 
@@ -153,9 +145,7 @@ class SystemChargeForm extends TPage
                 TTransaction::open('permission');
 
                 // instantiates object System_group
-                $object = new SystemGroup($key);
-
-                $object->programs = $object->getSystemPrograms();
+                $object = new SystemCharge($key);
 
                 // fill the form with the active record data
                 $this->form->setData($object);

@@ -120,14 +120,6 @@ class SystemEmployeesForm extends TPage
 
             $this->form->validate(); // form validation
             $object->store(); // stores the object
-            $object->clearParts();
-            if( $object->programs )
-            {
-                foreach( $object->programs as $program )
-                {
-                    $object->addSystemProgram( $program );
-                }
-            }
 
             $this->form->setData($object); // fill the form with the active record data
 
@@ -161,9 +153,8 @@ class SystemEmployeesForm extends TPage
                 TTransaction::open('permission');
 
                 // instantiates object System_group
-                $object = new SystemGroup($key);
+                $object = new SystemEmployees($key);
 
-                $object->programs = $object->getSystemPrograms();
 
                 // fill the form with the active record data
                 $this->form->setData($object);

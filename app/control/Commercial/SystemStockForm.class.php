@@ -54,8 +54,8 @@ class SystemStockForm extends TPage
         // add a row for the field id
         $table->addRowSet(new TLabel('ID:'), $id);
         $table->addRowSet(new TLabel('Product: '), $product);
-        $table->addRowSet(new TLabel('quantity: '), $quantity);
-        $table->addRowSet(new TLabel('price: '), $price);
+        $table->addRowSet(new TLabel('Quantity: '), $quantity);
+        $table->addRowSet(new TLabel('Price: '), $price);
 
 
         // create an action button (save)
@@ -110,14 +110,6 @@ class SystemStockForm extends TPage
 
             $this->form->validate(); // form validation
             $object->store(); // stores the object
-            $object->clearParts();
-            if( $object->programs )
-            {
-                foreach( $object->programs as $program )
-                {
-                    $object->addSystemProgram( $program );
-                }
-            }
 
             $this->form->setData($object); // fill the form with the active record data
 
@@ -152,8 +144,6 @@ class SystemStockForm extends TPage
 
                 // instantiates object System_group
                 $object = new SystemGroup($key);
-
-                $object->programs = $object->getSystemPrograms();
 
                 // fill the form with the active record data
                 $this->form->setData($object);

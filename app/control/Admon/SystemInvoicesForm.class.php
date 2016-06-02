@@ -36,7 +36,7 @@ class SystemInvoicesForm extends TPage
         // create the form fields
         $id            = new TEntry('id');
         $client        = new TDBCombo('client', 'permission', 'SystemClients', 'name', 'name');
-        $amount        = new TEntry('amount');
+        $amount        = new TEntry('account_money');
         $date          = new TDate('date');
         $id->setEditable(false);
 
@@ -48,7 +48,7 @@ class SystemInvoicesForm extends TPage
 
         // validations
         $client->addValidation('client', new TRequiredValidator);
-        $amount->addValidation('amount', new TRequiredValidator);
+        $amount->addValidation('account_money', new TRequiredValidator);
         $date->addValidation('date', new TRequiredValidator);
 
         // add a row for the field id
@@ -110,14 +110,6 @@ class SystemInvoicesForm extends TPage
 
             $this->form->validate(); // form validation
             $object->store(); // stores the object
-            $object->clearParts();
-            if( $object->programs )
-            {
-                foreach( $object->programs as $program )
-                {
-                    $object->addSystemProgram( $program );
-                }
-            }
 
             $this->form->setData($object); // fill the form with the active record data
 
@@ -151,9 +143,7 @@ class SystemInvoicesForm extends TPage
                 TTransaction::open('permission');
 
                 // instantiates object System_group
-                $object = new SystemGroup($key);
-
-                $object->programs = $object->getSystemPrograms();
+                $object = new SystemReceipt($key);
 
                 // fill the form with the active record data
                 $this->form->setData($object);

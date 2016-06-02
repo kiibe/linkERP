@@ -22,21 +22,6 @@ class SystemProviders extends TRecord
         parent::addAttribute('name');
     }
 
-    /**
-     * Reset aggregates
-     */
-    public function clearParts()
-    {
-        // delete the related System_userSystem_user_group objects
-        $criteria = new TCriteria;
-        $criteria->add(new TFilter('system_user_id', '=', $this->id));
-
-        $repository = new TRepository('SystemUserGroup');
-        $repository->delete($criteria);
-
-        $repository = new TRepository('SystemUserProgram');
-        $repository->delete($criteria);
-    }
 
     /**
      * Delete the object and its aggregates
@@ -46,18 +31,10 @@ class SystemProviders extends TRecord
     {
         // delete the related System_userSystem_user_group objects
         $id = isset($id) ? $id : $this->id;
-        $repository = new TRepository('SystemUserGroup');
+        $repository = new TRepository('SystemProviders');
         $criteria = new TCriteria;
-        $criteria->add(new TFilter('system_user_id', '=', $id));
+        $criteria->add(new TFilter('id', '=', $id));
         $repository->delete($criteria);
-
-        // delete the related System_userSystem_user_program objects
-        $id = isset($id) ? $id : $this->id;
-        $repository = new TRepository('SystemUserProgram');
-        $criteria = new TCriteria;
-        $criteria->add(new TFilter('system_user_id', '=', $id));
-        $repository->delete($criteria);
-
 
         // delete the object itself
         parent::delete($id);

@@ -214,7 +214,7 @@ class SystemChargeList extends TPage
             TTransaction::open('permission');
 
             // instantiates object System_group
-            $object = new SystemGroup($key);
+            $object = new SystemCharge($key);
             // deletes the object from the database
             $object->{$field} = $value;
             $object->store();
@@ -325,6 +325,7 @@ class SystemChargeList extends TPage
             $criteria = new TCriteria;
             $criteria->setProperties($param); // order, offset
             $criteria->setProperty('limit', $limit);
+            $criteria->add(new TFilter('client', 'IS NOT', NULL));
 
             if (TSession::getValue('s_id_filter'))
             {
@@ -418,7 +419,7 @@ class SystemChargeList extends TPage
             TTransaction::open('permission');
 
             // instantiates object System_group
-            $object = new SystemGroup($key);
+            $object = new SystemCharge($key);
 
             // deletes the object from the database
             $object->delete();

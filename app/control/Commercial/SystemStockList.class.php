@@ -49,7 +49,7 @@ class SystemStockList extends TPage
 
         $id->setSize(100);
         $product->setSize(300);
-        $quantity->setSize(300); 
+        $quantity->setSize(300);
         $price->setSize(300);
 
         // add a row for the filter field
@@ -197,7 +197,7 @@ class SystemStockList extends TPage
             TTransaction::open('permission');
 
             // instantiates object System_group
-            $object = new SystemGroup($key);
+            $object = new SystemStock($key);
             // deletes the object from the database
             $object->{$field} = $value;
             $object->store();
@@ -396,7 +396,7 @@ class SystemStockList extends TPage
             TTransaction::open('permission');
 
             // instantiates object System_group
-            $object = new SystemGroup($key);
+            $object = new SystemStock($key);
 
             // deletes the object from the database
             $object->delete();

@@ -239,7 +239,7 @@ class SystemEmployeesList extends TPage
             TTransaction::open('permission');
 
             // instantiates object System_group
-            $object = new SystemGroup($key);
+            $object = new SystemEmployees($key);
             // deletes the object from the database
             $object->{$field} = $value;
             $object->store();
@@ -461,7 +461,7 @@ class SystemEmployeesList extends TPage
             TTransaction::open('permission');
 
             // instantiates object System_group
-            $object = new SystemGroup($key);
+            $object = new SystemEmployees($key);
 
             // deletes the object from the database
             $object->delete();

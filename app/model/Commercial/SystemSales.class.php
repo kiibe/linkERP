@@ -24,22 +24,6 @@ class SystemSales extends TRecord
     }
 
     /**
-     * Reset aggregates
-     */
-    public function clearParts()
-    {
-        // delete the related System_userSystem_user_group objects
-        $criteria = new TCriteria;
-        $criteria->add(new TFilter('system_user_id', '=', $this->id));
-
-        $repository = new TRepository('SystemUserGroup');
-        $repository->delete($criteria);
-
-        $repository = new TRepository('SystemUserProgram');
-        $repository->delete($criteria);
-    }
-
-    /**
      * Delete the object and its aggregates
      * @param $id object ID
      */
@@ -47,14 +31,14 @@ class SystemSales extends TRecord
     {
         // delete the related System_userSystem_user_group objects
         $id = isset($id) ? $id : $this->id;
-        $repository = new TRepository('SystemUserGroup');
+        $repository = new TRepository('SystemSales');
         $criteria = new TCriteria;
         $criteria->add(new TFilter('system_user_id', '=', $id));
         $repository->delete($criteria);
 
         // delete the related System_userSystem_user_program objects
         $id = isset($id) ? $id : $this->id;
-        $repository = new TRepository('SystemUserProgram');
+        $repository = new TRepository('SystemSales');
         $criteria = new TCriteria;
         $criteria->add(new TFilter('system_user_id', '=', $id));
         $repository->delete($criteria);

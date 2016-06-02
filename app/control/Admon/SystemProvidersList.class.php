@@ -185,7 +185,7 @@ class SystemProvidersList extends TPage
             TTransaction::open('permission');
 
             // instantiates object System_group
-            $object = new SystemGroup($key);
+            $object = new SystemProviders($key);
             // deletes the object from the database
             $object->{$field} = $value;
             $object->store();
@@ -369,7 +369,7 @@ class SystemProvidersList extends TPage
             TTransaction::open('permission');
 
             // instantiates object System_group
-            $object = new SystemGroup($key);
+            $object = new SystemProviders($key);
 
             // deletes the object from the database
             $object->delete();
@@ -420,8 +420,8 @@ class SystemProvidersList extends TPage
           // run query
           $result = $conn->query('SELECT nif, name from system_providers order by id');
 
-          // get the form data into an active record Customer
-          $widths = array(60, 125, 125, 150, 70);
+          // get the form data into an active record Customer -> tocar las columnas
+          $widths = array(270, 270);
           $tr = new TTableWriterPDF($widths);
 
           // create the document styles
@@ -433,7 +433,7 @@ class SystemProvidersList extends TPage
 
           // add a header row
           $tr->addRow();
-          $tr->addCell('Providers', 'center', 'header', 5);
+          $tr->addCell('Providers', 'center', 'header', 2);
 
           // add titles row
           $tr->addRow();
@@ -453,7 +453,7 @@ class SystemProvidersList extends TPage
 
           // footer row
           $tr->addRow();
-          $tr->addCell(date('l jS \of F Y h:i:s A'), 'center', 'footer', 5);
+          $tr->addCell(date('l jS \of F Y h:i:s A'), 'center', 'footer', 2);
           $tr->Footer('This document contains information about clients of the company.');
 
           if (!file_exists("app/output/providersList_".date("Ymd")."pdf") OR is_writable("app/output/providersList_".date("Ymd").".pdf"))

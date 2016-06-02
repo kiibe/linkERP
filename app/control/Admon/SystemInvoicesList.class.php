@@ -41,7 +41,7 @@ class SystemInvoicesList extends TPage
         $client = new TEntry('client');
         $client->setValue(TSession::getValue('s_client'));
 
-        $amount = new TEntry('amount');
+        $amount = new TEntry('account_money');
         $amount->setValue(TSession::getValue('s_amount'));
 
         $date = new TDate('date');
@@ -100,7 +100,7 @@ class SystemInvoicesList extends TPage
         // creates the datagrid columns
         $id   = new TDataGridColumn('id', 'ID', 'center');
         $client   = new TDataGridColumn('client', 'Client', 'center');
-        $amount = new TDataGridColumn('amount', 'Account money', 'center');
+        $amount = new TDataGridColumn('account_money', 'Account money', 'center');
         $date = new TDataGridColumn('date', 'Date', 'center');
 
 
@@ -120,7 +120,7 @@ class SystemInvoicesList extends TPage
         $client->setAction($order_client);
 
         $order_amount= new TAction(array($this, 'onReload'));
-        $order_amount->setParameter('order', 'amount');
+        $order_amount->setParameter('order', 'account_money');
         $amount->setAction($order_amount);
 
         $order_date= new TAction(array($this, 'onReload'));
@@ -204,7 +204,7 @@ class SystemInvoicesList extends TPage
             TTransaction::open('permission');
 
             // instantiates object System_group
-            $object = new SystemGroup($key);
+            $object = new SystemReceipt($key);
             // deletes the object from the database
             $object->{$field} = $value;
             $object->store();
@@ -264,13 +264,13 @@ class SystemInvoicesList extends TPage
             TSession::setValue('s_client_filter',   $filter);
             TSession::setValue('s_client', $data->client);
         }
-        if ( $data->amount )
+        if ( $data->account_money )
         {
             // creates a filter using what the user has typed
-            $filter = new TFilter('amount', 'like', "%{$data->amount}%");
+            $filter = new TFilter('account_money', 'like', "%{$data->account_money}%");
 
             TSession::setValue('s_amount_filter', $filter);
-            TSession::setValue('s_amount', $data->amount);
+            TSession::setValue('s_amount', $data->account_money);
         }
         if ( $data->date )
         {
@@ -405,7 +405,7 @@ class SystemInvoicesList extends TPage
             TTransaction::open('permission');
 
             // instantiates object System_group
-            $object = new SystemGroup($key);
+            $object = new SystemReceipt($key);
 
             // deletes the object from the database
             $object->delete();

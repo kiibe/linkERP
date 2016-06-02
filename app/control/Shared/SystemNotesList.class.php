@@ -210,7 +210,7 @@ class SystemNotesList extends TPage
             TTransaction::open('permission');
 
             // instantiates object System_group
-            $object = new SystemGroup($key);
+            $object = new SystemNotes($key);
             // deletes the object from the database
             $object->{$field} = $value;
             $object->store();
@@ -413,7 +413,7 @@ class SystemNotesList extends TPage
             TTransaction::open('permission');
 
             // instantiates object System_group
-            $object = new SystemGroup($key);
+            $object = new SystemNotes($key);
 
             // deletes the object from the database
             $object->delete();

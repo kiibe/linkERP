@@ -25,33 +25,36 @@ $content  = str_replace('{HEAD}', $css.$js, $content);
 if (isset($_REQUEST['changeContent'])) {
   $contenToChange = $_REQUEST['changeContent'];
   switch ($contenToChange) {
-      case 'clients':
-          $insideContent = file_get_contents("app/resources/manual/clients.html");
-          break;
-      case 'calendar':
-          $insideContent = file_get_contents("app/resources/manual/calendar.html");
-          break;
-      case 'notes':
-          $insideContent = file_get_contents("app/resources/manual/notes.html");
-          break;
-      case 'stock':
-          $insideContent = file_get_contents("app/resources/manual/stock.html");
-          break;
-      case 'sales':
-          $insideContent = file_get_contents("app/resources/manual/sales.html");
-          break;
-      case 'employees':
-          $insideContent = file_get_contents("app/resources/manual/employees.html");
-          break;
-      case 'invoices':
-          $insideContent = file_get_contents("app/resources/manual/invoices.html");
-          break;
-      case 'payments':
-          $insideContent = file_get_contents("app/resources/manual/payments.html");
-          break;
-      case 'charge':
-          $insideContent = file_get_contents("app/resources/manual/charge.html");
-          break;
+    case 'clients':
+        $insideContent = file_get_contents("app/resources/manual/clients.html");
+        break;
+    case 'calendar':
+        $insideContent = file_get_contents("app/resources/manual/calendar.html");
+        break;
+    case 'notes':
+        $insideContent = file_get_contents("app/resources/manual/notes.html");
+        break;
+    case 'stock':
+        $insideContent = file_get_contents("app/resources/manual/stock.html");
+        break;
+    case 'sales':
+        $insideContent = file_get_contents("app/resources/manual/sales.html");
+        break;
+    case 'employees':
+        $insideContent = file_get_contents("app/resources/manual/employees.html");
+        break;
+    case 'payments':
+        $insideContent = file_get_contents("app/resources/manual/payments.html");
+        break;
+    case 'charge':
+        $insideContent = file_get_contents("app/resources/manual/charge.html");
+        break;
+    case 'providers':
+        $insideContent = file_get_contents("app/resources/manual/providers.html");
+        break;
+    case 'receipt':
+        $insideContent = file_get_contents("app/resources/manual/receipt.html");
+        break;
   }
 } else {
   $insideContent = file_get_contents("app/resources/indexManual.html");

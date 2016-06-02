@@ -37,7 +37,7 @@ class SystemClientsForm extends TPage
         $id              = new TEntry('id');
         $dni             = new TEntry('dni');
         $name            = new TEntry('name');
-        $adress          = new TEntry('adress');
+        $address          = new TEntry('address');
         $email           = new TEntry('email');
         $phone           = new TEntry('phone');
         $id->setEditable(false);
@@ -46,14 +46,14 @@ class SystemClientsForm extends TPage
         $id->setSize(100);
         $dni->setSize(300);
         $name->setSize(300);
-        $adress->setSize(300);
+        $address->setSize(300);
         $email->setSize(300);
         $phone->setSize(300);
 
         // validations
         $dni->addValidation('dni', new TRequiredValidator);
         $name->addValidation('name', new TRequiredValidator);
-        $adress->addValidation('adress', new TRequiredValidator);
+        $address->addValidation('address', new TRequiredValidator);
         $email->addValidation('email', new TRequiredValidator);
         $phone->addValidation('phone', new TRequiredValidator);
 
@@ -61,7 +61,7 @@ class SystemClientsForm extends TPage
         $table->addRowSet(new TLabel('ID:'), $id);
         $table->addRowSet(new TLabel('DNI: '), $dni);
         $table->addRowSet(new TLabel('Name: '), $name);
-        $table->addRowSet(new TLabel('Adress: '), $adress);
+        $table->addRowSet(new TLabel('Address: '), $address);
         $table->addRowSet(new TLabel('Email: '), $email);
         $table->addRowSet(new TLabel('Phone: '), $phone);
 
@@ -80,7 +80,7 @@ class SystemClientsForm extends TPage
         $list_button->setImage('fa:table blue');
 
         // define the form fields
-        $this->form->setFields(array($id,$dni,$name,$adress,$email,$phone,$save_button,$new_button,$list_button));
+        $this->form->setFields(array($id,$dni,$name,$address,$email,$phone,$save_button,$new_button,$list_button));
 
         $buttons = new THBox;
         $buttons->add($save_button);
@@ -117,7 +117,6 @@ class SystemClientsForm extends TPage
 
             $this->form->validate(); // form validation
             $object->store(); // stores the object
-            //$object->clearParts();
 
             $this->form->setData($object); // fill the form with the active record data
 
@@ -151,9 +150,7 @@ class SystemClientsForm extends TPage
                 TTransaction::open('permission');
 
                 // instantiates object System_group
-                $object = new SystemGroup($key);
-
-                $object->programs = $object->getSystemPrograms();
+                $object = new SystemProviders($key);
 
                 // fill the form with the active record data
                 $this->form->setData($object);

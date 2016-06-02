@@ -114,14 +114,6 @@ class SystemPaymentsForm extends TPage
 
             $this->form->validate(); // form validation
             $object->store(); // stores the object
-            $object->clearParts();
-            if( $object->programs )
-            {
-                foreach( $object->programs as $program )
-                {
-                    $object->addSystemProgram( $program );
-                }
-            }
 
             $this->form->setData($object); // fill the form with the active record data
 
@@ -155,9 +147,7 @@ class SystemPaymentsForm extends TPage
                 TTransaction::open('permission');
 
                 // instantiates object System_group
-                $object = new SystemGroup($key);
-
-                $object->programs = $object->getSystemPrograms();
+                $object = new SystemPayments($key);
 
                 // fill the form with the active record data
                 $this->form->setData($object);
