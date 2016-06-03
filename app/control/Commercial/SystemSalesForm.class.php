@@ -58,7 +58,7 @@ class SystemSalesForm extends TPage
         $row  = $table_item->addRow();
         $row->class = 'tformtitle'; // CSS class
         $cell = $row->addCell( new TLabel('Point of Sales'));
-        $cell->colspan = 4;
+        $cell->colspan = 5;
 
         // create the field labels
         $lab_pro = new TLabel('ID');
@@ -76,9 +76,11 @@ class SystemSalesForm extends TPage
         // add the form fields
         $table_item->addRowSet($lab_pro, $product_id,  $lab_des, $product_description);
         $table_item->addRowSet($lab_pri, $sale_price,  $lab_amo, $amount);
+        $table_item->addRowSet($lab_tot, $total, $button1);
 
         // define the form fields
         $this->form_item->setFields(array($product_id, $product_description, $sale_price, $amount, $total, $button1));
+
 
 
 
@@ -122,7 +124,7 @@ class SystemSalesForm extends TPage
 
         // creates the grid for items
         $this->cartgrid = new TQuickGrid;
-        $this->cartgrid->class = 'tdatagrid_table customized-table';
+        $this->cartgrid->class = 'tdatagrid_table';
         $this->cartgrid->makeScrollable();
         $this->cartgrid->setHeight( 150 );
 
@@ -130,7 +132,6 @@ class SystemSalesForm extends TPage
         $this->cartgrid->addQuickColumn('Description', 'product_description', 'left', 230);
         $this->cartgrid->addQuickColumn('Price', 'sale_price', 'right', 80);
         $this->cartgrid->addQuickColumn('Amount', 'amount', 'right', 70);
-        $this->cartgrid->addQuickColumn('Discount', 'discount', 'right', 70);
         $this->cartgrid->addQuickColumn('Total', 'total', 'right', 100);
 
         $this->cartgrid->addQuickAction('Delete', new TDataGridAction(array($this, 'onDelete')), 'product_id', 'ico_delete.png');
@@ -159,7 +160,7 @@ class SystemSalesForm extends TPage
             $this->form_item->validate(); // validate form data
 
             $items = TSession::getValue('items'); // get items from session
-            $item = $this->form_item->getData('SaleItem');
+            $item = $this->form_item->getData('SystemStock');
             $items[ $item->product_id ] = $item; // add the item
             TSession::setValue('items', $items); // store back tthe session
             $this->form_item->clear(); // clear form
@@ -186,7 +187,20 @@ class SystemSalesForm extends TPage
             $items = TSession::getValue('items'); // get items
             if ($items)
             {
-                $sale = new Sale; // create a new Sale
+                $sales = new SystemSales;
+                // NAME: $data->customer_name;
+                // PRDT NAME: $items->product_description
+                // PRICE: $items->sale_price
+                // QUANT: $items->amount
+                // TOTAL: $items->total
+
+                foreach ($items as $item)
+                {
+                    $total += str_replace(',', '', $item->total);
+                }
+                $sales->saveSale($data->customer_name, $total);
+
+                /*$sale = new Sale; // create a new Sale
                 $sale->customer_id = $data->customer_id;
                 $sale->date = date('Y-m-d');
                 $total = 0;
@@ -199,7 +213,7 @@ class SystemSalesForm extends TPage
                     $sale->addSaleItem($item); // add the item to the Sale
                 }
                 $sale->total = $total;
-                $sale->store(); // store the Sale
+                $sale->store(); // store the Sale*/
 
                 // clear items
                 TSession::setValue('items', NULL);
@@ -217,7 +231,7 @@ class SystemSalesForm extends TPage
 
     /**
      * Exit action for the field product
-     * Fill some form fields (sale_price, amount, discount, total)
+     * Fill some form fields (sale_price, amount)
      */
     public static function onExitProduct($param)
     {
@@ -226,15 +240,15 @@ class SystemSalesForm extends TPage
         {
             TTransaction::open('permission');
             //$product = new Product($product_id); // reads the product
-            $conn = TTransaction::get(); // get PDO connection
-            // run query
-            $result = $conn->query('SELECT product, quantity, price from system_stock where id = '.$product_id.' order by id LIMIT 1');
-            print_r($result);
+
+            $result = new SystemStock();
+            $result -> getDataItem($product_id);
 
             $obj = new StdClass;
-            $obj->sale_price  = number_format($result['price'], 2, '.', ',');
+            $obj->product_description = $result->product;
+            $obj->sale_price  = number_format($result->price, 2, '.', ',');
             $obj->amount = 1;
-            $obj->total       = number_format($result['quantity'], 2, '.', ',');
+
             TTransaction::close();
             TForm::sendData('form_pos', $obj);
         }

@@ -143,7 +143,7 @@ class SystemStockForm extends TPage
                 TTransaction::open('permission');
 
                 // instantiates object System_group
-                $object = new SystemGroup($key);
+                $object = new SystemStock($key);
 
                 // fill the form with the active record data
                 $this->form->setData($object);

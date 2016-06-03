@@ -42,4 +42,22 @@ class SystemStock extends TRecord
         parent::delete($id);
     }
 
+    /*
+    * Get de data of an object
+    * @param $id object ID
+    */
+    public function getDataItem($id = NULL)
+    {
+        $conn = TTransaction::get(); // get PDO connection
+        // run query
+        $result = $conn->query('SELECT product, quantity, price from system_stock where id = '.$id.' order by id');
+
+        foreach ($result as $key) {
+            $this->product = $key['product'];
+            $this->quantity = $key['quantity'];
+            $this->price = $key['price'];
+        }
+
+    }
+
 }

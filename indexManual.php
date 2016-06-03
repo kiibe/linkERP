@@ -55,6 +55,15 @@ if (isset($_REQUEST['changeContent'])) {
     case 'receipt':
         $insideContent = file_get_contents("app/resources/manual/receipt.html");
         break;
+    case 'programs':
+        $insideContent = file_get_contents("app/resources/manual/programs.html");
+        break;
+    case 'users':
+        $insideContent = file_get_contents("app/resources/manual/users.html");
+        break;
+    case 'groups':
+        $insideContent = file_get_contents("app/resources/manual/groups.html");
+        break;
   }
 } else {
   $insideContent = file_get_contents("app/resources/indexManual.html");

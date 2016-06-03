@@ -9,9 +9,6 @@ class SystemSales extends TRecord
     const PRIMARYKEY= 'id';
     const IDPOLICY =  'max'; // {max, serial}
 
-
-    private $system_programs = array();
-
     /**
      * Constructor method
      */
@@ -37,15 +34,37 @@ class SystemSales extends TRecord
         $repository->delete($criteria);
 
         // delete the related System_userSystem_user_program objects
-        $id = isset($id) ? $id : $this->id;
+        /*$id = isset($id) ? $id : $this->id;
         $repository = new TRepository('SystemSales');
         $criteria = new TCriteria;
         $criteria->add(new TFilter('system_user_id', '=', $id));
-        $repository->delete($criteria);
+        $repository->delete($criteria);*/
 
 
         // delete the object itself
         parent::delete($id);
+    }
+
+    public function saveSale($client_insert, $amount_insert)
+    {
+        try
+        {
+        $conn = TTransaction::get(); // get PDO connection
+        // run query
+        $date = date('Y-m-d');
+
+        $result = $conn->query('INSERT INTO system_sales (date, client, amount) VALUES ('.$date.', '.$client_insert.', '.$amount_insert.')');
+
+        }
+        catch (Exception $e)
+        {
+            new TMessage('error', $e->getMessage());
+        }
+    }
+
+    public function saveLines($id, $products)
+    {
+
     }
 
 }
